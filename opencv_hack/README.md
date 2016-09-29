@@ -14,3 +14,13 @@ brew install opencv3
 
 
 check by opening up `python` on cmd line and then trying to import – `import cv2`
+
+## Creating Samples
+`opencv_createsamples -img img/hold_view1.JPG -num 50 -vec position_single`
+
+`opencv_traincascade -data train_cascade/ -vec position_single -bg bg.dat -numPos 50 -numNeg 3`
+
+## Bounding Box
+http://nicodjimenez.github.io/boxLabel/annotate.html
+
+opencv_createsamples -img img/hold_view1.JPG -num 50 -vec position_single -info info.dat -bg bg.dat
