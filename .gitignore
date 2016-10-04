@@ -1,7 +1,11 @@
 # OpenCV
 *.xml
+
+# Data
 *.jpg
+*.JPG
 *.png
+!*/readme_imgs/*
 
 
 
