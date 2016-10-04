@@ -5,7 +5,7 @@
 *.jpg
 *.JPG
 *.png
-!*/readme_imgs/*
+!readme_imgs/*
 
 
 
