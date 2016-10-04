@@ -1,4 +1,5 @@
 # OpenCV Hack-a-thing
+Learn about and use OpenCV for custom object detection of a climbing hold.
 
 ## Setup
 - ### Install with brew
@@ -29,7 +30,7 @@ Used [this](http://nicodjimenez.github.io/boxLabel/annotate.html) tool to help g
   - following [this tutorial](
 http://docs.opencv.org/trunk/dc/d88/tutorial_traincascade.html)
   - `opencv_createsamples --vec classifier/position_single -info info.dat -bg bg.dat`
-    - use the `-img` and `-num` flag to train off one image. this is what we did when only had 7 images
+    - use the `-img` and `-num` flag to train off one image. this is what we did when only had 7 images and had to generate training images from a single image
   - `opencv_createsamples -vec classifier/position_single -info info.dat -bg bg.dat`
   - `opencv_traincascade -data train_cascade/ -vec classifier/position_single -bg bg.dat -numPos 50 -numNeg 3`
 
@@ -38,8 +39,8 @@ Initial training with 7 images produced poor results. We even tested it on one o
 
 ![detected_7](readme_imgs/detected7.jpg)
 
-When training on 50 images, the results were much more promising.
+When training on 50 images, the results were much more promising! This was an unseen test image.
 ![detected_50](readme_imgs/detected50.jpg)
 
 ## Conclusion
-We need more training data! We save huge improvements going from the generated training images to actual annotated training images. Ideally we will generate training images from each actual image so instead of having 50 generated images or 50 actual images we will have 2500 images (50 of which are the original). We also only have 3 negative images – a paper we read used about 10x the number of negatives to positives. More negatives might be a huge help here too.
+We need more training data! We saw huge improvements going from the generated training images to actual annotated training images. Ideally we will generate training images from each actual image so instead of having 50 generated images or 50 actual images we will have 2500 images (50 of which are the original). We also only have 3 negative images – a paper we read used about 10x the number of negatives to positives, so more negatives might be a huge help here too.
