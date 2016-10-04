@@ -22,15 +22,24 @@ counter=0; name="out.jpg"; for i in $( ls ); do convert -resize 25% $i "../singl
 ```
 
 - ### Image Annotation
-Used [this](http://nicodjimenez.github.io/boxLabel/annotate.html) tool to help get the boudning box (pixels, top left to bottom right) of the image
-
+Used [this](http://nicodjimenez.github.io/boxLabel/annotate.html) tool to help get the boudning box (pixels, top left to bottom right) of the image. This part takes a long time and is tedious!
 
 
 - ### Training
-  - `opencv_createsamples -img img/hold_view1.JPG -num 50 -vec position_single -info info.dat -bg bg.dat`
-  - `opencv_traincascade -data train_cascade/ -vec position_single -bg bg.dat -numPos 50 -numNeg 3`
+  - following [this tutorial](
+http://docs.opencv.org/trunk/dc/d88/tutorial_traincascade.html)
+  - `opencv_createsamples --vec classifier/position_single -info info.dat -bg bg.dat`
+    - use the `-img` and `-num` flag to train off one image. this is what we did when only had 7 images
+  - `opencv_createsamples -vec classifier/position_single -info info.dat -bg bg.dat`
+  - `opencv_traincascade -data train_cascade/ -vec classifier/position_single -bg bg.dat -numPos 50 -numNeg 3`
 
 ## Results
 Initial training with 7 images produced poor results. We even tested it on one of our training images 😕.
 
-![detected_7](readme_imgs/detected.jpg)
+![detected_7](readme_imgs/detected7.jpg)
+
+When training on 50 images, the results were much more promising.
+![detected_50](readme_imgs/detected50.jpg)
+
+## Conclusion
+We need more training data! We save huge improvements going from the generated training images to actual annotated training images. Ideally we will generate training images from each actual image so instead of having 50 generated images or 50 actual images we will have 2500 images (50 of which are the original). We also only have 3 negative images – a paper we read used about 10x the number of negatives to positives. More negatives might be a huge help here too.
