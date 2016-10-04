@@ -1,7 +1,7 @@
 # climb.AR
 David Bain, Jon Kramer, Orestis Lykouropoulos, Charley Ren, Pat Xu
 
-![group](readme_imgs/group.jpg)
+![group](readme_imgs/group1.jpg)
 
 ## Project Proposal
 [doc](https://docs.google.com/document/d/1-N9_9W50bxWwFv98lRIs-yA9pZ39pB0hi-4nF0_e69U/edit?usp=sharing)
