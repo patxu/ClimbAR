@@ -7,6 +7,8 @@
 *.png
 !readme_imgs/*
 
+MacOS
+.DS_STORE
 
 
 
