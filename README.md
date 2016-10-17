@@ -11,6 +11,7 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. [1](
 
 
 - ### Game Mockup
+
 <img src="readme_imgs/game_menu.png" width=400x>
 <img src="readme_imgs/game_route_generation.png" width=400x>
 
@@ -37,7 +38,7 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. [1](
 - [Mockups and Data Model](https://docs.google.com/document/d/1wIeR-_1b2lWhGa01Qd_FU361YMmZCi3dA5iZgJWjieM/edit?usp=sharing)
 
 ## The Team
-<img src="readme_imgs/group1.jpg" width=300x>
+<img src="readme_imgs/group1.jpg" width=500x>
 
 Left to Right: Orestis, Charley, Pat, David, Jon
 
@@ -46,5 +47,6 @@ Left to Right: Orestis, Charley, Pat, David, Jon
     For his technical insight, mentorship, and teaching us to love (red pandas).
 
     <img src="readme_imgs/red-panda.jpg" width=300x>
+
   - ### DALI Lab
     For providing a inspiring and collaborative space (Sudikoff 007), as well as crucial hardware (Macbook Pros, Kinect, PCs).
