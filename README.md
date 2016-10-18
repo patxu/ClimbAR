@@ -15,7 +15,7 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. [1](
 <img src="readme_imgs/game_route_generation.png" width=400x>
 
 ## Architecture
-- Unity
+- Unity (`unity_test`)
   - Unity will be the backbone of our project
   - plugins will interface with our OpenCV code and Kinect SDK (both C#) to pull in data like hold location and climber skeleton
   - the Unity game will build game objects using sensor data
