@@ -10,7 +10,7 @@ class Annotation(object):
         self.endY = 0
         self.boxId = boxId
 
-class Annotater(object):
+class Annotator(object):
     def __init__(self, currentBox=None):
         self.currentBox = currentBox
 
@@ -32,27 +32,46 @@ if __name__ == "__main__":
     frame.pack(fill=BOTH,expand=1)
 
     #adding the image
-    File = askopenfilename(parent=root, initialdir="C:/",title='Choose an image.')
+    File = askopenfilename(parent=root, title='Choose an image.')
     img = ImageTk.PhotoImage(Image.open(File))
     canvas.create_image(0,0,image=img,anchor="nw")
     canvas.config(scrollregion=canvas.bbox(ALL))
 
+
     #keep track of annotations
     annotations = {}
     boxes = []
-    currentBox = None
-    an = Annotater(currentBox)
+    an = Annotator()
+
+
+    def saveAnnotations():
+        for box in boxes:
+            print annotations[box]
+        
+    def clearAnnotations():
+        for box in boxes:
+            canvas.delete(box)
+            del annotations[box]
+            del boxes[box]
+
     def click(event):
         an.currentBox = canvas.create_rectangle(0,0,0,0)
-        annotations[an.currentBox] = Annotation(event.x, event.y, an.currentBox)
-        boxes.append(canvas.create_rectangle(0,0,0,0))
+        annotations[an.currentBox] = Annotation(canvas.canvasx(event.x), canvas.canvasy(event.y), an.currentBox)
+        boxes.append(an.currentBox)
 
     def drag(event):
-        canvas.coords(an.currentBox, annotations[an.currentBox].startX, annotations[an.currentBox].startY, event.x, event.y)
+        canvas.coords(an.currentBox, annotations[an.currentBox].startX, annotations[an.currentBox].startY, canvas.canvasx(event.x), canvas.canvasy(event.y))
 
     def release(event):
-        annotations[an.currentBox].endX = event.x
-        annotations[an.currentBox].endY = event.y
+        annotations[an.currentBox].endX = canvas.canvasx(event.x)
+        annotations[an.currentBox].endY = canvas.canvasy(event.y)
+
+
+
+    b = Button(root, text="Save Annotations", command=saveAnnotations)
+    b.pack()
+    b = Button(root, text="Clear Annotations", command=clearAnnotations)
+    b.pack()
 
     canvas.bind("<Button-1>",click)
     canvas.bind("<B1-Motion>", drag)
