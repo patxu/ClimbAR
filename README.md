@@ -18,19 +18,21 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. [1](
 ## Architecture
 - Hold Recognition
   - OpenCV (copy from hack-a-thing?)
-  - ...
+  - Image Pre-Processing in Java
+    This is currently an exploration of image pre-processing and will later be incorporated in a single hold recognition component with OpenCV, and will also likely be translated to C#.
+    The java program reads an image, finds the most common color, which is part of the background in our climbing gym images. Then for every pixel, if it is close to the most common color (using a color distance function), the color is replaced with white, which isolates the holds. Currently we have no mechanism of removing the pieces tape that is on most climbing walls, so besides the holds it also isolates the tape, but we will work on removing that.
 - Unity
 - Kinect
 
 ## Setup
 - Hold Recognition
   - OpenCV (copy from hack-a-thing?)
-  - ...
+  - Image Pre-Processing in Java: Simple Java class - run from terminal or IDE
 
 ## Deployment
 - Hold Recognition
   - OpenCV (copy from hack-a-thing?)
-  - ...
+  - Image Pre-Processing in Java: not yet integrated in Hold Detection module.
 
 ## Docs
 - [Project Proposal](https://docs.google.com/document/d/1-N9_9W50bxWwFv98lRIs-yA9pZ39pB0hi-4nF0_e69U/edit?usp=sharing)
