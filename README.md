@@ -19,8 +19,8 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. [1](
   - Unity will be the backbone of our project
   - plugins will interface with our OpenCV code and Kinect SDK (both C#) to pull in data like hold location and climber skeleton
   - the Unity game will build game objects using sensor data
-- Hold Recognition
-  - OpenCV (copy from hack-a-thing?)
+- Hold Recognition (`opencv_hack`, `object_rec`)
+  - start with hundreds of positive & negative images of climbing holds and train an OpenCV custom object detection classifier to detect climbing holds
   - Image Pre-Processing in Java
     - This is currently an exploration of image pre-processing and will later be incorporated in a single hold recognition component with OpenCV, and will also likely be translated to C#. The java program reads an image, finds the most common color, which is part of the background in our climbing gym images. Then for every pixel, if it is close to the most common color (using a color distance function), the color is replaced with white, which isolates the holds. Currently we have no mechanism of removing the pieces tape that is on most climbing walls, so besides the holds it also isolates the tape, but we will work on removing that.
 - Kinect
