@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
 
@@ -20,9 +20,12 @@ public class TestDLL : MonoBehaviour
     public Camera mainCam; // ...
 
     // Class variables
-    private static int scalingFactor = 150;
-    private static int leftShift = 5;
-    private static int downShift = 5;
+    // private static int scalingFactor = 150;
+    // private static int leftShift = 5;
+    // private static int downShift = 5;
+    private static float imgX = 100; // assume square img for now
+    private static float imgY = 100;
+    private static int cameraSize = 5;
 
     // TODO: Restyle according to C# standards
     void Start () {
@@ -35,25 +38,25 @@ public class TestDLL : MonoBehaviour
         bb_array = new int[num_holds * 4];
         Marshal.Copy(bb, bb_array, 0, num_holds * 4);
         #else
-        num_holds = 1;
-        bb_array = new int[]{1500, 1000, 50, 100};
+        num_holds = 2;
+        bb_array = new int[]{50, 50, 10, 10, 90, 90, 10, 10};
         #endif
 
 
         this.handHolds = new GameObject[num_holds];
 
         // Adjust camera zoom
-        this.mainCam.orthographicSize = 20;
+        this.mainCam.orthographicSize = cameraSize/(float)2.0;
 
         print(num_holds); // debug
 
         // Instantiate handholds
         for (int i = 0; i < num_holds; i++)
         {
-            int x = bb_array[i * 4]/scalingFactor;
-            int y = bb_array[i * 4 + 1]/scalingFactor;
-            int width = bb_array[i * 4 + 2]/scalingFactor;
-            int height = bb_array[i * 4 + 3]/scalingFactor;
+            float x = bb_array[i * 4]/imgX * cameraSize - cameraSize/(float)2.0;
+            float y = bb_array[i * 4 + 1]/imgY * cameraSize - cameraSize/(float)2.0;
+            float width = bb_array[i * 4 + 2]/imgX/(float)2.0 * cameraSize;
+            float height = bb_array[i * 4 + 3]/imgY/(float)2.0 * cameraSize;
 
             print(x + ", " + y + "\n");
 
@@ -62,8 +65,10 @@ public class TestDLL : MonoBehaviour
 
             // TODO: Get bounds of camera and scale our position within those bounds
             // Position it in the scene, camera centered around (0, 0)
-            this.handHolds[i].transform.localPosition = new Vector2(x + width/2 - leftShift,
-                y + height/2 - downShift);
+            this.handHolds[i].transform.localPosition =
+                new Vector2(x + width,
+                            (float)-1.0 * (y + height)
+                           );
         }
         print("done");
         // TODO: Free bb_array
