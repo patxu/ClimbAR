@@ -15,7 +15,7 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. [1](
 
 ## Unity Scene
 The Unity scene so far! Displays the bounding boxes given by the OpenCV classifier. Read about our Unity architecture to get an idea of how we use OpenCV in Unity.
-<img src="readme_imgs/unity_bounding_boxes.jpg" width=400x>
+<img src="readme_imgs/unity_boundingboxes.jpg" width=400x>
 
 ## Architecture
 - Unity – connecting OpenCV and Kinect
