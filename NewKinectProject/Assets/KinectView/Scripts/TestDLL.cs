@@ -5,12 +5,14 @@ using System;
 public class TestDLL : MonoBehaviour
 {
     // The imported function
-    [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
-    public static extern void TestSort(int[] a, int length);
-    [DllImport("OpenCVUnity", EntryPoint = "OpenCVFunc")]
-    public static extern IntPtr OpenCVFunc();
-    [DllImport("OpenCVUnity", EntryPoint = "NumHolds")]
-    public static extern int NumHolds();
+    #if UNITY_STANDALONE_WIN
+      [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
+      public static extern void TestSort(int[] a, int length);
+      [DllImport("OpenCVUnity", EntryPoint = "OpenCVFunc")]
+      public static extern IntPtr OpenCVFunc();
+      [DllImport("OpenCVUnity", EntryPoint = "NumHolds")]
+      public static extern int NumHolds();
+      #endif
 
     // Game objects
     public GameObject[] handHolds;
@@ -24,12 +26,21 @@ public class TestDLL : MonoBehaviour
 
     // TODO: Restyle according to C# standards
     void Start () {
+      int num_holds;
+      int[] bb_array;
+      #if UNITY_STANDALONE_WIN
         // Init
         IntPtr bb = OpenCVFunc();
-        int num_holds = NumHolds();
-        this.handHolds = new GameObject[num_holds];
-        int[] bb_array = new int[num_holds * 4];
+        num_holds = NumHolds();
+        bb_array = new int[num_holds * 4];
         Marshal.Copy(bb, bb_array, 0, num_holds * 4);
+        #else
+        num_holds = 1;
+        bb_array = new int[]{1500, 1000, 50, 100};
+        #endif
+
+
+        this.handHolds = new GameObject[num_holds];
 
         // Adjust camera zoom
         this.mainCam.orthographicSize = 20;
@@ -44,11 +55,11 @@ public class TestDLL : MonoBehaviour
             int width = bb_array[i * 4 + 2]/scalingFactor;
             int height = bb_array[i * 4 + 3]/scalingFactor;
 
-            print(x + ", " + y + "\n");            
-            
+            print(x + ", " + y + "\n");
+
             // Create handhold object
             this.handHolds[i] = GameObject.Instantiate(Handhold);
-            
+
             // TODO: Get bounds of camera and scale our position within those bounds
             // Position it in the scene, camera centered around (0, 0)
             this.handHolds[i].transform.localPosition = new Vector2(x + width/2 - leftShift,
