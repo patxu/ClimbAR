@@ -21,22 +21,22 @@ public class ColorSourceManager : MonoBehaviour
     {
         _Sensor = KinectSensor.GetDefault();
         
-        if (_Sensor != null) 
-        {
-            _Reader = _Sensor.ColorFrameSource.OpenReader();
+		if (_Sensor != null) {
+			_Reader = _Sensor.ColorFrameSource.OpenReader ();
             
-            var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Rgba);
-            ColorWidth = frameDesc.Width;
-            ColorHeight = frameDesc.Height;
+			var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription (ColorImageFormat.Rgba);
+			ColorWidth = frameDesc.Width;
+			ColorHeight = frameDesc.Height;
             
-            _Texture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
-            _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
+			_Texture = new Texture2D (frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
+			_Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
             
-            if (!_Sensor.IsOpen)
-            {
-                _Sensor.Open();
-            }
-        }
+			if (!_Sensor.IsOpen) {
+				_Sensor.Open ();
+			}
+		} else {
+			Debug.Log ("Using image");
+		}
     }
     
     void Update () 
@@ -54,7 +54,9 @@ public class ColorSourceManager : MonoBehaviour
                 frame.Dispose();
                 frame = null;
             }
-        }
+        } else {
+			Debug.Log ("Using image");
+		}
     }
 
     void OnApplicationQuit()
