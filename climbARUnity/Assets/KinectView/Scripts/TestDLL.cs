@@ -1,9 +1,14 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
+using System.Drawing;
+using System.IO;
 
 public class TestDLL : MonoBehaviour
 {
+    //Constants
+    static readonly int MAX_IMG_BYTES = 100;
+
     // The imported function
     #if UNITY_STANDALONE_WIN
       [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
@@ -35,6 +40,15 @@ public class TestDLL : MonoBehaviour
         int[] boundingBoxArray;
         if (climbSystemEnv.isWindows())
         {
+            //Untested code
+            //http://stackoverflow.com/questions/29171151/passing-a-byte-array-from-unity-c-sharp-into-a-c-library-method
+            Image frame = Image.FromFile("pathToImage/img.png");
+            byte[] imgData = imageToByteArray(frame);
+
+            IntPtr unmanagedArray = Marshal.AllocHGlobal(MAX_IMG_BYTES);
+            Marshal.Copy(imgData, 0, unmanagedArray, MAX_IMG_BYTES);
+            //End untested
+
             IntPtr bb = OpenCVFunc();
             numHolds = NumHolds();
             boundingBoxArray = new int[numHolds * 4];
@@ -45,7 +59,6 @@ public class TestDLL : MonoBehaviour
             boundingBoxArray = new int[] { 50, 50, 10, 10, 90, 90, 10, 10 };
             numHolds = boundingBoxArray.Length/4;
         }
-
 
         this.handHolds = new GameObject[numHolds];
 
@@ -74,5 +87,19 @@ public class TestDLL : MonoBehaviour
 
     void Update () {
 
+    }
+
+    private byte[] imageToByteArray(Image imageIn)
+    {
+        MemoryStream ms = new MemoryStream();
+        imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+        return ms.ToArray();
+    }
+
+    public Image byteArrayToImage(byte[] byteArrayIn)
+    {
+        MemoryStream ms = new MemoryStream(byteArrayIn);
+        Image returnImage = Image.FromStream(ms);
+        return returnImage;
     }
 }
