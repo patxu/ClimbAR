@@ -23,17 +23,17 @@ public class TestDLL : MonoBehaviour
     // private static int scalingFactor = 150;
     // private static int leftShift = 5;
     // private static int downShift = 5;
-    //private static float imgX = 2448;
-    //private static float imgY = 3264;
-    private static float imgX = 100;
-    private static float imgY = 100;
+    private static float imgX = 2448;
+    private static float imgY = 3264;
+    //private static float imgX = 100;
+    //private static float imgY = 100;
     private static int cameraSize = 5;
 
     // TODO: Restyle according to C# standards
     void Start () { 
         int numHolds;
         int[] boundingBoxArray;
-        if (!climbSystemEnv.isWindows())
+        if (climbSystemEnv.isWindows())
         {
             IntPtr bb = OpenCVFunc();
             numHolds = NumHolds();
@@ -50,7 +50,7 @@ public class TestDLL : MonoBehaviour
         this.handHolds = new GameObject[numHolds];
 
         // Adjust camera zoom
-        this.mainCam.orthographicSize = cameraSize / (float)2.0;
+        this.mainCam.orthographicSize = cameraSize / 2f;
 
         // Instantiate handholds
         for (int i = 0; i < numHolds; i++)
