@@ -1,12 +1,4 @@
-# OpenCV
-*.xml
-
 # Data
-*.jpg
-*.JPG
-*.png
-!readme_imgs/*
-!*/readme_imgs/*
 
 MacOS
 .DS_STORE

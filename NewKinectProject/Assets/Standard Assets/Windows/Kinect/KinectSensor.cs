@@ -401,6 +401,7 @@ namespace Windows.Kinect
         private static extern RootSystem.IntPtr Windows_Kinect_KinectSensor_GetDefault();
         public static Windows.Kinect.KinectSensor GetDefault()
         {
+			#if UNITY_STANDALONE_WIN
             RootSystem.IntPtr objectPointer = Windows_Kinect_KinectSensor_GetDefault();
             Helper.ExceptionHelper.CheckLastError();
             if (objectPointer == RootSystem.IntPtr.Zero)
@@ -409,6 +410,8 @@ namespace Windows.Kinect
             }
 
             return Helper.NativeObjectCache.CreateOrGetObject<Windows.Kinect.KinectSensor>(objectPointer, n => new Windows.Kinect.KinectSensor(n));
+			#endif
+			return null;
         }
 
 
