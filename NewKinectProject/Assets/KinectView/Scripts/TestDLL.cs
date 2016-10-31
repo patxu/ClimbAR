@@ -23,8 +23,10 @@ public class TestDLL : MonoBehaviour
     // private static int scalingFactor = 150;
     // private static int leftShift = 5;
     // private static int downShift = 5;
-    private static float imgX = 2448;
-    private static float imgY = 3264;
+    //private static float imgX = 2448;
+    //private static float imgY = 3264;
+    private static float imgX = 100;
+    private static float imgY = 100;
     private static int cameraSize = 5;
 
     // TODO: Restyle according to C# standards
