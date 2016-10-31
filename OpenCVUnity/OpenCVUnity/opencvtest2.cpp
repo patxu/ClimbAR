@@ -25,8 +25,8 @@ extern "C" {
 
 	int* OpenCVFunc(unsigned char* data, int height, int width) {
 		CascadeClassifier classifier;
-		String classifierName = "C:\\cascade.xml";
-		String img = "C:\\img.jpg";
+		String classifierName = "C:\\cs98-senior-project\\OpenCV_files\\cascade.xml";
+		String img = "C:\\cs98-senior-project\\OpenCV_files\\img.jpg";
 
 		if (!classifier.load(classifierName)) {
 			cout << "not working";
