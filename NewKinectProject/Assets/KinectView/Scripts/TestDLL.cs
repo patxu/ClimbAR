@@ -31,18 +31,18 @@ public class TestDLL : MonoBehaviour
 
     // TODO: Restyle according to C# standards
     void Start () {
-      int num_holds;
-      int[] bb_array;
-      //#if UNITY_STANDALONE_WIN
-      //  // Init
-      //  IntPtr bb = OpenCVFunc();
-      //  num_holds = NumHolds();
-      //  bb_array = new int[num_holds * 4];
-      //  Marshal.Copy(bb, bb_array, 0, num_holds * 4);
-      //#else
-        num_holds = 2;
-        bb_array = new int[]{50, 50, 10, 10, 90, 90, 10, 10};
-      //#endif
+        int num_holds;
+        int[] bb_array;
+        #if UNITY_STANDALONE_WIN
+            // Init
+            IntPtr bb = OpenCVFunc();
+            num_holds = NumHolds();
+            bb_array = new int[num_holds * 4];
+            Marshal.Copy(bb, bb_array, 0, num_holds * 4);
+        #else
+            num_holds = 2;
+            bb_array = new int[]{50, 50, 10, 10, 90, 90, 10, 10};
+        #endif
 
 
         this.handHolds = new GameObject[num_holds];
