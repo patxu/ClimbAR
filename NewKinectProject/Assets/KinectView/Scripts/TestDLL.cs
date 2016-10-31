@@ -23,24 +23,24 @@ public class TestDLL : MonoBehaviour
     // private static int scalingFactor = 150;
     // private static int leftShift = 5;
     // private static int downShift = 5;
-    private static float imgX = 100; // assume square img for now
-    private static float imgY = 100;
+    private static float imgX = 2448;
+    private static float imgY = 3264;
     private static int cameraSize = 5;
 
     // TODO: Restyle according to C# standards
     void Start () {
       int num_holds;
       int[] bb_array;
-      #if UNITY_STANDALONE_WIN
-        // Init
-        IntPtr bb = OpenCVFunc();
-        num_holds = NumHolds();
-        bb_array = new int[num_holds * 4];
-        Marshal.Copy(bb, bb_array, 0, num_holds * 4);
-        #else
+      //#if UNITY_STANDALONE_WIN
+      //  // Init
+      //  IntPtr bb = OpenCVFunc();
+      //  num_holds = NumHolds();
+      //  bb_array = new int[num_holds * 4];
+      //  Marshal.Copy(bb, bb_array, 0, num_holds * 4);
+      //#else
         num_holds = 2;
         bb_array = new int[]{50, 50, 10, 10, 90, 90, 10, 10};
-        #endif
+      //#endif
 
 
         this.handHolds = new GameObject[num_holds];

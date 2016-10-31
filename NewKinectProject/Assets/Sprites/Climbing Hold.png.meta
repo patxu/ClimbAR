@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0111c961e7a4c4c5c9d3d6fa27df1fae
-timeCreated: 1477433802
+guid: 9b2a69a66ccd5a640a9ca178a306a2ac
+timeCreated: 1477878523
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -131,7 +131,7 @@ TextureImporter:
       - {x: -1.0282005, y: -1.7154602}
       - {x: -1.1111355, y: -1.6629425}
       - {x: -1.1913936, y: -1.6064187}
-      - {x: -1.2687817, y: -1.546025}
+      - {x: -1.2687817, y: -1.5460249}
       - {x: -1.3431131, y: -1.4819067}
       - {x: -1.4142088, y: -1.4142184}
       - {x: -1.4818976, y: -1.3431231}
