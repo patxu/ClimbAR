@@ -30,50 +30,46 @@ public class TestDLL : MonoBehaviour
     private static int cameraSize = 5;
 
     // TODO: Restyle according to C# standards
-    void Start () {
-        int num_holds;
-        int[] bb_array;
-        #if UNITY_STANDALONE_WIN
-            // Init
+    void Start () { 
+        int numHolds;
+        int[] boundingBoxArray;
+        if (!climbSystemEnv.isWindows())
+        {
             IntPtr bb = OpenCVFunc();
-            num_holds = NumHolds();
-            bb_array = new int[num_holds * 4];
-            Marshal.Copy(bb, bb_array, 0, num_holds * 4);
-        #else
-            num_holds = 2;
-            bb_array = new int[]{50, 50, 10, 10, 90, 90, 10, 10};
-        #endif
+            numHolds = NumHolds();
+            boundingBoxArray = new int[numHolds * 4];
+            Marshal.Copy(bb, boundingBoxArray, 0, numHolds * 4);
+        }
+        else
+        {
+            boundingBoxArray = new int[] { 50, 50, 10, 10, 90, 90, 10, 10 };
+            numHolds = boundingBoxArray.Length/4;
+        }
 
 
-        this.handHolds = new GameObject[num_holds];
+        this.handHolds = new GameObject[numHolds];
 
         // Adjust camera zoom
-        this.mainCam.orthographicSize = cameraSize/(float)2.0;
-
-        print(num_holds); // debug
+        this.mainCam.orthographicSize = cameraSize / (float)2.0;
 
         // Instantiate handholds
-        for (int i = 0; i < num_holds; i++)
+        for (int i = 0; i < numHolds; i++)
         {
-            float x = bb_array[i * 4]/imgX * cameraSize - cameraSize/(float)2.0;
-            float y = bb_array[i * 4 + 1]/imgY * cameraSize - cameraSize/(float)2.0;
-            float width = bb_array[i * 4 + 2]/imgX/(float)2.0 * cameraSize;
-            float height = bb_array[i * 4 + 3]/imgY/(float)2.0 * cameraSize;
-
-            print(x + ", " + y + "\n");
+            int holdIndex = i * 4;
+            float x = boundingBoxArray[holdIndex] / imgX * cameraSize - cameraSize / 2f;
+            float y = boundingBoxArray[holdIndex + 1] / imgY * cameraSize - cameraSize / 2f;
+            float width = boundingBoxArray[holdIndex + 2] / (imgX * 2.0f) * cameraSize;
+            float height = boundingBoxArray[holdIndex + 3] / (imgY * 2f) * cameraSize;
 
             // Create handhold object
             this.handHolds[i] = GameObject.Instantiate(Handhold);
 
-            // TODO: Get bounds of camera and scale our position within those bounds
-            // Position it in the scene, camera centered around (0, 0)
+            // transform handholds to be 
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
-                            (float)-1.0 * (y + height)
-                           );
+                            (y + height) * -1f);
         }
         print("done");
-        // TODO: Free bb_array
     }
 
     void Update () {
