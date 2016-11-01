@@ -6,10 +6,10 @@ using System.IO;
 
 public class TestDLL : MonoBehaviour
 {
-    //Constants
+    // Constants
     static readonly int MAX_IMG_BYTES = 10000;
 
-    // The imported function
+    // import OpenCV dll
     #if UNITY_STANDALONE_WIN
       [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
       public static extern void TestSort(int[] a, int length);
@@ -24,21 +24,17 @@ public class TestDLL : MonoBehaviour
     public GameObject Handhold; // prefab for Handhold
     public Camera mainCam; // ...
 
-    // Class variables
-    // private static int scalingFactor = 150;
-    // private static int leftShift = 5;
-    // private static int downShift = 5;
-    //private static float imgX = 2448;
-    //private static float imgY = 3264;
+    // image variables
+    // private static float imgX = 2448;
+    // private static float imgY = 3264;
     private static float imgX = 100;
     private static float imgY = 100;
 
-    public int segments = 10;
+    // bounding ellipse
     LineRenderer line;
 
     private static int cameraSize = 5;
 
-    // TODO: Restyle according to C# standards
     void Start () { 
         int numHolds;
         int[] boundingBoxArray;
@@ -60,7 +56,7 @@ public class TestDLL : MonoBehaviour
         }
         else
         {
-            boundingBoxArray = new int[] { 50, 50, 10, 30 };
+            boundingBoxArray = new int[] { 50, 50, 10, 15, 70, 70, 15, 5 };
             numHolds = boundingBoxArray.Length/4;
         }
 
@@ -78,46 +74,46 @@ public class TestDLL : MonoBehaviour
             float width = boundingBoxArray[holdIndex + 2] / (imgX * 2.0f) * cameraSize;
             float height = boundingBoxArray[holdIndex + 3] / (imgY * 2f) * cameraSize;
 
-            // Create handhold object
+            // Create handhold object and draw bounding circle
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             line = this.handHolds[i].GetComponent<LineRenderer>();
+            DrawBoundingEllipse(width, height);
 
-            float segments = 10f;
-            line.SetVertexCount((int)segments + 1);
-            line.useWorldSpace = false;
-            CreatePoints(segments, width, height);
-
-
-            // transform handholds to be 
+            // transform handholds (camera space?)
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
         }
-        print("done");
+        print("Finished generating holds");
     }
 
-    void CreatePoints(float segments, float xradius, float yradius)
+    // draw the bounding ellipse of the climbing hold
+    void DrawBoundingEllipse(float xradius, float yradius)
     {
         float x;
         float y;
         float z = 0f;
 
+        // resolution of the sides of the ellipse
+        float segments = 50f;
+        line.SetVertexCount((int)segments + 2);
+        line.useWorldSpace = false;
+
+        // width of line; scaled by width and height of bounding box
+        float lineWidth = Math.Min(xradius, yradius) / 5f; 
+        line.SetWidth(lineWidth, lineWidth);
+        
+        // not currently setting the angle of ellipse
         float angle = 0f;
 
-        for (int i = 0; i < (segments + 1); i++)
+        for (int i = 0; i < (segments + 2); i++)
         {
             x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
             y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
 
-            this.handHolds[i+1] = GameObject.Instantiate(Handhold);
-            this.handHolds[i+1].transform.localPosition =
-                new Vector2(x + xradius,
-                (y + yradius) * -1f);
-
             line.SetPosition(i, new Vector3(x, y, z));
 
             angle += (360f / segments);
-            print(x + " " + y + " " + angle);
         }
     }
 
