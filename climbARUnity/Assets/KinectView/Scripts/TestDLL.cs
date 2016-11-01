@@ -30,37 +30,39 @@ public class TestDLL : MonoBehaviour
 
     // Game objects
     public GameObject[] handHolds;
-    public GameObject Handhold; // prefab for Handhold
-    public Camera mainCam; // ...
+    public GameObject Handhold;
+    public Camera mainCam;
 
     // Class variables
     // private static int scalingFactor = 150;
     // private static int leftShift = 5;
     // private static int downShift = 5;
-    //private static float imgX = 2448;
-    //private static float imgY = 3264;
+    // private static float imgX = 2448;
+    // private static float imgY = 3264;
     private static float imgX = 100;
     private static float imgY = 100;
+    private Boolean first = true;
+    private Image testFrame;
 
     public int segments = 10;
     LineRenderer line;
 
     private static int cameraSize = 5;
 
-    // TODO: Restyle according to C# standards
+    // TODO: Restyle according to C# standards.
     void Start () { 
         int numHolds = 0;
         int[] boundingBoxArray;
         if (!climbSystemEnv.isWindows())
         {
-            //Untested code
+            //Untested code.
             //http://stackoverflow.com/questions/29171151/passing-a-byte-array-from-unity-c-sharp-into-a-c-library-method
             Image frame = Image.FromFile("pathToImage/img.png");
             byte[] imgData = imageToByteArray(frame);
 
             IntPtr unmanagedArray = Marshal.AllocHGlobal(MAX_IMG_BYTES);
             Marshal.Copy(imgData, 0, unmanagedArray, MAX_IMG_BYTES);
-            //End untested
+            //End untested.
 
             IntPtr bb = OpenCVFunc();
             numHolds = NumHolds();
@@ -85,30 +87,8 @@ public class TestDLL : MonoBehaviour
 
                 if (!_Sensor.IsOpen)
                 {
+                    print("Sensor is not open");
                     _Sensor.Open();
-                }
-
-                if (_Reader != null)
-                {
-                    print("Acquired reader");
-                    var frame = _Reader.AcquireLatestFrame();
-
-                    if (frame != null)
-                    {
-                        frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
-                        _Texture.LoadRawTextureData(_Data);
-                        _Texture.Apply();
-
-                        // Call OpenCV plugin 
-                        print("Call open_cv plugin here");
-
-                        frame.Dispose();
-                        frame = null;
-                    }
-                }
-                else
-                {
-                    Debug.Log("Using image");
                 }
             }
             else
@@ -122,10 +102,10 @@ public class TestDLL : MonoBehaviour
 
         this.handHolds = new GameObject[numHolds];
 
-        // Adjust camera zoom
+        // Adjust camera zoom.
         this.mainCam.orthographicSize = cameraSize / 2f;
 
-        // Instantiate handholds
+        // Instantiate handholds.
         for (int i = 0; i < numHolds; i++)
         {
             int holdIndex = i * 4;
@@ -134,7 +114,7 @@ public class TestDLL : MonoBehaviour
             float width = boundingBoxArray[holdIndex + 2] / (imgX * 2.0f) * cameraSize;
             float height = boundingBoxArray[holdIndex + 3] / (imgY * 2f) * cameraSize;
 
-            // Create handhold object
+            // Create handhold object.
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             line = this.handHolds[i].GetComponent<LineRenderer>();
 
@@ -143,7 +123,7 @@ public class TestDLL : MonoBehaviour
             CreatePoints(width, height);
 
 
-            // transform handholds to be 
+            // transform handholds to be.
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
@@ -173,7 +153,35 @@ public class TestDLL : MonoBehaviour
     }
 
     void Update () {
+        if (_Reader != null)
+        {
+            var frame = _Reader.AcquireLatestFrame();
+            
+            if (frame != null)
+            {
+                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
+                _Texture.LoadRawTextureData(_Data);
+                _Texture.Apply();
 
+                // Call OpenCV Plugin.
+                // http://stackoverflow.com/questions/10894836/c-sharp-convert-image-formats-to-jpg.
+                // Test code.
+                if (this.first)
+                {
+                    //this.testFrame = (Bitmap)((new ImageConverter()).ConvertFrom(_Data));
+                    //x.Save("c:\\frame.Jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                    this.first = false;
+                }
+                // End test code.
+
+                frame.Dispose();
+                frame = null;
+            }
+        }
+        else
+        {
+            Debug.Log("Using image");
+        }
     }
 
     private byte[] imageToByteArray(Image imageIn)
