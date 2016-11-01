@@ -7,7 +7,7 @@ using System.IO;
 public class TestDLL : MonoBehaviour
 {
     //Constants
-    static readonly int MAX_IMG_BYTES = 100;
+    static readonly int MAX_IMG_BYTES = 10000;
 
     // The imported function
     #if UNITY_STANDALONE_WIN
