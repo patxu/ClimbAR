@@ -34,7 +34,7 @@ public class kinectCheck : MonoBehaviour {
             _Sensor.Open();
         }
         checkKinectConnection(_Sensor);
-        //_Sensor.IsAvailableChanged += onIsAvailableChanged;
+        _Sensor.IsAvailableChanged += onIsAvailableChanged;
     }
 
 	// Update is called once per frame
