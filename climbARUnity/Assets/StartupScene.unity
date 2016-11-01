@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handHolds: []
-  Handhold: {fileID: 0}
+  Handhold: {fileID: 1000012162831070, guid: dccea8a8ff3ce594e980da184310ccfa, type: 2}
   mainCam: {fileID: 1689806028}
   segments: 0
 --- !u!1 &2057907504
