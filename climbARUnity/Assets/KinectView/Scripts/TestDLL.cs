@@ -3,15 +3,24 @@ using System.Runtime.InteropServices;
 using System;
 using System.Drawing;
 using System.IO;
+using Windows.Kinect;
 
 public class TestDLL : MonoBehaviour
 {
     //Constants
     static readonly int MAX_IMG_BYTES = 10000;
 
+    //Read image from Kinect
+    public int ColorWidth { get; private set; }
+    public int ColorHeight { get; private set; }
+    private KinectSensor _Sensor;
+    private ColorFrameReader _Reader;
+    private Texture2D _Texture;
+    private byte[] _Data;
+
     // The imported function
-    #if UNITY_STANDALONE_WIN
-      [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
+#if UNITY_STANDALONE_WIN
+    [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
       public static extern void TestSort(int[] a, int length);
       [DllImport("OpenCVUnity", EntryPoint = "OpenCVFunc")]
       public static extern IntPtr OpenCVFunc();
@@ -40,7 +49,7 @@ public class TestDLL : MonoBehaviour
 
     // TODO: Restyle according to C# standards
     void Start () { 
-        int numHolds;
+        int numHolds = 0;
         int[] boundingBoxArray;
         if (!climbSystemEnv.isWindows())
         {
@@ -60,6 +69,51 @@ public class TestDLL : MonoBehaviour
         }
         else
         {
+            _Sensor = KinectSensor.GetDefault();
+
+            if (_Sensor != null)
+            {
+                _Reader = _Sensor.ColorFrameSource.OpenReader();
+
+                var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Rgba);
+                ColorWidth = frameDesc.Width;
+                ColorHeight = frameDesc.Height;
+
+                _Texture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
+                _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
+
+                if (!_Sensor.IsOpen)
+                {
+                    _Sensor.Open();
+                }
+
+                if (_Reader != null)
+                {
+                    var frame = _Reader.AcquireLatestFrame();
+
+                    if (frame != null)
+                    {
+                        frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
+                        _Texture.LoadRawTextureData(_Data);
+                        _Texture.Apply();
+
+                        // Call OpenCV plugin 
+
+
+                        frame.Dispose();
+                        frame = null;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Using image");
+                }
+            }
+            else
+            {
+                Debug.Log("Using image");
+            }
+
             boundingBoxArray = new int[] { 50, 50, 10, 20, 90, 90, 20, 10 };
             numHolds = boundingBoxArray.Length/4;
         }
@@ -132,5 +186,24 @@ public class TestDLL : MonoBehaviour
         MemoryStream ms = new MemoryStream(byteArrayIn);
         Image returnImage = Image.FromStream(ms);
         return returnImage;
+    }
+
+    void OnApplicationQuit()
+    {
+        if (_Reader != null)
+        {
+            _Reader.Dispose();
+            _Reader = null;
+        }
+
+        if (_Sensor != null)
+        {
+            if (_Sensor.IsOpen)
+            {
+                _Sensor.Close();
+            }
+
+            _Sensor = null;
+        }
     }
 }
