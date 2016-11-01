@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class kinectCheck : MonoBehaviour {
     Text txt;
     private KinectSensor _Sensor;
+    private int frameCount;
     private bool kinectConnected = false;
 
     void checkForKinect1()
@@ -28,7 +29,7 @@ public class kinectCheck : MonoBehaviour {
         }
     }
 
-    void checkForKinect()
+    void checkForKinect2()
     {
         _Sensor = KinectSensor.GetDefault();
         if (_Sensor != null)
@@ -39,14 +40,34 @@ public class kinectCheck : MonoBehaviour {
         }
     }
 
+    void checkForKinect()
+    {
+        _Sensor = KinectSensor.GetDefault();
+        if (_Sensor.IsAvailable)
+        {
+            txt.text = "Kinect Connected!";
+        }
+        else
+        {
+            txt.text = "Kinect Disconnected. Please Reconnect!";
+        }
+    }
+
     // Use this for initialization
     void Start () {
+        frameCount = 0;
         txt = gameObject.GetComponent<Text>();
         checkForKinect();
     }
-	
+
 	// Update is called once per frame
 	void Update () {
-        checkForKinect();
+        frameCount++;
+        if (frameCount == 30)
+        {
+            checkForKinect();
+            frameCount = 0;
+            print("check");
+        }
     }
 }
