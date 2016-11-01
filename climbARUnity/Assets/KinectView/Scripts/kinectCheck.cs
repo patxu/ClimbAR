@@ -5,45 +5,17 @@ using UnityEngine.UI;
 
 
 public class kinectCheck : MonoBehaviour {
-    Text txt;
+    private Text txt;
     private KinectSensor _Sensor;
-    private int frameCount;
-    private bool kinectConnected = false;
 
-    void checkForKinect1()
+    private void onIsAvailableChanged(object sensor, System.EventArgs args)
     {
-        if (kinectConnected) {
-            if (!_Sensor.IsOpen)
-            {
-                txt.text = "Kinect Disconnected. Please Reconnect!";
-                kinectConnected = false;
-            }
-
-        } else {
-            _Sensor = KinectSensor.GetDefault();
-            if (_Sensor != null)
-            {
-                txt.text = "Kinect Connected!";
-                kinectConnected = true;
-            }
-        }
+        checkKinectConnection((KinectSensor)sensor);
     }
 
-    void checkForKinect2()
+    void checkKinectConnection(KinectSensor sensor)
     {
-        _Sensor = KinectSensor.GetDefault();
-        if (_Sensor != null)
-        {
-            txt.text = "Kinect Connected!";
-        } else {
-            txt.text = "Kinect Disconnected. Please Reconnect!";
-        }
-    }
-
-    void checkForKinect()
-    {
-        _Sensor = KinectSensor.GetDefault();
-        if (_Sensor.IsAvailable)
+        if (sensor.IsAvailable)
         {
             txt.text = "Kinect Connected!";
         }
@@ -55,19 +27,17 @@ public class kinectCheck : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        frameCount = 0;
         txt = gameObject.GetComponent<Text>();
-        checkForKinect();
+        _Sensor = KinectSensor.GetDefault();
+        if (_Sensor != null)
+        {
+            _Sensor.Open();
+        }
+        checkKinectConnection(_Sensor);
+        //_Sensor.IsAvailableChanged += onIsAvailableChanged;
     }
 
 	// Update is called once per frame
 	void Update () {
-        frameCount++;
-        if (frameCount == 30)
-        {
-            checkForKinect();
-            frameCount = 0;
-            print("check");
-        }
     }
 }
