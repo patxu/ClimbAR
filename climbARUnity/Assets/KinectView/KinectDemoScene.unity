@@ -819,6 +819,7 @@ MonoBehaviour:
   handHolds: []
   Handhold: {fileID: 0}
   mainCam: {fileID: 0}
+  segments: 10
 --- !u!1 &1736670513
 GameObject:
   m_ObjectHideFlags: 0
