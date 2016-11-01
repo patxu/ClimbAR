@@ -73,6 +73,7 @@ public class TestDLL : MonoBehaviour
 
             if (_Sensor != null)
             {
+                print("Acquired sensor");
                 _Reader = _Sensor.ColorFrameSource.OpenReader();
 
                 var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Rgba);
@@ -89,6 +90,7 @@ public class TestDLL : MonoBehaviour
 
                 if (_Reader != null)
                 {
+                    print("Acquired reader");
                     var frame = _Reader.AcquireLatestFrame();
 
                     if (frame != null)
@@ -98,7 +100,7 @@ public class TestDLL : MonoBehaviour
                         _Texture.Apply();
 
                         // Call OpenCV plugin 
-
+                        print("Call open_cv plugin here");
 
                         frame.Dispose();
                         frame = null;
