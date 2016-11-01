@@ -28,17 +28,21 @@ public class TestDLL : MonoBehaviour
     // private static int scalingFactor = 150;
     // private static int leftShift = 5;
     // private static int downShift = 5;
-    private static float imgX = 2448;
-    private static float imgY = 3264;
-    //private static float imgX = 100;
-    //private static float imgY = 100;
+    //private static float imgX = 2448;
+    //private static float imgY = 3264;
+    private static float imgX = 100;
+    private static float imgY = 100;
+
+    public int segments = 10;
+    LineRenderer line;
+
     private static int cameraSize = 5;
 
     // TODO: Restyle according to C# standards
     void Start () { 
         int numHolds;
         int[] boundingBoxArray;
-        if (climbSystemEnv.isWindows())
+        if (!climbSystemEnv.isWindows())
         {
             //Untested code
             //http://stackoverflow.com/questions/29171151/passing-a-byte-array-from-unity-c-sharp-into-a-c-library-method
@@ -56,7 +60,7 @@ public class TestDLL : MonoBehaviour
         }
         else
         {
-            boundingBoxArray = new int[] { 50, 50, 10, 10, 90, 90, 10, 10 };
+            boundingBoxArray = new int[] { 50, 50, 10, 20, 90, 90, 20, 10 };
             numHolds = boundingBoxArray.Length/4;
         }
 
@@ -76,6 +80,12 @@ public class TestDLL : MonoBehaviour
 
             // Create handhold object
             this.handHolds[i] = GameObject.Instantiate(Handhold);
+            line = this.handHolds[i].GetComponent<LineRenderer>();
+
+            line.SetVertexCount(segments + 1);
+            line.useWorldSpace = false;
+            CreatePoints(width, height);
+
 
             // transform handholds to be 
             this.handHolds[i].transform.localPosition =
@@ -83,6 +93,27 @@ public class TestDLL : MonoBehaviour
                             (y + height) * -1f);
         }
         print("done");
+    }
+
+    void CreatePoints(float xradius, float yradius)
+    {
+        segments = 10;
+        float x;
+        float y;
+        float z = 0f;
+
+        float angle = 20f;
+
+        for (int i = 0; i < (segments + 1); i++)
+        {
+            x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
+            y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
+
+            line.SetPosition(i, new Vector3(x, y, z));
+
+            angle += (360f / segments);
+            print(x + " " + y + " " + i + " " + segments);
+        }
     }
 
     void Update () {
