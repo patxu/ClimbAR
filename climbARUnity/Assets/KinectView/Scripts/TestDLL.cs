@@ -60,7 +60,7 @@ public class TestDLL : MonoBehaviour
         }
         else
         {
-            boundingBoxArray = new int[] { 50, 50, 10, 20, 90, 90, 20, 10 };
+            boundingBoxArray = new int[] { 50, 50, 10, 30 };
             numHolds = boundingBoxArray.Length/4;
         }
 
@@ -82,9 +82,10 @@ public class TestDLL : MonoBehaviour
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             line = this.handHolds[i].GetComponent<LineRenderer>();
 
-            line.SetVertexCount(segments + 1);
+            float segments = 10f;
+            line.SetVertexCount((int)segments + 1);
             line.useWorldSpace = false;
-            CreatePoints(width, height);
+            CreatePoints(segments, width, height);
 
 
             // transform handholds to be 
@@ -95,24 +96,28 @@ public class TestDLL : MonoBehaviour
         print("done");
     }
 
-    void CreatePoints(float xradius, float yradius)
+    void CreatePoints(float segments, float xradius, float yradius)
     {
-        segments = 10;
         float x;
         float y;
         float z = 0f;
 
-        float angle = 20f;
+        float angle = 0f;
 
         for (int i = 0; i < (segments + 1); i++)
         {
             x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
             y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
 
+            this.handHolds[i+1] = GameObject.Instantiate(Handhold);
+            this.handHolds[i+1].transform.localPosition =
+                new Vector2(x + xradius,
+                (y + yradius) * -1f);
+
             line.SetPosition(i, new Vector3(x, y, z));
 
             angle += (360f / segments);
-            print(x + " " + y + " " + i + " " + segments);
+            print(x + " " + y + " " + angle);
         }
     }
 
