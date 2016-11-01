@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
+using System.Drawing;
 using System;
 
 public class TestDLL : MonoBehaviour
