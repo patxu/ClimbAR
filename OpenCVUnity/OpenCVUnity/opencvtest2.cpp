@@ -1,5 +1,4 @@
 #include "opencvtest2.h"
-#include <algorithm>
 #include <opencv2/opencv.hpp>
 #include <opencv\highgui.h>
 #include <opencv2/core/core.hpp>
@@ -13,35 +12,39 @@ using namespace std;
 extern "C" {
 	int *bb_array;
 	int num_holds;
-	
+	String img = "C:\\cs98-senior-project\\OpenCV_files\\img.jpg";
 
-	void TestSort(int a[], int length) {
-		std::sort(a, a + length);
-	}
 
-	int NumHolds() {
+	int getNumHolds() {
 		return num_holds;
 	}
 
-	int* OpenCVFunc(unsigned char* data, int height, int width) {
+	int* classifyImage(unsigned char* data, int width, int height) {
 		CascadeClassifier classifier;
 		String classifierName = "C:\\cs98-senior-project\\OpenCV_files\\cascade.xml";
-		String img = "C:\\cs98-senior-project\\OpenCV_files\\img.jpg";
+		//this should be a condition that checks whether data is passed in
+		Mat image;
+		if (false)
+		{
+			image = imread(img, CV_LOAD_IMAGE_GRAYSCALE);
+		}
+		else
+		{
+			image = Mat(width, height, CV_8UC4, data); // might be CV_8UC3?
+		}
 
 		if (!classifier.load(classifierName)) {
 			cout << "not working";
 			/*return nullptr;*/
 		}
-		Mat image = imread(img, CV_LOAD_IMAGE_GRAYSCALE);
-			//Mat(height, width, CV_8UC3, data);
-		
+
 		std::vector<Rect> holds;
 		classifier.detectMultiScale(image, holds, 1.2, 30, 0, Size(30, 30), Size(600, 600));
 		num_holds = holds.size();
 
 		// TODO another func that will clear memory
 		bb_array = new int[holds.size() * 4]; // top left x, top left y, width, height )
-		int array_index=0;
+		int array_index = 0;
 		for (int i = 0; i < holds.size(); i++) {
 			bb_array[array_index++] = holds[i].x;
 			bb_array[array_index++] = holds[i].y;
