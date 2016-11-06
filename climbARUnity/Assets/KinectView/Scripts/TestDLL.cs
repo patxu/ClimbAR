@@ -11,8 +11,8 @@ public class TestDLL : MonoBehaviour
     static readonly int MAX_IMG_BYTES = 10000;
 
     //Read image from Kinect
-    public float ColorWidth { get; private set; }
-    public float ColorHeight { get; private set; }
+    public float imageWidth { get; private set; }
+    public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
     private Texture2D _Texture;
@@ -33,33 +33,26 @@ public class TestDLL : MonoBehaviour
     public GameObject[] handHolds;
     public GameObject Handhold;
     public Camera mainCam;
+
     private readonly int MAXHOLDS = 100;
     private int numHolds = 0;
     private int[] boundingBoxArray;
 
-    // image variables
-    // private static float imgX = 2448;
-    // private static float imgY = 3264;
-    //private static float imgX = 100;
-    //private static float imgY = 100;
-
     // bounding ellipse
     LineRenderer line;
 
-    private static int cameraSize = 5;
+    private readonly float cameraSize = 5f;
 
-    void Start () { 
+    void Start()
+    {
         // TODO get this working for mac dev
         if (!climbSystemEnv.isWindows()) // currently not using this block of code
         {
-            //Untested code.
-            //http://stackoverflow.com/questions/29171151/passing-a-byte-array-from-unity-c-sharp-into-a-c-library-method
             Image frame = Image.FromFile("pathToImage/img.png");
             byte[] imgData = imageToByteArray(frame);
 
             IntPtr unmanagedArray = Marshal.AllocHGlobal(MAX_IMG_BYTES);
             Marshal.Copy(imgData, 0, unmanagedArray, MAX_IMG_BYTES);
-            //End untested.
 
             //IntPtr bb = OpenCVFunc(); // defunct -- we have this.Classify() now
             //this.numHolds = NumHolds();
@@ -70,16 +63,22 @@ public class TestDLL : MonoBehaviour
         {
             _Sensor = KinectSensor.GetDefault();
 
-            if (_Sensor != null)
+            if ((_Sensor != null) && (_Sensor.IsAvailable))
             {
                 print("Acquired sensor");
                 _Reader = _Sensor.ColorFrameSource.OpenReader();
 
-                var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Rgba);
-                ColorWidth = frameDesc.Width;
-                ColorHeight = frameDesc.Height;
+                var frameDesc = _Sensor
+                    .ColorFrameSource
+                    .CreateFrameDescription(ColorImageFormat.Rgba);
+                this.imageWidth = frameDesc.Width;
+                this.imageHeight = frameDesc.Height;
 
-                _Texture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
+                _Texture = new Texture2D(
+                    (int)this.imageWidth,
+                    (int)this.imageHeight,
+                    TextureFormat.RGBA32,
+                    false);
                 _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
 
                 if (!_Sensor.IsOpen)
@@ -90,11 +89,11 @@ public class TestDLL : MonoBehaviour
             }
             else
             {
-                print("No Kinect sensor, using static image"); // TODO integrate with Jon's logic?
+                // TODO integrate with Jon's logic?
+                print("Kinect sensor unavailable, using static image");
+                this.genHardcodedBoundingBoxes();
             }
 
-            this.boundingBoxArray = new int[] { 50, 50, 10, 15, 70, 70, 15, 5 };
-            this.numHolds = boundingBoxArray.Length/4;
         }
 
         // Adjust camera zoom.
@@ -111,11 +110,12 @@ public class TestDLL : MonoBehaviour
         this.InstantiateHandholds();
     }
 
-    void Update () {
+    void Update()
+    {
         if (_Reader != null)
         {
             var frame = _Reader.AcquireLatestFrame();
-            
+
             if (frame != null)
             {
                 frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Bgra);
@@ -131,19 +131,23 @@ public class TestDLL : MonoBehaviour
         }
         else
         {
-            Debug.Log("Using image");
+            Debug.Log("Using hardcoded bounding boxes or image");
         }
 
         this.InstantiateHandholds();
     }
 
-    // classify image (byte array), update the number of holds, copy bounding boxes into memory
+    // classify image (byte array), update the number of holds, 
+    // copy bounding boxes into memory
     void Classify()
     {
         int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
         Marshal.Copy(_Data, 0, ptr, _Data.Length);
-        IntPtr _boundingBoxes = OpenCV.classifyImage(ptr, (int)ColorWidth, (int)ColorHeight);
+        IntPtr _boundingBoxes = OpenCV.classifyImage(
+            ptr,
+            (int)imageWidth,
+            (int)imageHeight);
         Marshal.FreeHGlobal(ptr);
 
         this.numHolds = OpenCV.getNumHolds();
@@ -154,15 +158,20 @@ public class TestDLL : MonoBehaviour
     // update hand holds
     void InstantiateHandholds()
     {
-        //print(this.numHolds + " " + ColorWidth + " " + ColorHeight);
-        //print(boundingBoxArray[0] + " " + boundingBoxArray[1]);
         for (int i = 0; i < this.numHolds; i++)
         {
             int holdIndex = i * 4;
-            float x = boundingBoxArray[holdIndex] / ColorWidth * cameraSize - cameraSize / 2f;
-            float y = boundingBoxArray[holdIndex + 1] / ColorHeight * cameraSize - cameraSize / 2f;
-            float width = boundingBoxArray[holdIndex + 2] / (ColorWidth* 2.0f) * cameraSize;
-            float height = boundingBoxArray[holdIndex + 3] / (ColorHeight * 2f) * cameraSize;
+            float x = this.boundingBoxArray[holdIndex] /
+                    this.imageWidth * this.cameraSize - this.cameraSize / 2f;
+
+            float y = this.boundingBoxArray[holdIndex + 1] /
+                this.imageHeight * this.cameraSize - this.cameraSize / 2f;
+
+            float width = this.boundingBoxArray[holdIndex + 2] /
+                (this.imageWidth * 2f) * this.cameraSize;
+
+            float height = this.boundingBoxArray[holdIndex + 3] /
+                (this.imageHeight * 2f) * this.cameraSize;
 
             // Create handhold object and draw bounding ellipse
             line = this.handHolds[i].GetComponent<LineRenderer>();
@@ -181,6 +190,15 @@ public class TestDLL : MonoBehaviour
         }
     }
 
+    // simple, hardcoded bounding boxes
+    void genHardcodedBoundingBoxes()
+    {
+        this.boundingBoxArray = new int[] { 50, 50, 10, 15, 70, 70, 15, 5 };
+        this.imageWidth = 100;
+        this.imageHeight = 100;
+        this.numHolds = boundingBoxArray.Length / 4;
+    }
+
     // draw the bounding ellipse of the climbing hold
     void DrawBoundingEllipse(float xradius, float yradius)
     {
@@ -193,9 +211,9 @@ public class TestDLL : MonoBehaviour
         line.SetVertexCount(segments + 2);
 
         // width of line; scaled by width and height of bounding box
-        float lineWidth = Math.Min(xradius, yradius) / 5f; 
+        float lineWidth = Math.Min(xradius, yradius) / 5f;
         line.SetWidth(lineWidth, lineWidth);
-        
+
         // not currently setting the angle of ellipse
         float angle = 0f;
 
