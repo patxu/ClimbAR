@@ -7,53 +7,50 @@ using Windows.Kinect;
 
 public class TestDLL : MonoBehaviour
 {
-    //Constants
+    // Constants
     static readonly int MAX_IMG_BYTES = 10000;
 
     //Read image from Kinect
-    public int ColorWidth { get; private set; }
-    public int ColorHeight { get; private set; }
+    public float ColorWidth { get; private set; }
+    public float ColorHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
     private Texture2D _Texture;
     private byte[] _Data;
 
-    // The imported function
+    // import OpenCV dll wrapper functions
+    static class OpenCV
+    {
 #if UNITY_STANDALONE_WIN
-    [DllImport("OpenCVUnity", EntryPoint = "TestSort")]
-      public static extern void TestSort(int[] a, int length);
-      [DllImport("OpenCVUnity", EntryPoint = "OpenCVFunc")]
-      public static extern IntPtr OpenCVFunc();
-      [DllImport("OpenCVUnity", EntryPoint = "NumHolds")]
-      public static extern int NumHolds();
-      #endif
+        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
+        public static extern int getNumHolds();
+        [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
+        public static extern IntPtr classifyImage(IntPtr data, int width, int height);
+#endif
+    }
 
     // Game objects
     public GameObject[] handHolds;
     public GameObject Handhold;
     public Camera mainCam;
+    private readonly int MAXHOLDS = 100;
+    private int numHolds = 0;
+    private int[] boundingBoxArray;
 
-    // Class variables
-    // private static int scalingFactor = 150;
-    // private static int leftShift = 5;
-    // private static int downShift = 5;
+    // image variables
     // private static float imgX = 2448;
     // private static float imgY = 3264;
-    private static float imgX = 100;
-    private static float imgY = 100;
-    private Boolean first = true;
-    private Image testFrame;
+    //private static float imgX = 100;
+    //private static float imgY = 100;
 
-    public int segments = 10;
+    // bounding ellipse
     LineRenderer line;
 
     private static int cameraSize = 5;
 
-    // TODO: Restyle according to C# standards.
     void Start () { 
-        int numHolds = 0;
-        int[] boundingBoxArray;
-        if (!climbSystemEnv.isWindows())
+        // TODO get this working for mac dev
+        if (!climbSystemEnv.isWindows()) // currently not using this block of code
         {
             //Untested code.
             //http://stackoverflow.com/questions/29171151/passing-a-byte-array-from-unity-c-sharp-into-a-c-library-method
@@ -64,10 +61,10 @@ public class TestDLL : MonoBehaviour
             Marshal.Copy(imgData, 0, unmanagedArray, MAX_IMG_BYTES);
             //End untested.
 
-            IntPtr bb = OpenCVFunc();
-            numHolds = NumHolds();
-            boundingBoxArray = new int[numHolds * 4];
-            Marshal.Copy(bb, boundingBoxArray, 0, numHolds * 4);
+            //IntPtr bb = OpenCVFunc(); // defunct -- we have this.Classify() now
+            //this.numHolds = NumHolds();
+            //this.boundingBoxArray = new int[numHolds * 4];
+            //Marshal.Copy(bb, boundingBoxArray, 0, numHolds * 4);
         }
         else
         {
@@ -87,69 +84,31 @@ public class TestDLL : MonoBehaviour
 
                 if (!_Sensor.IsOpen)
                 {
-                    print("Sensor is not open");
+                    print("Sensor is not open; opening");
                     _Sensor.Open();
                 }
             }
             else
             {
-                Debug.Log("Using image");
+                print("No Kinect sensor, using static image"); // TODO integrate with Jon's logic?
             }
 
-            boundingBoxArray = new int[] { 50, 50, 10, 20, 90, 90, 20, 10 };
-            numHolds = boundingBoxArray.Length/4;
+            this.boundingBoxArray = new int[] { 50, 50, 10, 15, 70, 70, 15, 5 };
+            this.numHolds = boundingBoxArray.Length/4;
         }
-
-        this.handHolds = new GameObject[numHolds];
 
         // Adjust camera zoom.
         this.mainCam.orthographicSize = cameraSize / 2f;
 
         // Instantiate handholds.
-        for (int i = 0; i < numHolds; i++)
+        // probably need to be smarter here? kinda ugly
+        this.handHolds = new GameObject[this.MAXHOLDS];
+        for (int i = 0; i < this.MAXHOLDS; i++)
         {
-            int holdIndex = i * 4;
-            float x = boundingBoxArray[holdIndex] / imgX * cameraSize - cameraSize / 2f;
-            float y = boundingBoxArray[holdIndex + 1] / imgY * cameraSize - cameraSize / 2f;
-            float width = boundingBoxArray[holdIndex + 2] / (imgX * 2.0f) * cameraSize;
-            float height = boundingBoxArray[holdIndex + 3] / (imgY * 2f) * cameraSize;
-
-            // Create handhold object.
             this.handHolds[i] = GameObject.Instantiate(Handhold);
-            line = this.handHolds[i].GetComponent<LineRenderer>();
-
-            line.SetVertexCount(segments + 1);
-            line.useWorldSpace = false;
-            CreatePoints(width, height);
-
-
-            // transform handholds to be.
-            this.handHolds[i].transform.localPosition =
-                new Vector2(x + width,
-                            (y + height) * -1f);
+            this.handHolds[i].GetComponent<Renderer>().enabled = false;
         }
-        print("done");
-    }
-
-    void CreatePoints(float xradius, float yradius)
-    {
-        segments = 10;
-        float x;
-        float y;
-        float z = 0f;
-
-        float angle = 20f;
-
-        for (int i = 0; i < (segments + 1); i++)
-        {
-            x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
-            y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
-
-            line.SetPosition(i, new Vector3(x, y, z));
-
-            angle += (360f / segments);
-            print(x + " " + y + " " + i + " " + segments);
-        }
+        this.InstantiateHandholds();
     }
 
     void Update () {
@@ -159,20 +118,12 @@ public class TestDLL : MonoBehaviour
             
             if (frame != null)
             {
-                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
+                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Bgra);
                 _Texture.LoadRawTextureData(_Data);
                 _Texture.Apply();
 
-                // Call OpenCV Plugin.
-                // http://stackoverflow.com/questions/10894836/c-sharp-convert-image-formats-to-jpg.
-                // Test code.
-                if (this.first)
-                {
-                    //this.testFrame = (Bitmap)((new ImageConverter()).ConvertFrom(_Data));
-                    //x.Save("c:\\frame.Jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                    this.first = false;
-                }
-                // End test code.
+                // classify image using OpenCV classifier
+                this.Classify();
 
                 frame.Dispose();
                 frame = null;
@@ -181,6 +132,81 @@ public class TestDLL : MonoBehaviour
         else
         {
             Debug.Log("Using image");
+        }
+
+        this.InstantiateHandholds();
+    }
+
+    // classify image (byte array), update the number of holds, copy bounding boxes into memory
+    void Classify()
+    {
+        int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
+        IntPtr ptr = Marshal.AllocHGlobal(size);
+        Marshal.Copy(_Data, 0, ptr, _Data.Length);
+        IntPtr _boundingBoxes = OpenCV.classifyImage(ptr, (int)ColorWidth, (int)ColorHeight);
+        Marshal.FreeHGlobal(ptr);
+
+        this.numHolds = OpenCV.getNumHolds();
+        this.boundingBoxArray = new int[numHolds * 4];
+        Marshal.Copy(_boundingBoxes, this.boundingBoxArray, 0, this.numHolds * 4);
+    }
+
+    // update hand holds
+    void InstantiateHandholds()
+    {
+        //print(this.numHolds + " " + ColorWidth + " " + ColorHeight);
+        //print(boundingBoxArray[0] + " " + boundingBoxArray[1]);
+        for (int i = 0; i < this.numHolds; i++)
+        {
+            int holdIndex = i * 4;
+            float x = boundingBoxArray[holdIndex] / ColorWidth * cameraSize - cameraSize / 2f;
+            float y = boundingBoxArray[holdIndex + 1] / ColorHeight * cameraSize - cameraSize / 2f;
+            float width = boundingBoxArray[holdIndex + 2] / (ColorWidth* 2.0f) * cameraSize;
+            float height = boundingBoxArray[holdIndex + 3] / (ColorHeight * 2f) * cameraSize;
+
+            // Create handhold object and draw bounding ellipse
+            line = this.handHolds[i].GetComponent<LineRenderer>();
+            DrawBoundingEllipse(width, height);
+
+            // transform handholds (camera space?)
+            this.handHolds[i].transform.localPosition =
+                new Vector2(x + width,
+                            (y + height) * -1f);
+            this.handHolds[i].GetComponent<Renderer>().enabled = true;
+        }
+
+        for (int i = this.numHolds; i < this.MAXHOLDS; i++)
+        {
+            this.handHolds[i].GetComponent<Renderer>().enabled = false;
+        }
+    }
+
+    // draw the bounding ellipse of the climbing hold
+    void DrawBoundingEllipse(float xradius, float yradius)
+    {
+        float x;
+        float y;
+        float z = 0f;
+
+        // resolution of the sides of the ellipse
+        int segments = 50;
+        line.SetVertexCount(segments + 2);
+
+        // width of line; scaled by width and height of bounding box
+        float lineWidth = Math.Min(xradius, yradius) / 5f; 
+        line.SetWidth(lineWidth, lineWidth);
+        
+        // not currently setting the angle of ellipse
+        float angle = 0f;
+
+        for (int i = 0; i < (segments + 2); i++)
+        {
+            x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
+            y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
+
+            line.SetPosition(i, new Vector3(x, y, z));
+
+            angle += (360f / segments);
         }
     }
 

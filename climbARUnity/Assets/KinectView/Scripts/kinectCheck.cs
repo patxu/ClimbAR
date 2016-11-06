@@ -5,36 +5,22 @@ using UnityEngine.UI;
 
 
 public class kinectCheck : MonoBehaviour {
-    Text txt;
+    private Text txt;
     private KinectSensor _Sensor;
-    private bool kinectConnected = false;
 
-    void checkForKinect1()
+    private void onIsAvailableChanged(object sensor, System.EventArgs args)
     {
-        if (kinectConnected) {
-            if (!_Sensor.IsOpen)
-            {
-                txt.text = "Kinect Disconnected. Please Reconnect!";
-                kinectConnected = false;
-            }
-
-        } else {
-            _Sensor = KinectSensor.GetDefault();
-            if (_Sensor != null)
-            {
-                txt.text = "Kinect Connected!";
-                kinectConnected = true;
-            }
-        }
+        checkKinectConnection((KinectSensor)sensor);
     }
 
-    void checkForKinect()
+    void checkKinectConnection(KinectSensor sensor)
     {
-        _Sensor = KinectSensor.GetDefault();
-        if (_Sensor != null)
+        if (sensor.IsAvailable)
         {
             txt.text = "Kinect Connected!";
-        } else {
+        }
+        else
+        {
             txt.text = "Kinect Disconnected. Please Reconnect!";
         }
     }
@@ -42,11 +28,16 @@ public class kinectCheck : MonoBehaviour {
     // Use this for initialization
     void Start () {
         txt = gameObject.GetComponent<Text>();
-        checkForKinect();
+        _Sensor = KinectSensor.GetDefault();
+        if (_Sensor != null)
+        {
+            _Sensor.Open();
+        }
+        checkKinectConnection(_Sensor);
+        _Sensor.IsAvailableChanged += onIsAvailableChanged;
     }
-	
+
 	// Update is called once per frame
 	void Update () {
-        checkForKinect();
     }
 }
