@@ -30,7 +30,8 @@ extern "C" {
 		}
 		else
 		{
-			image = Mat(width, height, CV_8UC4, data); // might be CV_8UC3?
+			Mat temp = Mat(height, width, CV_8UC4, data); // might be CV_8UC3?
+			cv::cvtColor(temp, image, CV_BGR2GRAY);
 		}
 
 		if (!classifier.load(classifierName)) {

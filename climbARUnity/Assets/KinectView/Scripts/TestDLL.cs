@@ -11,8 +11,8 @@ public class TestDLL : MonoBehaviour
     static readonly int MAX_IMG_BYTES = 10000;
 
     //Read image from Kinect
-    public int ColorWidth { get; private set; }
-    public int ColorHeight { get; private set; }
+    public float ColorWidth { get; private set; }
+    public float ColorHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
     private Texture2D _Texture;
@@ -40,11 +40,8 @@ public class TestDLL : MonoBehaviour
     // image variables
     // private static float imgX = 2448;
     // private static float imgY = 3264;
-    private static float imgX = 100;
-    private static float imgY = 100;
-    private Boolean first = true;
-    private Image testFrame;
-
+    //private static float imgX = 100;
+    //private static float imgY = 100;
 
     // bounding ellipse
     LineRenderer line;
@@ -121,22 +118,12 @@ public class TestDLL : MonoBehaviour
             
             if (frame != null)
             {
-                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
+                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Bgra);
                 _Texture.LoadRawTextureData(_Data);
                 _Texture.Apply();
 
                 // classify image using OpenCV classifier
                 this.Classify();
-
-                // http://stackoverflow.com/questions/10894836/c-sharp-convert-image-formats-to-jpg.
-                // Test code.
-                if (this.first)
-                {
-                    //this.testFrame = (Bitmap)((new ImageConverter()).ConvertFrom(_Data));
-                    //x.Save("c:\\frame.Jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                    this.first = false;
-                }
-                // End test code.
 
                 frame.Dispose();
                 frame = null;
@@ -156,25 +143,26 @@ public class TestDLL : MonoBehaviour
         int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
         Marshal.Copy(_Data, 0, ptr, _Data.Length);
-        IntPtr _boundingBoxes = OpenCV.classifyImage(ptr, ColorWidth, ColorHeight);
+        IntPtr _boundingBoxes = OpenCV.classifyImage(ptr, (int)ColorWidth, (int)ColorHeight);
         Marshal.FreeHGlobal(ptr);
 
-        //this.numHolds = OpenCV.getNumHolds();
-        //this.boundingBoxArray = new int[numHolds * 4];
-        //Marshal.Copy(_boundingBoxes, this.boundingBoxArray, 0, this.numHolds * 4);
+        this.numHolds = OpenCV.getNumHolds();
+        this.boundingBoxArray = new int[numHolds * 4];
+        Marshal.Copy(_boundingBoxes, this.boundingBoxArray, 0, this.numHolds * 4);
     }
 
     // update hand holds
     void InstantiateHandholds()
     {
-
+        //print(this.numHolds + " " + ColorWidth + " " + ColorHeight);
+        //print(boundingBoxArray[0] + " " + boundingBoxArray[1]);
         for (int i = 0; i < this.numHolds; i++)
         {
             int holdIndex = i * 4;
-            float x = boundingBoxArray[holdIndex] / imgX * cameraSize - cameraSize / 2f;
-            float y = boundingBoxArray[holdIndex + 1] / imgY * cameraSize - cameraSize / 2f;
-            float width = boundingBoxArray[holdIndex + 2] / (imgX * 2.0f) * cameraSize;
-            float height = boundingBoxArray[holdIndex + 3] / (imgY * 2f) * cameraSize;
+            float x = boundingBoxArray[holdIndex] / ColorWidth * cameraSize - cameraSize / 2f;
+            float y = boundingBoxArray[holdIndex + 1] / ColorHeight * cameraSize - cameraSize / 2f;
+            float width = boundingBoxArray[holdIndex + 2] / (ColorWidth* 2.0f) * cameraSize;
+            float height = boundingBoxArray[holdIndex + 3] / (ColorHeight * 2f) * cameraSize;
 
             // Create handhold object and draw bounding ellipse
             line = this.handHolds[i].GetComponent<LineRenderer>();
