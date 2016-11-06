@@ -34,31 +34,33 @@ The Unity scene so far! Displays the bounding boxes given by the OpenCV classifi
 
 ## Setup
 Setup depends on whether you want to only run the game or develop on our library.
-- ### Hold Recognition Classifier
-  - Image Pre-Processing in Java: Simple Java class - run from terminal or IDE
-    - `javaImageProcessing`
-  - OpenCV Python
-    - Install with brew
-      - `brew tap homebrew/science`
-      - `brew install opencv3`
 
-    - Set paths
-      - `export DYLD_FALLBACK_LIBRARY_PATH=/usr/local/Cellar/opencv3/3.1.0_1/lib:$DYLD_FALLBACK_LIBRARY_PATH`
-      - `export PYTHONPATH=/usr/local/Cellar/opencv3/3.1.0_3/lib/python2.7/site-packages:$PYTHONPATH`
-        - if this doesn't work then your opencv version might be slightly different. search around for the directory and it should work
-      - `export PATH=/usr/local/Cellar/opencv3/3.1.0_3/bin:$PATH`
-      - check by opening up `python` on cmd line and then trying to import – `import cv2`
+### Hold Recognition Classifier
+- Image Pre-Processing in Java: Simple Java class - run from terminal or IDE
+  - `javaImageProcessing`
+- OpenCV Python
+  - Install with Homebrew
+    - `brew tap homebrew/science`
+    - `brew install opencv3`
 
-    - Training
-      - followed [this tutorial](
-    http://docs.opencv.org/trunk/dc/d88/tutorial_traincascade.html)
-      - `opencv_createsamples --vec classifier/position_single -info info.dat -bg bg.dat`
-        - use the `-img` and `-num` flag to train off one image. this is what we did when only had 7 images and had to generate training images from a single image
-      - `opencv_createsamples -vec classifier/position_single -info info.dat -bg bg.dat`
-      - `opencv_traincascade -data train_cascade/ -vec classifier/position_single -bg bg.dat -numPos 50 -numNeg 3`
-- ### Unity
-  - download [Unity](https://unity3d.com/get-unity/download) to run our Unity projects
-  - download the [Kinect for Windows SDK](https://www.microsoft.com/en-us/download/details.aspx?id=36996)
+  - Set system paths
+    - `export DYLD_FALLBACK_LIBRARY_PATH=/usr/local/Cellar/opencv3/3.1.0_1/lib:$DYLD_FALLBACK_LIBRARY_PATH`
+    - `export PYTHONPATH=/usr/local/Cellar/opencv3/3.1.0_3/lib/python2.7/site-packages:$PYTHONPATH`
+      - if this doesn't work then your opencv version might be slightly different. search around for the directory and it should work
+    - `export PATH=/usr/local/Cellar/opencv3/3.1.0_3/bin:$PATH`
+    - check by opening up `python` on cmd line and then trying to import – `import cv2`
+
+  - Training
+    - followed [this tutorial](
+  http://docs.opencv.org/trunk/dc/d88/tutorial_traincascade.html)
+    - `opencv_createsamples --vec classifier/position_single -info info.dat -bg bg.dat`
+      - use the `-img` and `-num` flag to train off one image. this is what we did when only had 7 images and had to generate training images from a single image
+    - `opencv_createsamples -vec classifier/position_single -info info.dat -bg bg.dat`
+    - `opencv_traincascade -data train_cascade/ -vec classifier/position_single -bg bg.dat -numPos 50 -numNeg 3`
+
+### Unity
+- download [Unity](https://unity3d.com/get-unity/download) to run our Unity projects
+- download the [Kinect for Windows SDK](https://www.microsoft.com/en-us/download/details.aspx?id=36996)
 
 ## Deployment
 - hook up to a projector and run the Unity game!
@@ -77,9 +79,9 @@ Left to Right: Orestis, Charley, Pat, David, Jon
 
 ## Acknowledgements
   - ### Tim Tregubov
-    For his technical insight, mentorship, and teaching us the essence of love (especially regarding red pandas).
+    For his technical insight, mentorship, and infinite wisdom.
 
     <img src="readme_imgs/red-panda.jpg" width=300x>
 
   - ### DALI Lab
-    For providing a inspiring and collaborative space (Sudikoff 007), as well as crucial hardware (Macbook Pros, Kinect, PCs).
+    For providing a inspiring and collaborative space (Sudikoff 007), as well as crucial hardware (Macbook Pros, Kinect & projector, Windows PCs).
