@@ -25,17 +25,6 @@ public class InputHandler : MonoBehaviour
             // always resize current object
             m_CurrentObject = this.GetComponent<ResizableObject>();
             m_StartScale = m_CurrentObject.transform.localScale;
-
-            //if (Physics.Raycast(m_Ray.origin, m_Ray.direction, out m_RayCastHit, Mathf.Infinity))
-            //{
-            //    ResizableObject obj = m_RayCastHit.collider.gameObject.GetComponent<ResizableObject>();
-            //    if (obj)
-            //    {
-            //        m_CurrentObject = obj;
-            //        m_StartScale = obj.transform.localScale;
-
-            //    }
-            //}
         }
 
         if (Input.GetMouseButton(0))
@@ -64,9 +53,10 @@ public class InputHandler : MonoBehaviour
                 {
                     m_ScaleFactor = 1 / m_ScaleFactor;
                 }
+
                 m_CurrentObject.transform.localScale = Vector3.Lerp(
                     m_CurrentObject.transform.localScale,
-                    m_StartScale * m_ScaleFactor,
+                    new Vector3(m_StartScale.x, 0) * m_ScaleFactor,
                     m_DeltaTime);
             }
             m_AnimateScale = false;
