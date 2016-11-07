@@ -157,45 +157,39 @@ public class TestDLL : MonoBehaviour
 
     // update hand holds
     void InstantiateHandholds()
-    {
+    {   
+        //TODO: get real coordinates of projector bounding box from OpenCV
+        int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800};
+        float[] transformedSpaceArr = transformOpenCvToUnitySpace(testProjectorBB);
+
         for (int i = 0; i < this.numHolds; i++)
         {
             int holdIndex = i * 4;
-            float x = this.boundingBoxArray[holdIndex] /
-                    this.imageWidth * this.cameraSize - this.cameraSize / 2f;
+            float x = transformedSpaceArr[holdIndex] * this.cameraSize - this.cameraSize / 2f;
+            float y = transformedSpaceArr[holdIndex + 1] * this.cameraSize - this.cameraSize / 2f;
 
-            float y = this.boundingBoxArray[holdIndex + 1] /
-                this.imageHeight * this.cameraSize - this.cameraSize / 2f;
-
-            float width = this.boundingBoxArray[holdIndex + 2] /
-                (this.imageWidth * 2f) * this.cameraSize;
-
-            float height = this.boundingBoxArray[holdIndex + 3] /
-                (this.imageHeight * 2f) * this.cameraSize;
+            float width = (transformedSpaceArr[holdIndex + 2] / 2) * this.cameraSize; //divide by 2 because it is a radius
+            float height = (transformedSpaceArr[holdIndex + 3] / 2) * this.cameraSize;
 
             // Create handhold object and draw bounding ellipse
+            print(this.numHolds + " " + i);
             line = this.handHolds[i].GetComponent<LineRenderer>();
             DrawBoundingEllipse(width, height);
 
-            // transform handholds (camera space?)
+            // transform handhold (camera space?)
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
-            this.handHolds[i].GetComponent<Renderer>().enabled = true;
-        }
-
-        for (int i = this.numHolds; i < this.MAXHOLDS; i++)
-        {
-            this.handHolds[i].GetComponent<Renderer>().enabled = false;
+            this.handHolds[i].GetComponent<Renderer>().enabled = true; //not needed anymore?
         }
     }
 
     // simple, hardcoded bounding boxes
     void genHardcodedBoundingBoxes()
     {
-        this.boundingBoxArray = new int[] { 50, 50, 10, 15, 70, 70, 15, 5 };
-        this.imageWidth = 100;
-        this.imageHeight = 100;
+        this.boundingBoxArray = new int[] { 500, 500, 100, 150, 700, 700, 150, 50 };
+        this.imageWidth = 1000;
+        this.imageHeight = 1000;
         this.numHolds = boundingBoxArray.Length / 4;
     }
 
@@ -226,6 +220,58 @@ public class TestDLL : MonoBehaviour
 
             angle += (360f / segments);
         }
+    }
+
+    /// <summary>
+    /// Transforms coordinates given in OpenCV Space to coordinates in Unity ( 0 to 1)
+    /// </summary>
+    /// <param name="coordinates">int array of coordinates in the order top left (x,y), top right, bottom right, bottom left </param>
+    /// <returns>float array of transformed coordinates</returns>
+    private float[] transformOpenCvToUnitySpace(int[] coordinates)
+    {
+        int x1 = coordinates[0];
+        int y1 = coordinates[1];
+        int x2 = coordinates[2];
+        int y2 = coordinates[3];
+        int x3 = coordinates[4];
+        int y3 = coordinates[5];
+        int x4 = coordinates[6];
+        int y4 = coordinates[7];
+
+        float[] transformedArr = new float[this.numHolds * 4];
+
+        float height = y4 - y1; //this is assuming y1 and y2 are approximately the same
+
+        float leftGradient = (x4 - x1) / height;
+        float rightGradient = (x3 - x2) / (y3 - y2);
+
+        for (int i = 0; i < this.numHolds; i++)
+        {
+            int holdIndex = i * 4;
+
+            // get coordinates of hold
+            int currentX = this.boundingBoxArray[holdIndex];
+            int currentY = this.boundingBoxArray[holdIndex + 1];
+            int holdWidth = this.boundingBoxArray[holdIndex + 2];
+            int holdHeight = this.boundingBoxArray[holdIndex + 3];
+
+            //Project y on bb side left to get coordinates of the beginning of the horizonal line on which this hold belongs
+            float leftX = x1 + leftGradient * (currentY - y1);
+
+            //Project y on bb side right to get coordinates of the end of the horizonal line on which this hold belongs
+            float rightX = x2 + rightGradient * (currentY - y2);
+
+            //get length of corresponding horizontal line
+            float xLength = rightX - leftX;
+
+            //save values
+            transformedArr.SetValue((currentX - leftX) / xLength, holdIndex);
+            transformedArr.SetValue((currentY - y1) / height, holdIndex + 1);
+            transformedArr.SetValue(holdWidth / xLength, holdIndex + 2);
+            transformedArr.SetValue(holdHeight / height, holdIndex + 3);
+        }
+
+        return transformedArr;
     }
 
     private byte[] imageToByteArray(Image imageIn)
