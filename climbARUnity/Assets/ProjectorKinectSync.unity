@@ -101,6 +101,7 @@ GameObject:
   - 212: {fileID: 1469604065}
   - 114: {fileID: 1469604064}
   - 114: {fileID: 1469604067}
+  - 114: {fileID: 1469604068}
   m_Layer: 0
   m_Name: ProjectorSetupSquare
   m_TagString: Untagged
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1469604063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4dac93ad46bd3a459ce1e76d0133f53, type: 3}
+  m_Script: {fileID: 11500000, guid: 1941ec2fb4d6fd74ea23b8c0f67f5d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &1469604065
@@ -148,7 +149,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ba3d9b4f3219bab419528e2513a873f2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f8dd64a71e9044e4889f3688c3387674, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -159,8 +160,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1469604063}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 30, y: 30, z: 1}
+  m_LocalPosition: {x: -0.02, y: 0.05, z: 0}
+  m_LocalScale: {x: 219.22995, y: 252.37189, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -173,7 +174,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1469604063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dda8e383bbc877344b6431bc942131c2, type: 3}
+  m_Script: {fileID: 11500000, guid: a0c25447f42d3c840873dd05a171aae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1469604068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1469604063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9267d587a3db33b44943aaf21c3d8164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1471388362
