@@ -1,19 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.InteropServices;
 using Windows.Kinect;
 
 public class projectorCalibrate : MonoBehaviour
 {
-
-    //Red frame
-    //Green frame
-    // Blue frame
+    // import OpenCV dll wrapper functions
+    static class OpenCV
+    {
+#if UNITY_STANDALONE_WIN
+        [DllImport("OpenCVUnity", EntryPoint = "findProjectorBox")]
+        public static extern IntPtr findProjectorBox(IntPtr redData, IntPtr greenData, IntPtr blueData, int imageWidth, int imageHeight);
+#endif
+    }
 
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
     private byte[] _RedData;
     private byte[] _GreenData;
     private byte[] _BlueData;
+    private float imageWidth;
+    private float imageHeight;
+    private int[] projectorCoords;
     enum Stages { RED_COLLECT, GREEN_COLLECT, BLUE_COLLECT, CALCULATING, DONE };
     private Stages currentStage;
 
@@ -27,6 +36,8 @@ public class projectorCalibrate : MonoBehaviour
             _Reader = _Sensor.ColorFrameSource.OpenReader();
 
             var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Rgba);
+            imageHeight = frameDesc.Height;
+            imageWidth = frameDesc.Width;
             _RedData = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
             _GreenData = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
             _BlueData = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
@@ -67,6 +78,25 @@ public class projectorCalibrate : MonoBehaviour
                 }
                 break;
             case Stages.CALCULATING:
+                // Copy arrays of pixel data to be sent to c++ code
+                int size = Marshal.SizeOf(_RedData[0]) * _RedData.Length;
+                IntPtr redArray = Marshal.AllocHGlobal(size);
+                IntPtr greenArray = Marshal.AllocHGlobal(size);
+                IntPtr blueArray = Marshal.AllocHGlobal(size);
+                Marshal.Copy(_RedData, 0, redArray, _RedData.Length);
+                Marshal.Copy(_GreenData, 0, greenArray, _GreenData.Length);
+                Marshal.Copy(_BlueData, 0, blueArray, _BlueData.Length);
+
+                // Get coordinates
+                IntPtr coords = OpenCV.findProjectorBox(redArray, greenArray, blueArray, (int)imageWidth, (int)imageHeight);
+                projectorCoords = new int[4];
+                Marshal.Copy(coords, projectorCoords, 0, 4);
+                Debug.Log(projectorCoords[0]);
+
+                // Free data
+                Marshal.FreeHGlobal(redArray);
+                Marshal.FreeHGlobal(greenArray);
+                Marshal.FreeHGlobal(blueArray);
 
                 currentStage = Stages.DONE;
                 break;
