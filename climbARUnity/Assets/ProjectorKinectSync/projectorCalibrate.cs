@@ -20,6 +20,7 @@ public class projectorCalibrate : MonoBehaviour
     private byte[] _RedData;
     private byte[] _GreenData;
     private byte[] _BlueData;
+    private bool advance, inCoroutine;
     private float imageWidth;
     private float imageHeight;
     private int[] projectorCoords;
@@ -58,25 +59,25 @@ public class projectorCalibrate : MonoBehaviour
         switch (currentStage)
         {
             case Stages.RED_COLLECT:
-                if (readFrame(_RedData))
+                if (!inCoroutine)
                 {
-                    GetComponent<SpriteRenderer>().color = Color.green;
-                    currentStage = Stages.GREEN_COLLECT;
+                    StartCoroutine(captureColor(Color.red, _RedData, Stages.GREEN_COLLECT));
                 }
+               
                 break;
             case Stages.GREEN_COLLECT:
-                if (readFrame(_GreenData))
+                if (!inCoroutine)
                 {
-                    GetComponent<SpriteRenderer>().color = Color.blue;
-                    currentStage = Stages.BLUE_COLLECT;
+                    StartCoroutine(captureColor(Color.green, _GreenData, Stages.BLUE_COLLECT));
                 }
                 break;
             case Stages.BLUE_COLLECT:
-                if (readFrame(_BlueData))
+                if (!inCoroutine)
                 {
-                    currentStage = Stages.CALCULATING;
+                    StartCoroutine(captureColor(Color.blue, _BlueData, Stages.CALCULATING));
                 }
                 break;
+                
             case Stages.CALCULATING:
                 // Copy arrays of pixel data to be sent to c++ code
                 int size = Marshal.SizeOf(_RedData[0]) * _RedData.Length;
@@ -105,8 +106,24 @@ public class projectorCalibrate : MonoBehaviour
         }
     }
 
-    private bool readFrame(byte[] buffer)
+    IEnumerator captureColor(Color color, byte[] buffer, Stages advanceTo)
     {
+        advance = false;
+        inCoroutine = true;
+        GetComponent<SpriteRenderer>().color = color;
+        yield return new WaitForSecondsRealtime(5f);
+        while (!advance)
+        {
+            readFrame(buffer);
+            yield return null;
+        }
+        inCoroutine = false;
+        currentStage = advanceTo;
+    }
+
+    private void readFrame(byte[] buffer)
+    {
+        advance = false;
         var frame = _Reader.AcquireLatestFrame();
 
         if (frame != null)
@@ -114,10 +131,10 @@ public class projectorCalibrate : MonoBehaviour
             frame.CopyConvertedFrameDataToArray(buffer, ColorImageFormat.Bgra);
             frame.Dispose();
             frame = null;
-            return true;
+            advance = true;
+            return;
         }
 
         Debug.Log("Can't get frame");
-        return false;
     }
 }
