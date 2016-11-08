@@ -79,7 +79,7 @@ Left to Right: Orestis, Charley, Pat, David, Jon
 
 ## Acknowledgements
   - ### Tim Tregubov
-    For his technical insight, mentorship, and infinite wisdom.
+    For his technical insight, mentorship, and humor.
 
     <img src="readme_imgs/red-panda.jpg" width=300x>
 
