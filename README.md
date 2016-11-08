@@ -10,6 +10,7 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. thes
 
 ## Game Mockups
 Some basic mockups for how we envision the project. See a simple game UI displayed on the wall. Then, grab a hold to select an option.
+
 <img src="readme_imgs/game_menu.png" width=400x>
 <img src="readme_imgs/game_route_generation.png" width=400x>
 
