@@ -162,14 +162,23 @@ public class TestDLL : MonoBehaviour
         int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800};
         float[] transformedSpaceArr = transformOpenCvToUnitySpace(testProjectorBB);
 
+        float cam_height = 2f * mainCam.orthographicSize;
+        float cam_width = cam_height * mainCam.aspect;
+
         for (int i = 0; i < this.numHolds; i++)
         {
             int holdIndex = i * 4;
-            float x = transformedSpaceArr[holdIndex] * this.cameraSize - this.cameraSize / 2f;
+            float x = transformedSpaceArr[holdIndex] * cam_height - cam_width / 2f;
             float y = transformedSpaceArr[holdIndex + 1] * this.cameraSize - this.cameraSize / 2f;
 
-            float width = (transformedSpaceArr[holdIndex + 2] / 2) * this.cameraSize; //divide by 2 because it is a radius
-            float height = (transformedSpaceArr[holdIndex + 3] / 2) * this.cameraSize;
+            //float x = transformedSpaceArr[holdIndex] * this.cameraSize - this.cameraSize / 2f;
+            //float y = transformedSpaceArr[holdIndex + 1] * this.cameraSize - this.cameraSize / 2f;
+
+            float width = (transformedSpaceArr[holdIndex + 2] / 2) * cam_height; //divide by 2 because it is a radius
+            float height = (transformedSpaceArr[holdIndex + 3] / 2) * cam_height;
+
+            // float width = (transformedSpaceArr[holdIndex + 2] / 2) * this.cameraSize; //divide by 2 because it is a radius
+            // float height = (transformedSpaceArr[holdIndex + 3] / 2) * this.cameraSize;
 
             // Create handhold object and draw bounding ellipse
             print(this.numHolds + " " + i);
@@ -187,7 +196,7 @@ public class TestDLL : MonoBehaviour
     // simple, hardcoded bounding boxes
     void genHardcodedBoundingBoxes()
     {
-        this.boundingBoxArray = new int[] { 500, 500, 100, 150, 700, 700, 150, 50 };
+        this.boundingBoxArray = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
         this.imageWidth = 1000;
         this.imageHeight = 1000;
         this.numHolds = boundingBoxArray.Length / 4;
