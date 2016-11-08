@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using Windows.Kinect;
+using System.Collections;
 
 public class TestDLL : MonoBehaviour
 {
@@ -107,10 +108,11 @@ public class TestDLL : MonoBehaviour
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].GetComponent<Renderer>().enabled = false;
         }
-        this.InstantiateHandholds();
     }
 
-    void Update()
+    // coroutine for overlaying bounding boxes on color image
+    // TODO: add skeleton overlay
+    IEnumerator GrabFrameAndClassify()
     {
         if (_Reader != null)
         {
@@ -118,12 +120,14 @@ public class TestDLL : MonoBehaviour
 
             if (frame != null)
             {
+                print("Classifying and applying overlay");
                 frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Bgra);
                 _Texture.LoadRawTextureData(_Data);
                 _Texture.Apply();
 
                 // classify image using OpenCV classifier
                 this.Classify();
+                this.InstantiateHandholds();
 
                 frame.Dispose();
                 frame = null;
@@ -134,7 +138,15 @@ public class TestDLL : MonoBehaviour
             Debug.Log("Using hardcoded bounding boxes or image");
         }
 
-        this.InstantiateHandholds();
+        yield return null;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown("c"))
+        {
+            StartCoroutine("GrabFrameAndClassify");
+        }
     }
 
     // classify image (byte array), update the number of holds, 
