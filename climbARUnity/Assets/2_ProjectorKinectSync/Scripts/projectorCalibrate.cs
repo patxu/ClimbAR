@@ -20,7 +20,7 @@ public class projectorCalibrate : MonoBehaviour
     private byte[] _RedData;
     private byte[] _GreenData;
     private byte[] _BlueData;
-    private bool advance, inCoroutine;
+    private bool advance, inCoroutine, debugMode;
     private float imageWidth;
     private float imageHeight;
     private int[] projectorCoords;
@@ -51,6 +51,7 @@ public class projectorCalibrate : MonoBehaviour
 
         GetComponent<SpriteRenderer>().color = Color.red;
         currentStage = Stages.RED_COLLECT;
+        debugMode = true;
     }
 
     // Update is called once per frame
@@ -126,11 +127,17 @@ public class projectorCalibrate : MonoBehaviour
         advance = false;
         var frame = _Reader.AcquireLatestFrame();
 
+        
         if (frame != null)
         {
             frame.CopyConvertedFrameDataToArray(buffer, ColorImageFormat.Bgra);
             frame.Dispose();
             frame = null;
+            advance = true;
+            return;
+        }
+        if (debugMode)
+        {
             advance = true;
             return;
         }
