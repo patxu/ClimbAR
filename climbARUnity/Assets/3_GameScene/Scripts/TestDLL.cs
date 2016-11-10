@@ -146,6 +146,7 @@ public class TestDLL : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
+            print("starting coroutine");
             StartCoroutine("GrabFrameAndClassify");
         }
     }
