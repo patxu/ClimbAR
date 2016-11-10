@@ -64,7 +64,7 @@ public class TestDLL : MonoBehaviour
         {
             _Sensor = KinectSensor.GetDefault();
 
-            if ((_Sensor != null) && (_Sensor.IsAvailable))
+            if (_Sensor != null)
             {
                 print("Acquired sensor");
                 _Reader = _Sensor.ColorFrameSource.OpenReader();
@@ -169,7 +169,7 @@ public class TestDLL : MonoBehaviour
 
     // update hand holds
     void InstantiateHandholds()
-    {   
+    {
         //TODO: get real coordinates of projector bounding box from OpenCV
         int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800};
         float[] transformedSpaceArr = transformOpenCvToUnitySpace(testProjectorBB);
