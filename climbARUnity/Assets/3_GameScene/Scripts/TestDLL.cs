@@ -11,7 +11,7 @@ public class TestDLL : MonoBehaviour
     // Constants
     static readonly int MAX_IMG_BYTES = 10000;
 
-    //Read image from Kinect
+    // Read image from Kinect
     public float imageWidth { get; private set; }
     public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
@@ -22,12 +22,12 @@ public class TestDLL : MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
-#if UNITY_STANDALONE_WIN
-        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
-        public static extern int getNumHolds();
-        [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
-        public static extern IntPtr classifyImage(IntPtr data, int width, int height);
-#endif
+        #if UNITY_STANDALONE_WIN
+                [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
+                public static extern int getNumHolds();
+                [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
+                public static extern IntPtr classifyImage(IntPtr data, int width, int height);
+        #endif
     }
 
     // Game objects
@@ -108,6 +108,7 @@ public class TestDLL : MonoBehaviour
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].GetComponent<Renderer>().enabled = false;
         }
+
     }
 
     // coroutine for overlaying bounding boxes on color image
@@ -167,7 +168,7 @@ public class TestDLL : MonoBehaviour
         Marshal.Copy(_boundingBoxes, this.boundingBoxArray, 0, this.numHolds * 4);
     }
 
-    // update hand holds
+    // update handholds
     void InstantiateHandholds()
     {
         //TODO: get real coordinates of projector bounding box from OpenCV
