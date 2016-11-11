@@ -101,7 +101,6 @@ GameObject:
   - 212: {fileID: 1469604065}
   - 114: {fileID: 1469604064}
   - 114: {fileID: 1469604067}
-  - 114: {fileID: 1469604068}
   m_Layer: 0
   m_Name: ProjectorSetupSquare
   m_TagString: Untagged
