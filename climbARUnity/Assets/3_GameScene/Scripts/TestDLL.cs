@@ -1,16 +1,18 @@
 using UnityEngine;
+using UnityEditor;
 using System.Runtime.InteropServices;
 using System;
 using System.Drawing;
 using System.IO;
 using Windows.Kinect;
+using System.Collections;
 
 public class TestDLL : MonoBehaviour
 {
-    // Constants
-    static readonly int MAX_IMG_BYTES = 10000;
 
-    //Read image from Kinect
+    bool DEBUG = false;
+
+    // Read image from Kinect
     public float imageWidth { get; private set; }
     public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
@@ -34,23 +36,21 @@ public class TestDLL : MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
 
-    private readonly int MAXHOLDS = 100;
     private int numHolds = 0;
     private int[] boundingBoxArray;
 
     // bounding ellipse
     LineRenderer line;
 
-    private readonly float cameraSize = 5f;
-
     void Start()
     {
         _Sensor = KinectSensor.GetDefault();
 
-        if ((_Sensor != null) && (_Sensor.IsAvailable))
+        if (_Sensor != null)
         {
             print("Acquired sensor");
             _Reader = _Sensor.ColorFrameSource.OpenReader();
+
 
             var frameDesc = _Sensor
                 .ColorFrameSource
@@ -65,35 +65,38 @@ public class TestDLL : MonoBehaviour
                 false);
             _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
 
+
+
             if (!_Sensor.IsOpen)
             {
                 print("Sensor is not open; opening");
                 _Sensor.Open();
             }
+
+
         }
         else
         {
             // TODO integrate with Jon's logic?
             print("Kinect sensor unavailable, using static image");
-            this.genHardcodedBoundingBoxes();
+            //this.genHardcodedBoundingBoxes();
         }
 
 
-        // Adjust camera zoom.
-        this.mainCam.orthographicSize = cameraSize / 2f;
-
-        // Instantiate handholds.
-        // probably need to be smarter here? kinda ugly
-        this.handHolds = new GameObject[this.MAXHOLDS];
-        for (int i = 0; i < this.MAXHOLDS; i++)
-        {
-            this.handHolds[i] = GameObject.Instantiate(Handhold);
-            this.handHolds[i].GetComponent<Renderer>().enabled = false;
-        }
-        this.InstantiateHandholds();
     }
 
     void Update()
+    {
+        if (Input.GetKeyDown("c"))
+        {
+            print("starting coroutine");
+            StartCoroutine("GrabFrameAndClassify");
+        }
+    }
+
+    // coroutine for overlaying bounding boxes on color image
+    // TODO: add skeleton overlay
+    IEnumerator GrabFrameAndClassify()
     {
         if (_Reader != null)
         {
@@ -101,15 +104,58 @@ public class TestDLL : MonoBehaviour
 
             if (frame != null)
             {
-                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Bgra);
-                _Texture.LoadRawTextureData(_Data);
-                _Texture.Apply();
+                int numHolds;
+                int[] holdsBoundingBoxes;
+                int imageWidth;
+                int imageHeight;
 
-                // classify image using OpenCV classifier
-                this.Classify();
+                if (DEBUG)
+                {
+                    // simple, hardcoded bounding boxes
+                    holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
+                    numHolds = holdsBoundingBoxes.Length / 4;
 
-                frame.Dispose();
-                frame = null;
+                    imageWidth = 1000;
+                    imageHeight = 1000;
+                }
+                else
+                {
+                    print("Getting Kinect frame and classifying");
+                    frame.CopyConvertedFrameDataToArray(this._Data, ColorImageFormat.Bgra);
+                    this._Texture.LoadRawTextureData(this._Data);
+                    this._Texture.Apply();
+
+                    // classify image using OpenCV classifier
+                    numHolds = OpenCV.getNumHolds();
+
+                    if (numHolds == 0)
+                    {
+                        EditorUtility.DisplayDialog("No holds detected!", "Unable to classify hand holds in this image", "Ok");
+                    }
+
+                    FrameDescription frameDesc = _Sensor
+                        .ColorFrameSource
+                        .CreateFrameDescription(ColorImageFormat.Bgra);
+                    imageWidth = frameDesc.Width;
+                    imageHeight = frameDesc.Height;
+
+                    holdsBoundingBoxes = ClassifyImage(numHolds, imageWidth, imageHeight);
+                }
+
+                //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
+                int[] projectorBoundingBox = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 };
+                float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBoundingBox, holdsBoundingBoxes);
+                InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed);
+                for (int i = 0; i < holdsProjectorTransformed.Length; i++)
+                {
+                    print(holdsProjectorTransformed);
+                }
+
+                if (!DEBUG)
+                {
+                    frame.Dispose();
+                    frame = null;
+                }
             }
         }
         else
@@ -117,54 +163,62 @@ public class TestDLL : MonoBehaviour
             Debug.Log("Using hardcoded bounding boxes or image");
         }
 
-        this.InstantiateHandholds();
+        yield return null;
     }
 
     // classify image (byte array), update the number of holds, 
     // copy bounding boxes into memory
-    void Classify()
+    int[] ClassifyImage(int numHolds, int imageWidth, int imageHeight)
     {
-        int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
+        int size = Marshal.SizeOf(this._Data[0]) * this._Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
-        Marshal.Copy(_Data, 0, ptr, _Data.Length);
+        Marshal.Copy(this._Data, 0, ptr, this._Data.Length);
         IntPtr _boundingBoxes = OpenCV.classifyImage(
             ptr,
-            (int)imageWidth,
-            (int)imageHeight);
+            imageWidth,
+            imageHeight);
         Marshal.FreeHGlobal(ptr);
 
-        this.numHolds = OpenCV.getNumHolds();
-        this.boundingBoxArray = new int[numHolds * 4];
-        Marshal.Copy(_boundingBoxes, this.boundingBoxArray, 0, this.numHolds * 4);
+        int[] holdBoundingBoxes = new int[numHolds * 4];
+        Marshal.Copy(_boundingBoxes, holdBoundingBoxes, 0, numHolds * 4);
+        return holdBoundingBoxes;
     }
 
-    // update hand holds
-    void InstantiateHandholds()
-    {
-        //TODO: get real coordinates of projector bounding box from OpenCV
-        int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800 };
-        float[] transformedSpaceArr = transformOpenCvToUnitySpace(testProjectorBB);
 
-        float cam_height = 2f * mainCam.orthographicSize;
-        float cam_width = cam_height * mainCam.aspect;
+
+    // update handholds
+    void InstantiateHandholds(int numHolds, Camera cam, float[] projectorTransformation)
+    {
+        print("Instantiating " + numHolds + " handholds");
+        float camHeight = 2f * cam.orthographicSize;
+        float camWidth = camHeight * cam.aspect;
+
+
+        if (this.handHolds.Length != 0)
+        {
+            for (int i = 0; i < numHolds; i++)
+            {
+                Destroy(this.handHolds[i]);
+            }
+        }
+        this.handHolds = new GameObject[numHolds];
 
         for (int i = 0; i < this.numHolds; i++)
         {
             int holdIndex = i * 4;
-            float x = transformedSpaceArr[holdIndex] * cam_height - cam_width / 2f;
-            float y = transformedSpaceArr[holdIndex + 1] * this.cameraSize - this.cameraSize / 2f;
+            float x = projectorTransformation[holdIndex] * camHeight - camWidth / 2f;
+            float y = projectorTransformation[holdIndex + 1] * camHeight - camHeight / 2f;
 
-            //float x = transformedSpaceArr[holdIndex] * this.cameraSize - this.cameraSize / 2f;
-            //float y = transformedSpaceArr[holdIndex + 1] * this.cameraSize - this.cameraSize / 2f;
+            //float x = projectorTransformation[holdIndex] * cam_height - cam_height / 2f;
+            //float y = projectorTransformation[holdIndex + 1] * cam_height - cam_height / 2f;
 
-            float width = (transformedSpaceArr[holdIndex + 2] / 2) * cam_height; //divide by 2 because it is a radius
-            float height = (transformedSpaceArr[holdIndex + 3] / 2) * cam_height;
+            float width = (projectorTransformation[holdIndex + 2] / 2) * camHeight; //divide by 2 because it is a radius
+            float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
 
-            // float width = (transformedSpaceArr[holdIndex + 2] / 2) * this.cameraSize; //divide by 2 because it is a radius
-            // float height = (transformedSpaceArr[holdIndex + 3] / 2) * this.cameraSize;
+            // float width = (projectorTransformation[holdIndex + 2] / 2) * cam_height; //divide by 2 because it is a radius
+            // float height = (projectorTransformation[holdIndex + 3] / 2) * cam_height;
 
             // Create handhold object and draw bounding ellipse
-            print(this.numHolds + " " + i);
             line = this.handHolds[i].GetComponent<LineRenderer>();
             DrawBoundingEllipse(width, height);
 
@@ -172,21 +226,12 @@ public class TestDLL : MonoBehaviour
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
-            this.handHolds[i].GetComponent<Renderer>().enabled = true; //not needed anymore?
         }
-    }
-
-    // simple, hardcoded bounding boxes
-    void genHardcodedBoundingBoxes()
-    {
-        this.boundingBoxArray = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-        this.imageWidth = 1000;
-        this.imageHeight = 1000;
-        this.numHolds = boundingBoxArray.Length / 4;
     }
 
     // draw the bounding ellipse of the climbing hold
     void DrawBoundingEllipse(float xradius, float yradius)
+
     {
         float x;
         float y;
@@ -219,7 +264,7 @@ public class TestDLL : MonoBehaviour
     /// </summary>
     /// <param name="coordinates">int array of coordinates in the order top left (x,y), top right, bottom right, bottom left </param>
     /// <returns>float array of transformed coordinates</returns>
-    private float[] transformOpenCvToUnitySpace(int[] coordinates)
+    private float[] transformOpenCvToUnitySpace(int[] coordinates, int[] boundingBoxArray)
     {
         int x1 = coordinates[0];
         int y1 = coordinates[1];
@@ -230,22 +275,22 @@ public class TestDLL : MonoBehaviour
         int x4 = coordinates[6];
         int y4 = coordinates[7];
 
-        float[] transformedArr = new float[this.numHolds * 4];
+        float[] transformedArr = new float[boundingBoxArray.Length * 4];
 
         float height = y4 - y1; //this is assuming y1 and y2 are approximately the same
 
         float leftGradient = (x4 - x1) / height;
         float rightGradient = (x3 - x2) / (y3 - y2);
 
-        for (int i = 0; i < this.numHolds; i++)
+        for (int i = 0; i < transformedArr.Length; i++)
         {
             int holdIndex = i * 4;
 
             // get coordinates of hold
-            int currentX = this.boundingBoxArray[holdIndex];
-            int currentY = this.boundingBoxArray[holdIndex + 1];
-            int holdWidth = this.boundingBoxArray[holdIndex + 2];
-            int holdHeight = this.boundingBoxArray[holdIndex + 3];
+            int currentX = boundingBoxArray[holdIndex];
+            int currentY = boundingBoxArray[holdIndex + 1];
+            int holdWidth = boundingBoxArray[holdIndex + 2];
+            int holdHeight = boundingBoxArray[holdIndex + 3];
 
             //Project y on bb side left to get coordinates of the beginning of the horizonal line on which this hold belongs
             float leftX = x1 + leftGradient * (currentY - y1);

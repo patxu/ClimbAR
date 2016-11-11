@@ -100,7 +100,7 @@ GameObject:
   - 4: {fileID: 563150075}
   - 114: {fileID: 563150074}
   m_Layer: 0
-  m_Name: ColorManager (1)
+  m_Name: KinectColorManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,7 +143,7 @@ GameObject:
   - 23: {fileID: 1157462670}
   - 114: {fileID: 1157462669}
   m_Layer: 0
-  m_Name: ColorView
+  m_Name: KinectColorView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,8 +216,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1157462668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -118, y: 64.30853, z: 150.01746}
-  m_LocalScale: {x: 96, y: 54, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 9, y: 5, z: 0.09271424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -383,7 +383,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

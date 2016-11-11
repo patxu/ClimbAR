@@ -101,7 +101,6 @@ GameObject:
   - 212: {fileID: 1469604065}
   - 114: {fileID: 1469604064}
   - 114: {fileID: 1469604067}
-  - 114: {fileID: 1469604068}
   m_Layer: 0
   m_Name: ProjectorSetupSquare
   m_TagString: Untagged
@@ -117,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1469604063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ce9b9ed358a1ff478a7f3e98b9a3ac2, type: 3}
+  m_Script: {fileID: 11500000, guid: a9c5669a6f047544cbb6122fec549d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &1469604065
@@ -174,18 +173,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1469604063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a83c1cf8d22273a488745bb3d384eb00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1469604068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1469604063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7969614435dbf064dbe87b1272eb6f71, type: 3}
+  m_Script: {fileID: 11500000, guid: 269a80ec9ac6fc44c9413a33d933d3fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1471388362

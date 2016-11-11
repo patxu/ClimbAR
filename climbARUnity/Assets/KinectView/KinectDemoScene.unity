@@ -420,6 +420,7 @@ GameObject:
   - 65: {fileID: 934010676}
   - 23: {fileID: 934010675}
   - 114: {fileID: 934010674}
+  - 114: {fileID: 934010679}
   m_Layer: 0
   m_Name: ColorView
   m_TagString: Untagged
@@ -494,12 +495,26 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 934010673}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -118, y: 64.30853, z: 150.01746}
+  m_LocalPosition: {x: -118, y: 64, z: 150.01746}
   m_LocalScale: {x: 96, y: 54, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &934010679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 934010673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f30f77b8f6be014783ea02e8b29d9fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handHolds: []
+  Handhold: {fileID: 1000012162831070, guid: 45cfefdd50ca97e43b5609d3f47b52f9, type: 2}
+  mainCam: {fileID: 1747301864}
 --- !u!1 &1022827879
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,7 +681,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1608503454}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -118, y: -6.0306396, z: 150.01746}
+  m_LocalPosition: {x: -118, y: -6, z: 150.01746}
   m_LocalScale: {x: 96, y: 79.5, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
