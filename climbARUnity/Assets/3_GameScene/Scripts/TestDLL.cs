@@ -45,56 +45,39 @@ public class TestDLL : MonoBehaviour
 
     void Start()
     {
-        // TODO get this working for mac dev
-        if (!climbSystemEnv.isWindows()) // currently not using this block of code
+        _Sensor = KinectSensor.GetDefault();
+
+        if ((_Sensor != null) && (_Sensor.IsAvailable))
         {
-            Image frame = Image.FromFile("pathToImage/img.png");
-            byte[] imgData = imageToByteArray(frame);
+            print("Acquired sensor");
+            _Reader = _Sensor.ColorFrameSource.OpenReader();
 
-            IntPtr unmanagedArray = Marshal.AllocHGlobal(MAX_IMG_BYTES);
-            Marshal.Copy(imgData, 0, unmanagedArray, MAX_IMG_BYTES);
+            var frameDesc = _Sensor
+                .ColorFrameSource
+                .CreateFrameDescription(ColorImageFormat.Rgba);
+            this.imageWidth = frameDesc.Width;
+            this.imageHeight = frameDesc.Height;
 
-            //IntPtr bb = OpenCVFunc(); // defunct -- we have this.Classify() now
-            //this.numHolds = NumHolds();
-            //this.boundingBoxArray = new int[numHolds * 4];
-            //Marshal.Copy(bb, boundingBoxArray, 0, numHolds * 4);
+            _Texture = new Texture2D(
+                (int)this.imageWidth,
+                (int)this.imageHeight,
+                TextureFormat.RGBA32,
+                false);
+            _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
+
+            if (!_Sensor.IsOpen)
+            {
+                print("Sensor is not open; opening");
+                _Sensor.Open();
+            }
         }
         else
         {
-            _Sensor = KinectSensor.GetDefault();
-
-            if ((_Sensor != null) && (_Sensor.IsAvailable))
-            {
-                print("Acquired sensor");
-                _Reader = _Sensor.ColorFrameSource.OpenReader();
-
-                var frameDesc = _Sensor
-                    .ColorFrameSource
-                    .CreateFrameDescription(ColorImageFormat.Rgba);
-                this.imageWidth = frameDesc.Width;
-                this.imageHeight = frameDesc.Height;
-
-                _Texture = new Texture2D(
-                    (int)this.imageWidth,
-                    (int)this.imageHeight,
-                    TextureFormat.RGBA32,
-                    false);
-                _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
-
-                if (!_Sensor.IsOpen)
-                {
-                    print("Sensor is not open; opening");
-                    _Sensor.Open();
-                }
-            }
-            else
-            {
-                // TODO integrate with Jon's logic?
-                print("Kinect sensor unavailable, using static image");
-                this.genHardcodedBoundingBoxes();
-            }
-
+            // TODO integrate with Jon's logic?
+            print("Kinect sensor unavailable, using static image");
+            this.genHardcodedBoundingBoxes();
         }
+
 
         // Adjust camera zoom.
         this.mainCam.orthographicSize = cameraSize / 2f;
@@ -157,9 +140,9 @@ public class TestDLL : MonoBehaviour
 
     // update hand holds
     void InstantiateHandholds()
-    {   
+    {
         //TODO: get real coordinates of projector bounding box from OpenCV
-        int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800};
+        int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800 };
         float[] transformedSpaceArr = transformOpenCvToUnitySpace(testProjectorBB);
 
         float cam_height = 2f * mainCam.orthographicSize;
