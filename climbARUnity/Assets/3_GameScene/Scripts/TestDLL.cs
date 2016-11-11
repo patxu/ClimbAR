@@ -17,8 +17,8 @@ public class TestDLL : MonoBehaviour
     public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
-    private Texture2D _Texture;
-    private byte[] _Data;
+    //private Texture2D _Texture;
+    //private byte[] _Data;
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -51,18 +51,19 @@ public class TestDLL : MonoBehaviour
             print("Acquired sensor");
             _Reader = _Sensor.ColorFrameSource.OpenReader();
 
-            var frameDesc = _Sensor
-                .ColorFrameSource
-                .CreateFrameDescription(ColorImageFormat.Rgba);
-            this.imageWidth = frameDesc.Width;
-            this.imageHeight = frameDesc.Height;
+            // worth keeping all this as state?
+            //var frameDesc = _Sensor
+            //    .ColorFrameSource
+            //    .CreateFrameDescription(ColorImageFormat.Rgba);
+            //this.imageWidth = frameDesc.Width;
+            //this.imageHeight = frameDesc.Height;
 
-            _Texture = new Texture2D(
-                (int)this.imageWidth,
-                (int)this.imageHeight,
-                TextureFormat.RGBA32,
-                false);
-            _Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
+            //_Texture = new Texture2D(
+                //(int)this.imageWidth,
+                //(int)this.imageHeight,
+                //TextureFormat.RGBA32,
+                //false);
+            //this._Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
 
             if (!_Sensor.IsOpen)
             {
@@ -114,9 +115,9 @@ public class TestDLL : MonoBehaviour
                 else
                 {
                     print("Getting Kinect frame and classifying");
-                    frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Bgra);
-                    _Texture.LoadRawTextureData(_Data);
-                    _Texture.Apply();
+                    frame.CopyConvertedFrameDataToArray(this._Data, ColorImageFormat.Bgra);
+                    this._Texture.LoadRawTextureData(this._Data);
+                    this._Texture.Apply();
 
                     // classify image using OpenCV classifier
                     numHolds = OpenCV.getNumHolds();
@@ -136,9 +137,13 @@ public class TestDLL : MonoBehaviour
                 }
 
                 //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
-                int[] projectorBoundingBox = new int[] { 100, 100, 900, 100, 900, 900, 100, 900 };
+                int[] projectorBoundingBox = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080};
                 float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBoundingBox, holdsBoundingBoxes);
                 InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed);
+                for (int i = 0; i < holdsProjectorTransformed.Length; i++)
+                {
+                    print(holdsProjectorTransformed);
+                }
 
                 if (!DEBUG)
                 {
@@ -159,9 +164,9 @@ public class TestDLL : MonoBehaviour
     // copy bounding boxes into memory
     int[] ClassifyImage(int numHolds, int imageWidth, int imageHeight)
     {
-        int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
+        int size = Marshal.SizeOf(this._Data[0]) * this._Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
-        Marshal.Copy(_Data, 0, ptr, _Data.Length);
+        Marshal.Copy(this._Data, 0, ptr, this._Data.Length);
         IntPtr _boundingBoxes = OpenCV.classifyImage(
             ptr,
             imageWidth,
@@ -176,7 +181,7 @@ public class TestDLL : MonoBehaviour
     // update handholds
     void InstantiateHandholds(int numHolds, Camera cam, float[] projectorTransformation)
     {
-        print("Instantiating handholds");
+        print("Instantiating " + numHolds + " handholds");
         float camHeight = 2f * cam.orthographicSize;
         float camWidth = camHeight * cam.aspect;
 
@@ -187,7 +192,7 @@ public class TestDLL : MonoBehaviour
                 Destroy(this.handHolds[i]);
             }
         }
-        this.handHolds = new GameObject[this.numHolds];
+        this.handHolds = new GameObject[numHolds];
 
         for (int i = 0; i < this.numHolds; i++)
         {
@@ -260,14 +265,14 @@ public class TestDLL : MonoBehaviour
         int x4 = coordinates[6];
         int y4 = coordinates[7];
 
-        float[] transformedArr = new float[this.numHolds * 4];
+        float[] transformedArr = new float[boundingBoxArray.Length * 4];
 
         float height = y4 - y1; //this is assuming y1 and y2 are approximately the same
 
         float leftGradient = (x4 - x1) / height;
         float rightGradient = (x3 - x2) / (y3 - y2);
 
-        for (int i = 0; i < this.numHolds; i++)
+        for (int i = 0; i < transformedArr.Length; i++)
         {
             int holdIndex = i * 4;
 
