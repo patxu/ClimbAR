@@ -23,12 +23,12 @@ public class KinectClassify: MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
-        #if UNITY_STANDALONE_WIN
-            [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
-            public static extern int getNumHolds();
-            [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
-            public static extern IntPtr classifyImage(IntPtr data, int width, int height);
-        #endif
+#if UNITY_STANDALONE_WIN
+        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
+        public static extern int getNumHolds();
+        [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
+        public static extern IntPtr classifyImage(IntPtr data, int width, int height);
+#endif
     }
 
     // Game objects
@@ -82,11 +82,14 @@ public class KinectClassify: MonoBehaviour
                 print("Sensor is not open; opening");
                 _Sensor.Open();
             }
+
+
         }
         else
         {
             // TODO integrate with Jon's logic?
-            print("Kinect sensor unavailable! turn DEBUG onto use hardcoded bounding boxes");
+            print("Kinect sensor unavailable, using static image");
+            //this.genHardcodedBoundingBoxes();
         }
     }
 
@@ -141,7 +144,8 @@ public class KinectClassify: MonoBehaviour
 
             //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
             int[] projectorBoundingBox = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 }; 
-            float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBoundingBox, holdsBoundingBoxes); InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed); 
+            float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBoundingBox, holdsBoundingBoxes);
+            InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed); 
             if (!DEBUG)
             {
                 frame.Dispose();
@@ -170,12 +174,15 @@ public class KinectClassify: MonoBehaviour
         return holdBoundingBoxes;
     }
 
+
+
     // update handholds
     void InstantiateHandholds(int numHolds, Camera cam, float[] projectorTransformation)
     {
         print("Instantiating " + numHolds + " handholds");
         float camHeight = 2f * cam.orthographicSize;
         float camWidth = camHeight * cam.aspect;
+
 
         if (this.handHolds.Length != 0)
         {
@@ -218,6 +225,7 @@ public class KinectClassify: MonoBehaviour
 
     // draw the bounding ellipse of the climbing hold
     void DrawBoundingEllipse(float xradius, float yradius)
+
     {
         float x;
         float y;
