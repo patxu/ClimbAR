@@ -17,8 +17,8 @@ public class TestDLL : MonoBehaviour
     public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
-    //private Texture2D _Texture;
-    //private byte[] _Data;
+    private Texture2D _Texture;
+    private byte[] _Data;
 
     // import OpenCV dll wrapper functions
     static class OpenCV
