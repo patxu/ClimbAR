@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
@@ -64,7 +65,7 @@ public class projectorCalibrate : MonoBehaviour
                 {
                     StartCoroutine(captureColor(Color.red, _RedData, Stages.GREEN_COLLECT));
                 }
-               
+
                 break;
             case Stages.GREEN_COLLECT:
                 if (!inCoroutine)
@@ -78,7 +79,7 @@ public class projectorCalibrate : MonoBehaviour
                     StartCoroutine(captureColor(Color.blue, _BlueData, Stages.CALCULATING));
                 }
                 break;
-                
+
             case Stages.CALCULATING:
                 // Copy arrays of pixel data to be sent to c++ code
                 int size = Marshal.SizeOf(_RedData[0]) * _RedData.Length;
@@ -93,7 +94,6 @@ public class projectorCalibrate : MonoBehaviour
                 IntPtr coords = OpenCV.findProjectorBox(redArray, greenArray, blueArray, (int)imageWidth, (int)imageHeight);
                 projectorCoords = new int[4];
                 Marshal.Copy(coords, projectorCoords, 0, 4);
-                Debug.Log(projectorCoords[0]);
 
                 // Free data
                 Marshal.FreeHGlobal(redArray);
@@ -103,6 +103,8 @@ public class projectorCalibrate : MonoBehaviour
                 currentStage = Stages.DONE;
                 break;
             case Stages.DONE:
+                Debug.Log("loading next scene");
+                SceneManager.LoadScene("3_GameScene");
                 break;
         }
     }
@@ -127,7 +129,7 @@ public class projectorCalibrate : MonoBehaviour
         advance = false;
         var frame = _Reader.AcquireLatestFrame();
 
-        
+
         if (frame != null)
         {
             frame.CopyConvertedFrameDataToArray(buffer, ColorImageFormat.Bgra);
