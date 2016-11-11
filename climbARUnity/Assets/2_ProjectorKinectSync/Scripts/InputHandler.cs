@@ -5,7 +5,7 @@ using System.Collections;
 // adapted from http://answers.unity3d.com/questions/301951/how-can-i-make-a-gameobject-scaleresize-with-mouse.html
 public class InputHandler : MonoBehaviour
 {
-    private Ray m_Ray;
+    //private Ray m_Ray;
     private RaycastHit m_RayCastHit;
     private ResizableObject m_CurrentObject;
     private Vector3 m_LastMousePos;
@@ -20,7 +20,7 @@ public class InputHandler : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             m_LastMousePos = Input.mousePosition;
-            m_Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //m_Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             // always resize current object
             m_CurrentObject = this.GetComponent<ResizableObject>();
