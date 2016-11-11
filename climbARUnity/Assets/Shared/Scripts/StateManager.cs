@@ -5,7 +5,7 @@ public class StateManager : MonoBehaviour
 {
 
     // Variables relating to state
-    public int kinectUpperLeftX, kinectUpperLeftY;
+    public int kinectUpperLeftX, kinectUpperLeftY, kinectWidth, kinectHeight;
 
     public static StateManager instance = null;
     void Awake()
