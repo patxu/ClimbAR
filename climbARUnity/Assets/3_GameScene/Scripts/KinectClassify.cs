@@ -7,14 +7,14 @@ using System.IO;
 using Windows.Kinect;
 using System.Collections;
 
-public class TestDLL : MonoBehaviour
+public class KinectClassify: MonoBehaviour
 {
-
+    // true if you want to use the hardcoded bounding boxes
     bool DEBUG = false;
 
     // Read image from Kinect
-    public float imageWidth { get; private set; }
-    public float imageHeight { get; private set; }
+    //public float imageWidth { get; private set; }
+    //public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
     private Texture2D _Texture;
@@ -44,6 +44,24 @@ public class TestDLL : MonoBehaviour
 
     void Start()
     {
+        // start Kinect color image
+        SetupKinectImage();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown("c"))
+        {
+            print("starting coroutine");
+            StartCoroutine("GrabFrameAndClassify");
+        }
+    }
+
+    /// <summary>
+    /// Open Kinect Sensor, setup color image
+    /// </summary>
+    void SetupKinectImage()
+    {
         _Sensor = KinectSensor.GetDefault();
 
         if (_Sensor != null)
@@ -52,18 +70,12 @@ public class TestDLL : MonoBehaviour
             _Reader = _Sensor.ColorFrameSource.OpenReader();
 
             // worth keeping all this as state?
-            //var frameDesc = _Sensor
-            //    .ColorFrameSource
-            //    .CreateFrameDescription(ColorImageFormat.Rgba);
-            //this.imageWidth = frameDesc.Width;
-            //this.imageHeight = frameDesc.Height;
+            var frameDesc = _Sensor
+                .ColorFrameSource
+                .CreateFrameDescription(ColorImageFormat.Rgba);
 
-            //_Texture = new Texture2D(
-                //(int)this.imageWidth,
-                //(int)this.imageHeight,
-                //TextureFormat.RGBA32,
-                //false);
-            //this._Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
+            this._Texture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
+            this._Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
 
             if (!_Sensor.IsOpen)
             {
@@ -76,85 +88,65 @@ public class TestDLL : MonoBehaviour
             // TODO integrate with Jon's logic?
             print("Kinect sensor unavailable! turn DEBUG onto use hardcoded bounding boxes");
         }
-
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown("c"))
-        {
-            print("starting coroutine");
-            StartCoroutine("GrabFrameAndClassify");
-        }
-    }
 
     // coroutine for overlaying bounding boxes on color image
     // TODO: add skeleton overlay
     IEnumerator GrabFrameAndClassify()
     {
-        if (_Reader != null)
-        {
-            var frame = _Reader.AcquireLatestFrame();
-
-            if (frame != null)
-            {
-                int numHolds;
-                int[] holdsBoundingBoxes;
-                int imageWidth;
-                int imageHeight;
-
-                if (DEBUG)
-                {
-                    // simple, hardcoded bounding boxes
-                    holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-                    numHolds = holdsBoundingBoxes.Length / 4;
-
-                    imageWidth = 1000;
-                    imageHeight = 1000;
-                }
-                else
-                {
-                    print("Getting Kinect frame and classifying");
-                    frame.CopyConvertedFrameDataToArray(this._Data, ColorImageFormat.Bgra);
-                    this._Texture.LoadRawTextureData(this._Data);
-                    this._Texture.Apply();
-
-                    // classify image using OpenCV classifier
-                    numHolds = OpenCV.getNumHolds();
-
-                    if (numHolds == 0)
-                    {
-                    EditorUtility.DisplayDialog("No holds detected!", "Unable to classify hand holds in this image", "Ok");
-                    }
-
-                    FrameDescription frameDesc = _Sensor
-                        .ColorFrameSource
-                        .CreateFrameDescription(ColorImageFormat.Bgra);
-                    imageWidth = frameDesc.Width;
-                    imageHeight = frameDesc.Height;
-
-                    holdsBoundingBoxes = ClassifyImage(numHolds, imageWidth, imageHeight);
-                }
-
-                //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
-                int[] projectorBoundingBox = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080};
-                float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBoundingBox, holdsBoundingBoxes);
-                InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed);
-                for (int i = 0; i < holdsProjectorTransformed.Length; i++)
-                {
-                    print(holdsProjectorTransformed);
-                }
-
-                if (!DEBUG)
-                {
-                    frame.Dispose();
-                    frame = null;
-                }
-            }
-        }
-        else
+        if (_Reader == null)
         {
             Debug.Log("Using hardcoded bounding boxes or image");
+            yield return null;
+        }
+
+        var frame = _Reader.AcquireLatestFrame();
+
+        if (frame != null)
+        {
+            int numHolds;
+            int[] holdsBoundingBoxes;
+            int imageWidth;
+            int imageHeight;
+
+            if (DEBUG)
+            {
+                // simple, hardcoded bounding boxes
+                //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
+                holdsBoundingBoxes = new int[] { 0, 0, 100, 100 , 1800, 900, 100, 100};
+                numHolds = holdsBoundingBoxes.Length / 4;
+
+                imageWidth = 1000;
+                imageHeight = 1000;
+            }
+            else
+            {
+                print("Getting Kinect frame and classifying");
+                frame.CopyConvertedFrameDataToArray(this._Data, ColorImageFormat.Bgra);
+                this._Texture.LoadRawTextureData(this._Data);
+                this._Texture.Apply();
+
+                // classify image using OpenCV classifier
+                numHolds = OpenCV.getNumHolds();
+
+                FrameDescription frameDesc = _Sensor
+                    .ColorFrameSource
+                    .CreateFrameDescription(ColorImageFormat.Bgra);
+                imageWidth = frameDesc.Width;
+                imageHeight = frameDesc.Height;
+
+                holdsBoundingBoxes = ClassifyImage(numHolds, imageWidth, imageHeight);
+            }
+
+            //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
+            int[] projectorBoundingBox = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 }; 
+            float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBoundingBox, holdsBoundingBoxes); InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed); 
+            if (!DEBUG)
+            {
+                frame.Dispose();
+                frame = null;
+            }
         }
 
         yield return null;
@@ -187,36 +179,40 @@ public class TestDLL : MonoBehaviour
 
         if (this.handHolds.Length != 0)
         {
-            for (int i = 0; i < numHolds; i++)
+            for (int i = 0; i < this.handHolds.Length; i++)
             {
                 Destroy(this.handHolds[i]);
             }
         }
         this.handHolds = new GameObject[numHolds];
 
-        for (int i = 0; i < this.numHolds; i++)
+        for (int i = 0; i < numHolds; i++)
         {
             int holdIndex = i * 4;
-            float x = projectorTransformation[holdIndex] * camHeight - camWidth / 2f;
+            float x = projectorTransformation[holdIndex] * camWidth - camWidth / 2f;
             float y = projectorTransformation[holdIndex + 1] * camHeight - camHeight / 2f;
 
             //float x = projectorTransformation[holdIndex] * cam_height - cam_height / 2f;
             //float y = projectorTransformation[holdIndex + 1] * cam_height - cam_height / 2f;
 
-            float width = (projectorTransformation[holdIndex + 2] / 2) * camHeight; //divide by 2 because it is a radius
+            float width = (projectorTransformation[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
             float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
 
             // float width = (projectorTransformation[holdIndex + 2] / 2) * cam_height; //divide by 2 because it is a radius
             // float height = (projectorTransformation[holdIndex + 3] / 2) * cam_height;
 
-            // Create handhold object and draw bounding ellipse
-            line = this.handHolds[i].GetComponent<LineRenderer>();
-            DrawBoundingEllipse(width, height);
-
             // transform handhold (camera space?)
+            this.handHolds[i] = GameObject.Instantiate(Handhold);
+            this.handHolds[i].name = "Handhold " + i;
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
+
+            // Create handhold object and draw bounding ellipse
+            line = this.handHolds[i].GetComponent<LineRenderer>();
+            DrawBoundingEllipse(width, height);
+            print(projectorTransformation[holdIndex] + " " + projectorTransformation[holdIndex + 1]);
+            print(x + " " + y);
         }
     }
 
@@ -265,14 +261,14 @@ public class TestDLL : MonoBehaviour
         int x4 = coordinates[6];
         int y4 = coordinates[7];
 
-        float[] transformedArr = new float[boundingBoxArray.Length * 4];
+        float[] transformedArr = new float[boundingBoxArray.Length];
 
         float height = y4 - y1; //this is assuming y1 and y2 are approximately the same
 
         float leftGradient = (x4 - x1) / height;
         float rightGradient = (x3 - x2) / (y3 - y2);
 
-        for (int i = 0; i < transformedArr.Length; i++)
+        for (int i = 0; i < boundingBoxArray.Length / 4; i++)
         {
             int holdIndex = i * 4;
 
