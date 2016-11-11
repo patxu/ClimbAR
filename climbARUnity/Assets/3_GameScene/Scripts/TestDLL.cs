@@ -173,7 +173,7 @@ public class TestDLL : MonoBehaviour
     void InstantiateHandholds()
     {
         //TODO: get real coordinates of projector bounding box from OpenCV
-        int[] testProjectorBB = new int[] { 100, 100, 900, 100, 850, 800, 150, 800};
+        int[] testProjectorBB = new int[] { 100, 100, 900, 100, 900, 900, 100, 900};
         float[] transformedSpaceArr = transformOpenCvToUnitySpace(testProjectorBB);
 
         float cam_height = 2f * mainCam.orthographicSize;
