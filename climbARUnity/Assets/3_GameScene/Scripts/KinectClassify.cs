@@ -115,6 +115,7 @@ public class KinectClassify: MonoBehaviour
 
             if (DEBUG)
             {
+                Debug.Log("In debug mode");
                 // simple, hardcoded bounding boxes
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
                 holdsBoundingBoxes = new int[] { 0, 0, 100, 100 , 1800, 900, 100, 100};

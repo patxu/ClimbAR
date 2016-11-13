@@ -7,7 +7,9 @@ public class BodySourceView : MonoBehaviour
 {
     public Material BoneMaterial;
     public GameObject BodySourceManager;
-    
+    private Kinect.KinectSensor _Sensor;
+    public Camera mainCam;
+
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
     
@@ -47,6 +49,7 @@ public class BodySourceView : MonoBehaviour
 
     void Start ()
     {
+        _Sensor = Kinect.KinectSensor.GetDefault();
         camera = Camera.current;
     }
     
@@ -181,6 +184,17 @@ public class BodySourceView : MonoBehaviour
     
     private Vector3 GetVector3FromJoint(Kinect.Joint joint)
     {
-        return new Vector3(joint.Position.X * 10, joint.Position.Y * 10, joint.Position.Z * 10);
+        Kinect.CameraSpacePoint cameraPoint = joint.Position;
+
+        return GetUnitySpaceFromKinectCameraPoint(cameraPoint, 1, this.mainCam, 1920, 1080);
+    }
+
+    private Vector3 GetUnitySpaceFromKinectCameraPoint(Kinect.CameraSpacePoint point, float depth, Camera cam, int kinectWidth, int kinectHeight)
+    {
+        Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(point);
+        float newX = ((2 * colorPoint.X - kinectWidth) / kinectWidth) * (cam.orthographicSize * cam.aspect);
+        float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) *cam.orthographicSize;
+        
+        return new Vector3(newX, newY, 1);
     }
 }
