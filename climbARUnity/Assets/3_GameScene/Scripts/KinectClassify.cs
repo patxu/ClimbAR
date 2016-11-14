@@ -36,7 +36,7 @@ public class KinectClassify: MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
 
-    private int numHolds = 0;
+    //private int numHolds = 0;
     private int[] boundingBoxArray;
 
     // bounding ellipse
@@ -66,7 +66,7 @@ public class KinectClassify: MonoBehaviour
 
         if (_Sensor != null)
         {
-            print("Acquired sensor");
+            print("Acquired sensor"); // TODO kinda buggy - doesn't actually detect in Kinect is kinected... (pat)
             _Reader = _Sensor.ColorFrameSource.OpenReader();
 
             // worth keeping all this as state?
@@ -115,6 +115,7 @@ public class KinectClassify: MonoBehaviour
 
             if (DEBUG)
             {
+                Debug.Log("In debug mode");
                 // simple, hardcoded bounding boxes
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
                 holdsBoundingBoxes = new int[] { 0, 0, 100, 100 , 1800, 900, 100, 100};
@@ -188,6 +189,11 @@ public class KinectClassify: MonoBehaviour
         {
             for (int i = 0; i < this.handHolds.Length; i++)
             {
+                CircleCollider2D col = this.handHolds[i].GetComponent<CircleCollider2D>();
+                if (col)
+                {
+                    DestroyImmediate(col);
+                }
                 Destroy(this.handHolds[i]);
             }
         }
@@ -214,12 +220,19 @@ public class KinectClassify: MonoBehaviour
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
+            Rigidbody2D rigid = this.handHolds[i].AddComponent<Rigidbody2D>();
+            rigid.isKinematic = true;
 
+            CircleCollider2D col = this.handHolds[i].AddComponent<CircleCollider2D>();
+            col.radius = 0.2f; //(float)Math.Max(width, height);
+            // col.offset = new Vector2(x + width, (y + height) * -1f);
+            col.enabled = true;
+            col.isTrigger = true;
             // Create handhold object and draw bounding ellipse
             line = this.handHolds[i].GetComponent<LineRenderer>();
             DrawBoundingEllipse(width, height);
-            print(projectorTransformation[holdIndex] + " " + projectorTransformation[holdIndex + 1]);
-            print(x + " " + y);
+            //print(projectorTransformation[holdIndex] + " " + projectorTransformation[holdIndex + 1]);
+            //print(x + " " + y);
         }
     }
 
@@ -227,6 +240,9 @@ public class KinectClassify: MonoBehaviour
     void DrawBoundingEllipse(float xradius, float yradius)
 
     {
+        line.SetColors(UnityEngine.Color.red, UnityEngine.Color.red);
+        line.material = new Material(Shader.Find("Particles/Additive"));
+
         float x;
         float y;
         float z = 0f;
@@ -247,7 +263,7 @@ public class KinectClassify: MonoBehaviour
             x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
             y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
 
-            line.SetPosition(i, new Vector3(x, y, z));
+            line.SetPosition(i, new Vector3(x, y, 0));
 
             angle += (360f / segments);
         }
