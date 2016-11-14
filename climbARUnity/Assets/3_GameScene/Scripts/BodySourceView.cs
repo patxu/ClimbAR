@@ -10,6 +10,8 @@ public class BodySourceView : MonoBehaviour
     private Kinect.KinectSensor _Sensor;
     public Camera mainCam;
 
+    public GameObject Bone;
+
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
     
@@ -130,8 +132,12 @@ public class BodySourceView : MonoBehaviour
 
             if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight)
             {
+                
+                Rigidbody2D rigid = jointObj.AddComponent<Rigidbody2D>();
+                rigid.isKinematic = true;
                 CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
                 col.enabled = true;
+                col.isTrigger = true;
             }
 
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
@@ -172,7 +178,7 @@ public class BodySourceView : MonoBehaviour
                     CircleCollider2D col = jointObj.gameObject.GetComponent<CircleCollider2D>();
                     if (col != null)
                     {
-                        col.radius = 0.2f;
+                        col.radius = 1.0f;
                         col.offset = new Vector2(jointObj.localPosition.x, jointObj.localPosition.y); 
                     } 
                 }

@@ -220,15 +220,19 @@ public class KinectClassify: MonoBehaviour
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
+            Rigidbody2D rigid = this.handHolds[i].AddComponent<Rigidbody2D>();
+            rigid.isKinematic = true;
+
             CircleCollider2D col = this.handHolds[i].AddComponent<CircleCollider2D>();
-            col.radius = 0.2f;
+            col.radius = 1.0f;
             col.offset = new Vector2(x + width, (y + height) * -1f);
             col.enabled = true;
+            col.isTrigger = true;
             // Create handhold object and draw bounding ellipse
             line = this.handHolds[i].GetComponent<LineRenderer>();
             DrawBoundingEllipse(width, height);
-            print(projectorTransformation[holdIndex] + " " + projectorTransformation[holdIndex + 1]);
-            print(x + " " + y);
+            //print(projectorTransformation[holdIndex] + " " + projectorTransformation[holdIndex + 1]);
+            //print(x + " " + y);
         }
     }
 
@@ -256,7 +260,7 @@ public class KinectClassify: MonoBehaviour
             x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
             y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
 
-            line.SetPosition(i, new Vector3(x, y, z));
+            line.SetPosition(i, new Vector3(x, y, 0));
 
             angle += (360f / segments);
         }

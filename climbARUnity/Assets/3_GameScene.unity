@@ -201,6 +201,7 @@ MonoBehaviour:
   BoneMaterial: {fileID: 2100000, guid: f2ea145c63353784985576f08398a815, type: 2}
   BodySourceManager: {fileID: 503489935}
   mainCam: {fileID: 1689806028}
+  Bone: {fileID: 0}
 --- !u!4 &1156401113
 Transform:
   m_ObjectHideFlags: 0
