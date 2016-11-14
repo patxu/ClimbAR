@@ -124,7 +124,14 @@ public class BodySourceView : MonoBehaviour
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
             GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            
+
+            DestroyImmediate(jointObj.GetComponent("BoxCollider"));
+
+            if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight)
+            {
+                CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
+            }
+
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
             lr.SetVertexCount(2);
             lr.material = BoneMaterial;
@@ -144,18 +151,29 @@ public class BodySourceView : MonoBehaviour
         {
             Kinect.Joint sourceJoint = body.Joints[jt];
             Kinect.Joint? targetJoint = null;
+
+            
             
             if(_BoneMap.ContainsKey(jt))
             {
                 targetJoint = body.Joints[_BoneMap[jt]];
             }
-            // TODO: modify joint positions to shift skeleton around
+            
             Transform jointObj = bodyObject.transform.FindChild(jt.ToString());
             jointObj.localPosition = GetVector3FromJoint(sourceJoint);
             
             LineRenderer lr = jointObj.GetComponent<LineRenderer>();
             if(targetJoint.HasValue)
             {
+                if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight)
+                {
+                    CircleCollider2D col = jointObj.gameObject.GetComponent<CircleCollider2D>();
+                    if (col != null)
+                    {
+                        col.radius = 0.2f;
+                        col.offset = new Vector2(jointObj.localPosition.x, jointObj.localPosition.y); 
+                    } 
+                }
                 lr.SetPosition(0, jointObj.localPosition);
                 lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));
                 lr.SetColors(GetColorForState (sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
