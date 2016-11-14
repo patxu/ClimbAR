@@ -36,7 +36,7 @@ public class KinectClassify: MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
 
-    private int numHolds = 0;
+    //private int numHolds = 0;
     private int[] boundingBoxArray;
 
     // bounding ellipse
