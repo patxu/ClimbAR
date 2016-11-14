@@ -90,6 +90,7 @@ public class BodySourceView : MonoBehaviour
         {
             if(!trackedIds.Contains(trackingId))
             {
+                DestroyCollidersAttachedToBody(_Bodies[trackingId]);
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
             }
@@ -127,6 +128,7 @@ public class BodySourceView : MonoBehaviour
             if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight)
             {
                 CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
+                col.enabled = true;
             }
 
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
@@ -184,6 +186,25 @@ public class BodySourceView : MonoBehaviour
             {
                 lr.enabled = false;
             }
+        }
+    }
+
+    private void DestroyCollidersAttachedToBody(GameObject bodyObject)
+    {
+        Transform leftHand = bodyObject.transform.FindChild(Kinect.JointType.HandLeft.ToString());
+        CircleCollider2D leftCol = leftHand.gameObject.GetComponent<CircleCollider2D>();
+
+        if (leftCol)
+        {
+            DestroyImmediate(leftCol);
+        }
+
+        Transform rightHand = bodyObject.transform.FindChild(Kinect.JointType.HandRight.ToString());
+        CircleCollider2D rightCol = rightHand.gameObject.GetComponent<CircleCollider2D>();
+
+        if (rightCol)
+        {
+            DestroyImmediate(rightCol);
         }
     }
     
