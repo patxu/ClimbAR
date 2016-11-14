@@ -36,7 +36,7 @@ public class KinectClassify: MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
 
-    private int numHolds = 0;
+    //private int numHolds = 0;
     private int[] boundingBoxArray;
 
     // bounding ellipse
@@ -66,7 +66,7 @@ public class KinectClassify: MonoBehaviour
 
         if (_Sensor != null)
         {
-            print("Acquired sensor");
+            print("Acquired sensor"); // TODO kinda buggy - doesn't actually detect in Kinect is kinected... (pat)
             _Reader = _Sensor.ColorFrameSource.OpenReader();
 
             // worth keeping all this as state?
