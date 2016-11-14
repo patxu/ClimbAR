@@ -189,6 +189,11 @@ public class KinectClassify: MonoBehaviour
         {
             for (int i = 0; i < this.handHolds.Length; i++)
             {
+                CircleCollider2D col = this.handHolds[i].GetComponent<CircleCollider2D>();
+                if (col)
+                {
+                    DestroyImmediate(col);
+                }
                 Destroy(this.handHolds[i]);
             }
         }
@@ -215,7 +220,10 @@ public class KinectClassify: MonoBehaviour
             this.handHolds[i].transform.localPosition =
                 new Vector2(x + width,
                             (y + height) * -1f);
-
+            CircleCollider2D col = this.handHolds[i].AddComponent<CircleCollider2D>();
+            col.radius = 0.2f;
+            col.offset = new Vector2(x + width, (y + height) * -1f);
+            col.enabled = true;
             // Create handhold object and draw bounding ellipse
             line = this.handHolds[i].GetComponent<LineRenderer>();
             DrawBoundingEllipse(width, height);
