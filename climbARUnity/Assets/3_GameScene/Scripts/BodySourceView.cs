@@ -181,7 +181,7 @@ public class BodySourceView : MonoBehaviour
                     if (col != null)
                     {
                         col.radius = 1.0f;
-                        col.offset = new Vector2(jointObj.localPosition.x, jointObj.localPosition.y); 
+                        //col.offset = new Vector2(jointObj.localPosition.x, jointObj.localPosition.y); 
                     } 
                 }
                 lr.SetPosition(0, jointObj.localPosition);
@@ -233,7 +233,7 @@ public class BodySourceView : MonoBehaviour
     {
         Kinect.CameraSpacePoint cameraPoint = joint.Position;
 
-        return GetUnitySpaceFromKinectCameraPoint(cameraPoint, 1, this.mainCam, 1920, 1080);
+        return GetUnitySpaceFromKinectCameraPoint(cameraPoint, 0, this.mainCam, 1920, 1080);
     }
 
     private Vector3 GetUnitySpaceFromKinectCameraPoint(Kinect.CameraSpacePoint point, float depth, Camera cam, int kinectWidth, int kinectHeight)

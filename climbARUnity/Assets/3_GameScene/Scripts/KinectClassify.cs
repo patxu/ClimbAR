@@ -224,8 +224,8 @@ public class KinectClassify: MonoBehaviour
             rigid.isKinematic = true;
 
             CircleCollider2D col = this.handHolds[i].AddComponent<CircleCollider2D>();
-            col.radius = 1.0f;
-            col.offset = new Vector2(x + width, (y + height) * -1f);
+            col.radius = 0.2f; //(float)Math.Max(width, height);
+            // col.offset = new Vector2(x + width, (y + height) * -1f);
             col.enabled = true;
             col.isTrigger = true;
             // Create handhold object and draw bounding ellipse
@@ -240,6 +240,9 @@ public class KinectClassify: MonoBehaviour
     void DrawBoundingEllipse(float xradius, float yradius)
 
     {
+        line.SetColors(UnityEngine.Color.red, UnityEngine.Color.red);
+        line.material = new Material(Shader.Find("Particles/Additive"));
+
         float x;
         float y;
         float z = 0f;
