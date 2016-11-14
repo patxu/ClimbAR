@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using Windows.Kinect;
 using UnityEngine.UI;
 
 
-public class kinectCheck : MonoBehaviour {
+public class kinectCheck : MonoBehaviour
+{
     private Text txt;
     private KinectSensor _Sensor;
 
@@ -17,7 +19,8 @@ public class kinectCheck : MonoBehaviour {
     {
         if (sensor.IsAvailable)
         {
-            txt.text = "Kinect Connected!";
+            txt.text = "Connected! Transitioning...";
+            StartCoroutine(TransitionToSceneWithDelay("3_GameScene", 2f));
         }
         else
         {
@@ -26,7 +29,8 @@ public class kinectCheck : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         txt = gameObject.GetComponent<Text>();
         _Sensor = KinectSensor.GetDefault();
         if (_Sensor != null)
@@ -37,7 +41,14 @@ public class kinectCheck : MonoBehaviour {
         _Sensor.IsAvailableChanged += onIsAvailableChanged;
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
+    }
+
+    IEnumerator TransitionToSceneWithDelay(string sceneName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     }
 }
