@@ -45,12 +45,9 @@ public class BodySourceView : MonoBehaviour
         { Kinect.JointType.Neck, Kinect.JointType.Head },
     };
 
-    private Camera camera;
-
     void Start ()
     {
         _Sensor = Kinect.KinectSensor.GetDefault();
-        camera = Camera.current;
     }
     
     void Update () 
@@ -152,15 +149,20 @@ public class BodySourceView : MonoBehaviour
             Kinect.Joint sourceJoint = body.Joints[jt];
             Kinect.Joint? targetJoint = null;
 
-            
-            
             if(_BoneMap.ContainsKey(jt))
             {
                 targetJoint = body.Joints[_BoneMap[jt]];
             }
             
+            Vector3 position = GetVector3FromJoint(sourceJoint);
+            if (float.IsInfinity(position.x) || float.IsNegativeInfinity(position.x) ||
+                float.IsInfinity(position.y) || float.IsNegativeInfinity(position.y))
+            {
+                continue;
+            }
+
             Transform jointObj = bodyObject.transform.FindChild(jt.ToString());
-            jointObj.localPosition = GetVector3FromJoint(sourceJoint);
+            jointObj.localPosition = position;
             
             LineRenderer lr = jointObj.GetComponent<LineRenderer>();
             if(targetJoint.HasValue)
@@ -211,8 +213,8 @@ public class BodySourceView : MonoBehaviour
     {
         Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(point);
         float newX = ((2 * colorPoint.X - kinectWidth) / kinectWidth) * (cam.orthographicSize * cam.aspect);
-        float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) *cam.orthographicSize;
+        float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) * cam.orthographicSize;
         
-        return new Vector3(newX, newY, 1);
+        return new Vector3(newX, newY, depth);
     }
 }

@@ -66,7 +66,7 @@ public class KinectClassify: MonoBehaviour
 
         if (_Sensor != null)
         {
-            print("Acquired sensor");
+            print("Acquired sensor"); // TODO kinda buggy - doesn't actually detect in Kinect is kinected... (pat)
             _Reader = _Sensor.ColorFrameSource.OpenReader();
 
             // worth keeping all this as state?
