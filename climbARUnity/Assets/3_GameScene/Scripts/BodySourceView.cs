@@ -127,7 +127,9 @@ public class BodySourceView : MonoBehaviour
 
             DestroyImmediate(jointObj.GetComponent("BoxCollider"));
 
-            if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight)
+            if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight || 
+                jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight || 
+                jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
             {
                 
                 Rigidbody2D rigid = jointObj.AddComponent<Rigidbody2D>();
@@ -140,9 +142,9 @@ public class BodySourceView : MonoBehaviour
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
             lr.SetVertexCount(2);
             lr.material = BoneMaterial;
-            lr.SetWidth(0.25f, 0.25f);
+            lr.SetWidth(0.05f, 0.05f);
             
-            jointObj.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            jointObj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
         }
@@ -175,7 +177,9 @@ public class BodySourceView : MonoBehaviour
             LineRenderer lr = jointObj.GetComponent<LineRenderer>();
             if(targetJoint.HasValue)
             {
-                if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight)
+                if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight ||
+                    jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
+                    jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
                 {
                     CircleCollider2D col = jointObj.gameObject.GetComponent<CircleCollider2D>();
                     if (col != null)

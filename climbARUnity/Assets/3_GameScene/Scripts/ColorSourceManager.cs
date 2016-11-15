@@ -11,7 +11,9 @@ public class ColorSourceManager : MonoBehaviour
     private ColorFrameReader _Reader;
     private Texture2D _Texture;
     private byte[] _Data;
-    
+    private Color32[] resetColorArray;
+    private bool toggleOn;
+
     public Texture2D GetColorTexture()
     {
         return _Texture;
@@ -20,8 +22,9 @@ public class ColorSourceManager : MonoBehaviour
     void Start()
     {
         _Sensor = KinectSensor.GetDefault();
-        
-		if (_Sensor != null) {
+        toggleOn = true;
+
+        if (_Sensor != null) {
 			_Reader = _Sensor.ColorFrameSource.OpenReader ();
             
 			var frameDesc = _Sensor.ColorFrameSource.CreateFrameDescription (ColorImageFormat.Rgba);
@@ -30,8 +33,15 @@ public class ColorSourceManager : MonoBehaviour
             
 			_Texture = new Texture2D (frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
 			_Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
-            
-			if (!_Sensor.IsOpen) {
+
+            Color32 resetColor = new Color32(0, 0, 0, 0);
+            resetColorArray = _Texture.GetPixels32();
+            for (int i = 0; i < resetColorArray.Length; i++)
+            {
+                resetColorArray[i] = resetColor;
+            }
+
+            if (!_Sensor.IsOpen) {
 				_Sensor.Open ();
 			}
 		} else {
@@ -41,8 +51,17 @@ public class ColorSourceManager : MonoBehaviour
     
     void Update () 
     {
-        if (_Reader != null) 
+        if (Input.GetKeyDown("t"))
         {
+            toggleOn = !toggleOn;
+        }
+        if (!toggleOn) {
+            print("Texture Off");
+            _Texture.SetPixels32(resetColorArray);
+            _Texture.Apply();
+        } else if (_Reader != null) 
+        {
+            print("Texture On");
             var frame = _Reader.AcquireLatestFrame();
             
             if (frame != null)
