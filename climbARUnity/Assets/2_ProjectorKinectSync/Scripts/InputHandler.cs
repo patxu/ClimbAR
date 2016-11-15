@@ -39,8 +39,8 @@ public class InputHandler : MonoBehaviour
                     m_DeltaTime = 0f;
                 }
             }
-            m_draggingOut = isDraggingOut(m_CurrentObject.transform.position - m_LastMousePos, deltaPosition);
-            print(m_draggingOut);
+            m_draggingOut = isDraggingOut(m_CurrentObject.transform.position -
+                                          m_LastMousePos, deltaPosition);
             m_LastMousePos = Input.mousePosition;
         }
 
