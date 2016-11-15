@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class ManualSync : MonoBehaviour
@@ -18,7 +19,15 @@ public class ManualSync : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown("space"))
+        {
+            // 0,0 is top left, +y points down
+            StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[0].transform.localPosition.x, this.cornerCircles[0].transform.localPosition.y, mainCam);
+            StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[1].transform.localPosition.x, this.cornerCircles[1].transform.localPosition.y, mainCam);
+            StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[2].transform.localPosition.x, this.cornerCircles[2].transform.localPosition.y, mainCam);
+            StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[3].transform.localPosition.x, this.cornerCircles[3].transform.localPosition.y, mainCam);
+            SceneManager.LoadScene("3_GameScene");
+        }
     }
 
     /// <summary>
@@ -27,17 +36,14 @@ public class ManualSync : MonoBehaviour
     void InitCornerCircles()
     {
         this.cornerCircles = new GameObject[4];
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
-            for (int j = 0; j < 2; j++)
-            {
-                this.cornerCircles[i * 2 + j] = GameObject.Instantiate(CornerCircle);
-                this.cornerCircles[i * 2 + j].name = "CornerCircle " + (i * 2 + j);
-            }
+            this.cornerCircles[i] = GameObject.Instantiate(CornerCircle);
+            this.cornerCircles[i].name = "CornerCircle " + (i);
         }
-        this.cornerCircles[0].transform.localPosition = ClimbARUtils.fractionToCameraSpace(0, 1, this.mainCam);
-        this.cornerCircles[1].transform.localPosition = ClimbARUtils.fractionToCameraSpace(1, 1, this.mainCam);
-        this.cornerCircles[2].transform.localPosition = ClimbARUtils.fractionToCameraSpace(1, 0, this.mainCam);
-        this.cornerCircles[3].transform.localPosition = ClimbARUtils.fractionToCameraSpace(0, 0, this.mainCam);
+        this.cornerCircles[0].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0, 0, this.mainCam);
+        this.cornerCircles[1].transform.localPosition = ClimbARUtils.fractionToWorldSpace(1, 0, this.mainCam);
+        this.cornerCircles[2].transform.localPosition = ClimbARUtils.fractionToWorldSpace(1, 1, this.mainCam);
+        this.cornerCircles[3].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0, 1, this.mainCam);
     }
 }
