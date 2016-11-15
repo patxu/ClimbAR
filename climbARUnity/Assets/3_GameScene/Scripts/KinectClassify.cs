@@ -189,12 +189,16 @@ public class KinectClassify: MonoBehaviour
         {
             for (int i = 0; i < this.handHolds.Length; i++)
             {
-                CircleCollider2D col = this.handHolds[i].GetComponent<CircleCollider2D>();
-                if (col)
+                // Make sure this hold has not been manually deleted by the user due to a false positive in the classification stage
+                if (this.handHolds[i])
                 {
-                    DestroyImmediate(col);
+                    CircleCollider2D col = this.handHolds[i].GetComponent<CircleCollider2D>();
+                    if (col)
+                    {
+                        DestroyImmediate(col);
+                    }
+                    Destroy(this.handHolds[i]);
                 }
-                Destroy(this.handHolds[i]);
             }
         }
         this.handHolds = new GameObject[numHolds];
@@ -241,7 +245,7 @@ public class KinectClassify: MonoBehaviour
 
     {
         line.SetColors(UnityEngine.Color.red, UnityEngine.Color.red);
-        line.material = new Material(Shader.Find("Particles/Additive"));
+        //line.material = new Material(Shader.Find("Particles/Additive"));
 
         float x;
         float y;
