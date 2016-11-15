@@ -101,6 +101,7 @@ GameObject:
   - 212: {fileID: 1469604065}
   - 114: {fileID: 1469604064}
   - 114: {fileID: 1469604067}
+  - 114: {fileID: 1469604068}
   m_Layer: 0
   m_Name: ProjectorSetupSquare
   m_TagString: Untagged
@@ -212,7 +213,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1471388362}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &1471388364
 Behaviour:
   m_ObjectHideFlags: 0

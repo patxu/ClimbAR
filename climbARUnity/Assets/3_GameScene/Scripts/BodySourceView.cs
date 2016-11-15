@@ -7,6 +7,10 @@ public class BodySourceView : MonoBehaviour
 {
     public Material BoneMaterial;
     public GameObject BodySourceManager;
+    private Kinect.KinectSensor _Sensor;
+    public Camera mainCam;
+
+    public GameObject Bone;
 
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
@@ -43,11 +47,9 @@ public class BodySourceView : MonoBehaviour
         { Kinect.JointType.Neck, Kinect.JointType.Head },
     };
 
-    //private Camera camera;
-
     void Start()
     {
-        //camera = Camera.current;
+        _Sensor = Kinect.KinectSensor.GetDefault();
     }
 
     void Update()
@@ -90,6 +92,7 @@ public class BodySourceView : MonoBehaviour
         {
             if (!trackedIds.Contains(trackingId))
             {
+                DestroyCollidersAttachedToBody(_Bodies[trackingId]);
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
             }
@@ -122,12 +125,26 @@ public class BodySourceView : MonoBehaviour
         {
             GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
+            DestroyImmediate(jointObj.GetComponent("BoxCollider"));
+
+            if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight ||
+                jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
+                jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
+            {
+
+                Rigidbody2D rigid = jointObj.AddComponent<Rigidbody2D>();
+                rigid.isKinematic = true;
+                CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
+                col.enabled = true;
+                col.isTrigger = true;
+            }
+
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
             lr.SetVertexCount(2);
             lr.material = BoneMaterial;
-            lr.SetWidth(0.25f, 0.25f);
+            lr.SetWidth(0.05f, 0.05f);
 
-            jointObj.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            jointObj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
         }
@@ -146,13 +163,32 @@ public class BodySourceView : MonoBehaviour
             {
                 targetJoint = body.Joints[_BoneMap[jt]];
             }
-            // TODO: modify joint positions to shift skeleton around
+
+            Vector3 position = GetVector3FromJoint(sourceJoint);
+            if (float.IsInfinity(position.x) || float.IsNegativeInfinity(position.x) ||
+                float.IsInfinity(position.y) || float.IsNegativeInfinity(position.y))
+            {
+                continue;
+            }
+
             Transform jointObj = bodyObject.transform.FindChild(jt.ToString());
-            jointObj.localPosition = GetVector3FromJoint(sourceJoint);
+            jointObj.localPosition = position;
+
 
             LineRenderer lr = jointObj.GetComponent<LineRenderer>();
             if (targetJoint.HasValue)
             {
+                if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight ||
+                    jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
+                    jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
+                {
+                    CircleCollider2D col = jointObj.gameObject.GetComponent<CircleCollider2D>();
+                    if (col != null)
+                    {
+                        col.radius = 1.0f;
+                        //col.offset = new Vector2(jointObj.localPosition.x, jointObj.localPosition.y); 
+                    }
+                }
                 lr.SetPosition(0, jointObj.localPosition);
                 lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));
                 lr.SetColors(GetColorForState(sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
@@ -161,6 +197,25 @@ public class BodySourceView : MonoBehaviour
             {
                 lr.enabled = false;
             }
+        }
+    }
+
+    private void DestroyCollidersAttachedToBody(GameObject bodyObject)
+    {
+        Transform leftHand = bodyObject.transform.FindChild(Kinect.JointType.HandLeft.ToString());
+        CircleCollider2D leftCol = leftHand.gameObject.GetComponent<CircleCollider2D>();
+
+        if (leftCol)
+        {
+            DestroyImmediate(leftCol);
+        }
+
+        Transform rightHand = bodyObject.transform.FindChild(Kinect.JointType.HandRight.ToString());
+        CircleCollider2D rightCol = rightHand.gameObject.GetComponent<CircleCollider2D>();
+
+        if (rightCol)
+        {
+            DestroyImmediate(rightCol);
         }
     }
 
@@ -181,6 +236,17 @@ public class BodySourceView : MonoBehaviour
 
     private Vector3 GetVector3FromJoint(Kinect.Joint joint)
     {
-        return new Vector3(joint.Position.X * 10, joint.Position.Y * 10, joint.Position.Z * 10);
+        Kinect.CameraSpacePoint cameraPoint = joint.Position;
+
+        return GetUnitySpaceFromKinectCameraPoint(cameraPoint, 0, this.mainCam, 1920, 1080);
+    }
+
+    private Vector3 GetUnitySpaceFromKinectCameraPoint(Kinect.CameraSpacePoint point, float depth, Camera cam, int kinectWidth, int kinectHeight)
+    {
+        Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(point);
+        float newX = ((2 * colorPoint.X - kinectWidth) / kinectWidth) * (cam.orthographicSize * cam.aspect);
+        float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) * cam.orthographicSize;
+
+        return new Vector3(newX, newY, depth);
     }
 }
