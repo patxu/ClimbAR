@@ -5,6 +5,9 @@ using System.Drawing;
 using System.IO;
 using Windows.Kinect;
 using System.Collections;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 public class KinectClassify : MonoBehaviour
 {
@@ -51,8 +54,21 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-            print("starting coroutine");
+            Debug.Log("starting coroutine");
             StartCoroutine("GrabFrameAndClassify");
+        }
+        else if (Input.GetKeyDown("q"))
+        {
+            Debug.Log("quitting application");
+            // @ http://answers.unity3d.com/questions/899037/applicationquit-not-working-1.html
+            // save any game data here
+            #if UNITY_EDITOR
+                // Application.Quit() does not work in the editor so
+                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                Application.Quit();
+            #endif
         }
     }
 
@@ -81,8 +97,6 @@ public class KinectClassify : MonoBehaviour
                 print("Sensor is not open; opening");
                 _Sensor.Open();
             }
-
-
         }
         else
         {
