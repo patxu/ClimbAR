@@ -95,11 +95,6 @@ public class projectorCalibrate : MonoBehaviour
                 projectorCoords = new int[4];
                 Marshal.Copy(coords, projectorCoords, 0, 4);
 
-                StateManager.instance.kinectUpperLeftX = projectorCoords[0];
-                StateManager.instance.kinectUpperLeftY = projectorCoords[1];
-                StateManager.instance.kinectHeight = projectorCoords[3] - projectorCoords[1];
-                StateManager.instance.kinectWidth = projectorCoords[2] - projectorCoords[0];
-
                 // Free data
                 Marshal.FreeHGlobal(redArray);
                 Marshal.FreeHGlobal(greenArray);

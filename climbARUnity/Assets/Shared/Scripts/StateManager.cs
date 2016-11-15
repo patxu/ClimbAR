@@ -5,7 +5,7 @@ public class StateManager : MonoBehaviour
 {
 
     // Variables relating to state
-    public int kinectUpperLeftX, kinectUpperLeftY, kinectWidth, kinectHeight;
+    public Vector2 kinectUpperLeft, kinectUpperRight, kinectLowerLeft, kinectLowerRight;
 
     public static StateManager instance = null;
     void Awake()
@@ -20,11 +20,5 @@ public class StateManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
