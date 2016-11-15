@@ -144,25 +144,25 @@ public class KinectClassify : MonoBehaviour
             }
 
             //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
-            //int[] projectorBounds = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 };
-            Vector2 topLeft = StateManager.instance.kinectUpperLeft; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperLeft.x, StateManager.instance.kinectUpperLeft.x, mainCam);
-            Debug.Log(topLeft);
-            topLeft.Scale(ClimbARUtils.kinectScale);
-            Vector2 topRight = StateManager.instance.kinectUpperRight; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperRight.x, StateManager.instance.kinectUpperRight.x, mainCam);
-            Debug.Log(topRight);
-            topRight.Scale(ClimbARUtils.kinectScale);
-            Vector2 bottomRight = StateManager.instance.kinectLowerRight; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerRight.x, StateManager.instance.kinectLowerRight.x, mainCam);
-            Debug.Log(bottomRight);
-            bottomRight.Scale(ClimbARUtils.kinectScale);
-            Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerLeft.x, StateManager.instance.kinectLowerLeft.x, mainCam);
-            Debug.Log(bottomLeft);
-            bottomLeft.Scale(ClimbARUtils.kinectScale);
+            int[] projectorBounds = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 };
+            //Vector2 topLeft = StateManager.instance.kinectUpperLeft; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperLeft.x, StateManager.instance.kinectUpperLeft.x, mainCam);
+            //Debug.Log(topLeft);
+            //topLeft.Scale(ClimbARUtils.kinectScale);
+            //Vector2 topRight = StateManager.instance.kinectUpperRight; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperRight.x, StateManager.instance.kinectUpperRight.x, mainCam);
+            //Debug.Log(topRight);
+            //topRight.Scale(ClimbARUtils.kinectScale);
+            //Vector2 bottomRight = StateManager.instance.kinectLowerRight; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerRight.x, StateManager.instance.kinectLowerRight.x, mainCam);
+            //Debug.Log(bottomRight);
+            //bottomRight.Scale(ClimbARUtils.kinectScale);
+            //Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerLeft.x, StateManager.instance.kinectLowerLeft.x, mainCam);
+            //Debug.Log(bottomLeft);
+            //bottomLeft.Scale(ClimbARUtils.kinectScale);
 
-            int[] projectorBounds = new int[] { (int)topLeft.x, (int)topLeft.y, (int)topRight.x, (int)topRight.y, (int)bottomRight.x, (int)bottomRight.y, (int)bottomLeft.x, (int)bottomLeft.y };
-            for (int i = 0; i < 8; i++)
-            {
-                Debug.Log(projectorBounds[i]);
-            }
+            //int[] projectorBounds = new int[] { (int)topLeft.x, (int)topLeft.y, (int)topRight.x, (int)topRight.y, (int)bottomRight.x, (int)bottomRight.y, (int)bottomLeft.x, (int)bottomLeft.y };
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    Debug.Log(projectorBounds[i]);
+            //}
             float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBounds, holdsBoundingBoxes);
             InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed);
             if (!DEBUG)
