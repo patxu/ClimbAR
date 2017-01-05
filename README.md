@@ -4,7 +4,7 @@ Orestis Lykouropoulos, Charley Ren, Pat Xu, David Bain, Jon Kramer
 - [Overview](https://github.com/patxu/cs98-senior-project#overview)
 - [Mockups](https://github.com/patxu/cs98-senior-project#game-mockups)
 - [Unity Scene](https://github.com/patxu/cs98-senior-project#unity-scene)
-- [Architecture](https://github.com/patxu/cs98-senior-project#Architecture)
+- [Architecture](https://github.com/patxu/cs98-senior-project#architecture)
 - [Setup](https://github.com/patxu/cs98-senior-project#setup)
 - [Deployment](https://github.com/patxu/cs98-senior-project#deployment)
 - [Docs](https://github.com/patxu/cs98-senior-project#docs)
