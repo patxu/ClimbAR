@@ -1,8 +1,6 @@
 # checkpoints
 This directory contains some of the checkpoints that were required for the project.
 
-# Term 1
-
 ## [Documents](https://github.com/patxu/cs98-senior-project#docs) (week 1-4)
 
 ## Hack-a-thing Interlude (week 3)
