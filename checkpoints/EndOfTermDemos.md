@@ -10,6 +10,8 @@ These are links to various directories within our repo.
 ## Debrief
 **So far** we've been able to write an OpenCV C++ wrapper for use in Unity, perform climbing hold recognition with an live image from the Kinect sensor, and finally pull everything together in a Unity application where we overlay a live image from the Kinect, the skeleton of the climber, and recognized holds.
 
+<img src="../readme_imgs/overlay2.jpg" width=400x>
+
 **What worked well:** training an accurate classifier via OpenCV, using the Kinect sensor (color image, skeleton), using Unity for detect hold grabbing (i.e. collision detection)
 
 **What was trickier:** overlaying the image, skeleton, and holds AND showing this on a projector that overlays everything ON the holds. several transformations of the space are needed here but I'm confident we can solve this

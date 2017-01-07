@@ -27,8 +27,7 @@ Some basic mockups for how we envision the project. See a simple game UI display
 ## Unity Scene
 The Unity scene so far! Displays the bounding boxes (ellipses) given by the OpenCV classifier. Read about our Unity architecture to get an idea of how we use OpenCV in Unity.
 
-<img src="readme_imgs/opencv_live_classification.jpg" width=400x>
-<img src="readme_imgs/kinect_overlay.jpg" width=400x>
+<img src="readme_imgs/overlay2.jpg" width=400x>
 
 ## Architecture
 - Unity – connecting OpenCV and Kinect
