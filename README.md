@@ -1,6 +1,16 @@
 # climb.AR
 Orestis Lykouropoulos, Charley Ren, Pat Xu, David Bain, Jon Kramer
 
+- [Overview](https://github.com/patxu/cs98-senior-project#overview)
+- [Mockups](https://github.com/patxu/cs98-senior-project#game-mockups)
+- [Unity Scene](https://github.com/patxu/cs98-senior-project#unity-scene)
+- [Architecture](https://github.com/patxu/cs98-senior-project#architecture)
+- [Setup](https://github.com/patxu/cs98-senior-project#setup)
+- [Deployment](https://github.com/patxu/cs98-senior-project#deployment)
+- [Docs](https://github.com/patxu/cs98-senior-project#docs)
+- [The Team](https://github.com/patxu/cs98-senior-project#the-team)
+- [Acknowledgements](https://github.com/patxu/cs98-senior-project#acknowledgements)
+
 ## Overview
 We are building an augmented reality climbing game platform, with a focus on releasing the platform as a developer-friendly development kit. Components include
 - wall, hold, and climber body recognition via [OpenCV](http://opencv.org/),
@@ -17,7 +27,7 @@ Some basic mockups for how we envision the project. See a simple game UI display
 ## Unity Scene
 The Unity scene so far! Displays the bounding boxes (ellipses) given by the OpenCV classifier. Read about our Unity architecture to get an idea of how we use OpenCV in Unity.
 
-<img src="readme_imgs/opencv_live_classification.jpg" width=400x>
+<img src="readme_imgs/overlay2.jpg" width=400x>
 
 ## Architecture
 - Unity – connecting OpenCV and Kinect
