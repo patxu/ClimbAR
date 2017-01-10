@@ -257,22 +257,20 @@ public class KinectClassify : MonoBehaviour
             float x = projectorTransformation[holdIndex] * camWidth - camWidth / 2f;
             float y = projectorTransformation[holdIndex + 1] * camHeight - camHeight / 2f;
 
-
-
             float width = (projectorTransformation[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
             float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
 
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].name = "Handhold " + i;
 
-            Vector2 pos = new Vector2(x + width,
-                            (y + height) * -1f);
+            Vector2 pos = new Vector2(x + width, (y + height) * -1f);
 
             if (!StateManager.instance.debugView)
             {
                 pos.x = pos.x * -1;
             }
             this.handHolds[i].transform.localPosition = pos;
+            this.handHolds[i].transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
 
             Rigidbody2D rigid = this.handHolds[i].AddComponent<Rigidbody2D>();
             rigid.isKinematic = true;
@@ -305,7 +303,8 @@ public class KinectClassify : MonoBehaviour
         line.SetVertexCount(segments + 2);
 
         // width of line; scaled by width and height of bounding box
-        float lineWidth = Math.Min(xradius, yradius) / 5f;
+        //float lineWidth = Math.Min(xradius, yradius) / 5f;
+        float lineWidth = 0.15f;
         line.SetWidth(lineWidth, lineWidth);
 
         // not currently setting the angle of ellipse
