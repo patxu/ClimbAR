@@ -31,7 +31,7 @@ public class ManualSync : MonoBehaviour
     }
 
     /// <summary>
-    /// Top left, top right, bottom right, bottom left
+    /// 0, 1, 2, 3 -> top left, top right, bottom right, bottom left
     /// </summary>
     void InitCornerCircles()
     {
@@ -41,9 +41,9 @@ public class ManualSync : MonoBehaviour
             this.cornerCircles[i] = GameObject.Instantiate(CornerCircle);
             this.cornerCircles[i].name = "CornerCircle " + (i);
         }
-        this.cornerCircles[0].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0, 0, this.mainCam);
-        this.cornerCircles[1].transform.localPosition = ClimbARUtils.fractionToWorldSpace(1, 0, this.mainCam);
-        this.cornerCircles[2].transform.localPosition = ClimbARUtils.fractionToWorldSpace(1, 1, this.mainCam);
-        this.cornerCircles[3].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0, 1, this.mainCam);
+        this.cornerCircles[0].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0.1f, 0.1f, this.mainCam);
+        this.cornerCircles[1].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0.9f, 0.1f, this.mainCam);
+        this.cornerCircles[2].transform.localPosition = ClimbARUtils.fractionToWorldSpace(.9f, .9f, this.mainCam);
+        this.cornerCircles[3].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0.1f, 0.9f, this.mainCam);
     }
 }
