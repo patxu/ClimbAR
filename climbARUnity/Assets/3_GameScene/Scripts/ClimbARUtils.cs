@@ -53,6 +53,15 @@ static class ClimbARUtils
         float camWidth = camHeight * cam.aspect;
 
         return new Vector2(x / camWidth + 0.5f,
-                           (y / camHeight - 0.5f) * -1);
+                           (y / camHeight - 0.5f) * -1f);
+    }
+
+    public static Vector2 getPositionForGameObject(Vector2 position, Camera cam, bool debugView)
+    {
+        if (debugView)
+        {
+            position.x = position.x * -1f;
+        }
+        return position;
     }
 }

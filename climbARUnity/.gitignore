@@ -124,3 +124,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+*.exe
+test_app_*/

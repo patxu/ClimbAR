@@ -6,6 +6,7 @@ public class StateManager : MonoBehaviour
 
     // Variables relating to state
     public Vector2 kinectUpperLeft, kinectUpperRight, kinectLowerLeft, kinectLowerRight;
+    public bool debugView = true;
 
     public static StateManager instance = null;
     void Awake()
