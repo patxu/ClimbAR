@@ -59,14 +59,11 @@ public class KinectClassify : MonoBehaviour
         }
         else if (Input.GetKeyDown("t"))
         {
-
             foreach (var hold in handHolds)
             {
                 Vector3 position = hold.transform.localPosition;
-
                 hold.transform.localPosition = new Vector3(position.x * -1, position.y, position.z);
             }
-
         }
         else if (Input.GetKeyDown("q"))
         {
@@ -183,12 +180,7 @@ public class KinectClassify : MonoBehaviour
             bottomLeft.Scale(ClimbARUtils.kinectScale);
 
             int[] projectorBounds = new int[] { (int)topLeft.x, (int)topLeft.y, (int)topRight.x, (int)topRight.y, (int)bottomRight.x, (int)bottomRight.y, (int)bottomLeft.x, (int)bottomLeft.y };
-            /*
-            for (int i = 0; i < 8; i++)
-            {
-                Debug.Log(projectorBounds[i]);
-            }
-            */
+
             float[] holdsProjectorTransformed;
 
             if (!StateManager.instance.debugView)
@@ -358,13 +350,6 @@ public class KinectClassify : MonoBehaviour
         float leftGradient = (x4 - x1) / height;
         float rightGradient = (x3 - x2) / (y3 - y2);
 
-        Debug.Log("Bounding box array:");
-        foreach (var val in boundingBoxArray)
-        {
-            Debug.Log(val);
-        }
-        Debug.Log(boundingBoxArray);
-
         for (int i = 0; i < boundingBoxArray.Length / 4; i++)
         {
             //Debug.Log("Hold: ");
@@ -391,11 +376,7 @@ public class KinectClassify : MonoBehaviour
             transformedArr.SetValue(holdWidth / xLength, holdIndex + 2);
             transformedArr.SetValue(holdHeight / height, holdIndex + 3);
         }
-        Debug.Log("Transformed arrray: ");
-        foreach (var val in transformedArr)
-        {
-            Debug.Log(val);
-        }
+
         return transformedArr;
     }
 

@@ -126,3 +126,4 @@ ENV/
 .ropeproject
 
 *.exe
+test_app_*/
