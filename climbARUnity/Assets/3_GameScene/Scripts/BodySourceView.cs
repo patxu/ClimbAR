@@ -247,6 +247,10 @@ public class BodySourceView : MonoBehaviour
         float newX = ((2 * colorPoint.X - kinectWidth) / kinectWidth) * (cam.orthographicSize * cam.aspect);
         float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) * cam.orthographicSize;
 
+        if (!StateManager.instance.debugView)
+        {
+            newX = newX * -1;
+        }
         return new Vector3(newX, newY, depth);
     }
 }

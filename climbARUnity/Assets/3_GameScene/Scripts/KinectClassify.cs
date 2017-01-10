@@ -6,7 +6,7 @@ using System.IO;
 using Windows.Kinect;
 using System.Collections;
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 public class KinectClassify : MonoBehaviour
@@ -57,18 +57,29 @@ public class KinectClassify : MonoBehaviour
             Debug.Log("starting coroutine");
             StartCoroutine("GrabFrameAndClassify");
         }
+        else if (Input.GetKeyDown("t"))
+        {
+
+            foreach (var hold in handHolds)
+            {
+                Vector3 position = hold.transform.localPosition;
+
+                hold.transform.localPosition = new Vector3(position.x * -1, position.y, position.z);
+            }
+
+        }
         else if (Input.GetKeyDown("q"))
         {
             Debug.Log("quitting application");
             // @ http://answers.unity3d.com/questions/899037/applicationquit-not-working-1.html
             // save any game data here
-            #if UNITY_EDITOR
-                // Application.Quit() does not work in the editor so
-                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#if UNITY_EDITOR
+            // Application.Quit() does not work in the editor so
+            // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
                 Application.Quit();
-            #endif
+#endif
         }
     }
 
@@ -157,26 +168,42 @@ public class KinectClassify : MonoBehaviour
             }
 
             //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
-            int[] projectorBounds = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 };
-            //Vector2 topLeft = StateManager.instance.kinectUpperLeft; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperLeft.x, StateManager.instance.kinectUpperLeft.x, mainCam);
-            //Debug.Log(topLeft);
-            //topLeft.Scale(ClimbARUtils.kinectScale);
-            //Vector2 topRight = StateManager.instance.kinectUpperRight; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperRight.x, StateManager.instance.kinectUpperRight.x, mainCam);
-            //Debug.Log(topRight);
-            //topRight.Scale(ClimbARUtils.kinectScale);
-            //Vector2 bottomRight = StateManager.instance.kinectLowerRight; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerRight.x, StateManager.instance.kinectLowerRight.x, mainCam);
-            //Debug.Log(bottomRight);
-            //bottomRight.Scale(ClimbARUtils.kinectScale);
-            //Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerLeft.x, StateManager.instance.kinectLowerLeft.x, mainCam);
-            //Debug.Log(bottomLeft);
-            //bottomLeft.Scale(ClimbARUtils.kinectScale);
+            //int[] projectorBounds = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 };
+            Vector2 topLeft = StateManager.instance.kinectUpperLeft; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperLeft.x, StateManager.instance.kinectUpperLeft.x, mainCam);
+            Debug.Log(topLeft);
+            topLeft.Scale(ClimbARUtils.kinectScale);
+            Vector2 topRight = StateManager.instance.kinectUpperRight; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperRight.x, StateManager.instance.kinectUpperRight.x, mainCam);
+            Debug.Log(topRight);
+            topRight.Scale(ClimbARUtils.kinectScale);
+            Vector2 bottomRight = StateManager.instance.kinectLowerRight; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerRight.x, StateManager.instance.kinectLowerRight.x, mainCam);
+            Debug.Log(bottomRight);
+            bottomRight.Scale(ClimbARUtils.kinectScale);
+            Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerLeft.x, StateManager.instance.kinectLowerLeft.x, mainCam);
+            Debug.Log(bottomLeft);
+            bottomLeft.Scale(ClimbARUtils.kinectScale);
 
-            //int[] projectorBounds = new int[] { (int)topLeft.x, (int)topLeft.y, (int)topRight.x, (int)topRight.y, (int)bottomRight.x, (int)bottomRight.y, (int)bottomLeft.x, (int)bottomLeft.y };
-            //for (int i = 0; i < 8; i++)
-            //{
-            //    Debug.Log(projectorBounds[i]);
-            //}
-            float[] holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBounds, holdsBoundingBoxes);
+            int[] projectorBounds = new int[] { (int)topLeft.x, (int)topLeft.y, (int)topRight.x, (int)topRight.y, (int)bottomRight.x, (int)bottomRight.y, (int)bottomLeft.x, (int)bottomLeft.y };
+            /*
+            for (int i = 0; i < 8; i++)
+            {
+                Debug.Log(projectorBounds[i]);
+            }
+            */
+            float[] holdsProjectorTransformed;
+
+            if (!StateManager.instance.debugView)
+            {
+                holdsProjectorTransformed = transformOpenCvToUnitySpace(projectorBounds, holdsBoundingBoxes);
+            }
+            else
+            {
+                holdsProjectorTransformed = new float[holdsBoundingBoxes.Length];
+                for (int i = 0; i < holdsBoundingBoxes.Length; i++)
+                {
+                    holdsProjectorTransformed[i] = (float)holdsBoundingBoxes[i];
+                }
+
+            }
             InstantiateHandholds(numHolds, this.mainCam, holdsProjectorTransformed);
             if (!DEBUG)
             {
@@ -240,33 +267,39 @@ public class KinectClassify : MonoBehaviour
             float x = projectorTransformation[holdIndex] * camWidth - camWidth / 2f;
             float y = projectorTransformation[holdIndex + 1] * camHeight - camHeight / 2f;
 
-            //float x = projectorTransformation[holdIndex] * cam_height - cam_height / 2f;
-            //float y = projectorTransformation[holdIndex + 1] * cam_height - cam_height / 2f;
+
 
             float width = (projectorTransformation[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
             float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
 
-            // float width = (projectorTransformation[holdIndex + 2] / 2) * cam_height; //divide by 2 because it is a radius
-            // float height = (projectorTransformation[holdIndex + 3] / 2) * cam_height;
-
-            // transform handhold (camera space?)
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].name = "Handhold " + i;
-            this.handHolds[i].transform.localPosition =
-                new Vector2(x + width,
+
+            Vector2 pos = new Vector2(x + width,
                             (y + height) * -1f);
+
+            if (!StateManager.instance.debugView)
+            {
+                pos.x = pos.x * -1;
+            }
+            this.handHolds[i].transform.localPosition = pos;
+
             Rigidbody2D rigid = this.handHolds[i].AddComponent<Rigidbody2D>();
             rigid.isKinematic = true;
 
             CircleCollider2D col = this.handHolds[i].AddComponent<CircleCollider2D>();
             col.radius = 0.2f; //(float)Math.Max(width, height);
-            // col.offset = new Vector2(x + width, (y + height) * -1f);
             col.enabled = true;
             col.isTrigger = true;
             // Create handhold object and draw bounding ellipse
             line = this.handHolds[i].GetComponent<LineRenderer>();
             DrawBoundingEllipse(width, height);
         }
+    }
+
+    Vector2 getPositionForGameObject(Vector2 position, bool debug)
+    {
+        return position;
     }
 
     // draw the bounding ellipse of the climbing hold
@@ -325,8 +358,16 @@ public class KinectClassify : MonoBehaviour
         float leftGradient = (x4 - x1) / height;
         float rightGradient = (x3 - x2) / (y3 - y2);
 
+        Debug.Log("Bounding box array:");
+        foreach (var val in boundingBoxArray)
+        {
+            Debug.Log(val);
+        }
+        Debug.Log(boundingBoxArray);
+
         for (int i = 0; i < boundingBoxArray.Length / 4; i++)
         {
+            //Debug.Log("Hold: ");
             int holdIndex = i * 4;
 
             // get coordinates of hold
@@ -350,7 +391,11 @@ public class KinectClassify : MonoBehaviour
             transformedArr.SetValue(holdWidth / xLength, holdIndex + 2);
             transformedArr.SetValue(holdHeight / height, holdIndex + 3);
         }
-
+        Debug.Log("Transformed arrray: ");
+        foreach (var val in transformedArr)
+        {
+            Debug.Log(val);
+        }
         return transformedArr;
     }
 

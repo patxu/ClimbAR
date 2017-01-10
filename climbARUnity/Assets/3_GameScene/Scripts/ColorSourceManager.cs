@@ -12,7 +12,6 @@ public class ColorSourceManager : MonoBehaviour
     private Texture2D _Texture;
     private byte[] _Data;
     private Color32[] resetColorArray;
-    private bool toggleOn;
 
     public Texture2D GetColorTexture()
     {
@@ -22,7 +21,7 @@ public class ColorSourceManager : MonoBehaviour
     void Start()
     {
         _Sensor = KinectSensor.GetDefault();
-        toggleOn = true;
+        StateManager.instance.debugView = true;
 
         if (_Sensor != null)
         {
@@ -57,9 +56,9 @@ public class ColorSourceManager : MonoBehaviour
     {
         if (Input.GetKeyDown("t"))
         {
-            toggleOn = !toggleOn;
+            StateManager.instance.debugView = !StateManager.instance.debugView;
         }
-        if (!toggleOn)
+        if (!StateManager.instance.debugView)
         {
             _Texture.SetPixels32(resetColorArray);
             _Texture.Apply();
