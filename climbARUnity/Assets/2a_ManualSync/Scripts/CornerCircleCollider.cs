@@ -15,6 +15,5 @@ public class CornerCircleCollider : MonoBehaviour
         Vector3 mousePos = Input.mousePosition;
         this.transform.position =
             Camera.main.ScreenToWorldPoint(mousePos) + offset;
-        this.transform.position = this.transform.position + new Vector3(0, 0, 10);
     }
 }
