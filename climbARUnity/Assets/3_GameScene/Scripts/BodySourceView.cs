@@ -239,18 +239,30 @@ public class BodySourceView : MonoBehaviour
         // x and y in [-1,1], I think
         Kinect.CameraSpacePoint cameraPoint = joint.Position;
 
-        Vector3 unityVector = transformKinectToUnitySpace(cameraPoint, 0, this.mainCam, 1920, 1080);
-        Debug.Log(cameraPoint.X + " " + cameraPoint.Y);
-        Debug.Log(unityVector.ToString());
-        float[] coordinates = new float[] { cameraPoint.X, cameraPoint.Y , 0, 0}; // 0, 0 is filler for the bounding box
+        // x and y in [0, 1080]
+        Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(cameraPoint);
+
+        // Match format for hold bounding box
+        float[] coordinates = new float[] { colorPoint.X, colorPoint.Y, 0, 0 }; // 0, 0 is filler for the bounding box
         float[] projectorBounds = StateManager.instance.getProjectorBounds();
+
+        // Transform into the appropriate coordinates to project 
         float[] transformedCoordinates = transformOpenCvToUnitySpace(projectorBounds, coordinates);
-        return new Vector3(transformedCoordinates[0], transformedCoordinates[1], unityVector.z);
+
+
+        // Now convert back into unity space so joints can be added to the scene
+        float camHeight = 2f * this.mainCam.orthographicSize;
+        float camWidth = camHeight * this.mainCam.aspect;
+
+        float x = transformedCoordinates[0] * camWidth - camWidth / 2f;
+        float y = transformedCoordinates[1] * camHeight - camHeight / 2f;
+        return new Vector3(-1f * x, -1f * y, 0);
     }
 
     private Vector3 transformKinectToUnitySpace(Kinect.CameraSpacePoint point, float depth, Camera cam, int kinectWidth, int kinectHeight)
     {
         Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(point);
+
         float newX = ((2 * colorPoint.X - kinectWidth) / kinectWidth) * (cam.orthographicSize * cam.aspect);
         float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) * cam.orthographicSize;
 
@@ -258,6 +270,7 @@ public class BodySourceView : MonoBehaviour
         {
             newX = newX * -1;
         }
+
         return new Vector3(newX, newY, depth);
     }
 
