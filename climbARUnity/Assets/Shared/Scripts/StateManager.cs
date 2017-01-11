@@ -11,7 +11,6 @@ public class StateManager : MonoBehaviour
     public static StateManager instance = null;
     void Awake()
     {
-        Debug.Log("in awake for game manager");
         if (instance == null)
         {
             instance = this;
@@ -21,5 +20,19 @@ public class StateManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+    // scale coordinates of projector bounds and return as int array
+    public float[] getProjectorBounds()
+    {
+        Vector2 topLeft = StateManager.instance.kinectUpperLeft; 
+        topLeft.Scale(ClimbARUtils.kinectScale);
+        Vector2 topRight = StateManager.instance.kinectUpperRight; 
+        topRight.Scale(ClimbARUtils.kinectScale);
+        Vector2 bottomRight = StateManager.instance.kinectLowerRight; ;
+        bottomRight.Scale(ClimbARUtils.kinectScale);
+        Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; 
+        bottomLeft.Scale(ClimbARUtils.kinectScale);
+        return new float[] { topLeft.x, topLeft.y, topRight.x, topRight.y, bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y };
     }
 }

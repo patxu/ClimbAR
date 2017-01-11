@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using Windows.Kinect;
 using System.Collections;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,12 +26,12 @@ public class KinectClassify : MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
-#if UNITY_STANDALONE_WIN
-        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
-        public static extern int getNumHolds();
-        [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
-        public static extern IntPtr classifyImage(IntPtr data, int width, int height);
-#endif
+        #if UNITY_STANDALONE_WIN
+                [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
+                public static extern int getNumHolds();
+                [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
+                public static extern IntPtr classifyImage(IntPtr data, int width, int height);
+        #endif
     }
 
     // Game objects
@@ -130,7 +131,7 @@ public class KinectClassify : MonoBehaviour
         if (frame != null)
         {
             int numHolds;
-            int[] holdsBoundingBoxes;
+            float[] holdsBoundingBoxes;
             int imageWidth;
             int imageHeight;
 
@@ -139,7 +140,7 @@ public class KinectClassify : MonoBehaviour
                 Debug.Log("In debug mode");
                 // simple, hardcoded bounding boxes
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-                holdsBoundingBoxes = new int[] { 0, 0, 100, 100, 1800, 900, 100, 100 };
+                holdsBoundingBoxes = new float[] { 0, 0, 100, 100, 1800, 900, 100, 100 };
                 numHolds = holdsBoundingBoxes.Length / 4;
 
                 imageWidth = 1000;
@@ -164,21 +165,7 @@ public class KinectClassify : MonoBehaviour
                 holdsBoundingBoxes = ClassifyImage(numHolds, imageWidth, imageHeight);
             }
 
-            Vector2 topLeft = StateManager.instance.kinectUpperLeft; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperLeft.x, StateManager.instance.kinectUpperLeft.x, mainCam);
-            Debug.Log(topLeft);
-            topLeft.Scale(ClimbARUtils.kinectScale);
-            Vector2 topRight = StateManager.instance.kinectUpperRight; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperRight.x, StateManager.instance.kinectUpperRight.x, mainCam);
-            Debug.Log(topRight);
-            topRight.Scale(ClimbARUtils.kinectScale);
-            Vector2 bottomRight = StateManager.instance.kinectLowerRight; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerRight.x, StateManager.instance.kinectLowerRight.x, mainCam);
-            Debug.Log(bottomRight);
-            bottomRight.Scale(ClimbARUtils.kinectScale);
-            Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; //ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectLowerLeft.x, StateManager.instance.kinectLowerLeft.x, mainCam);
-            Debug.Log(bottomLeft);
-            bottomLeft.Scale(ClimbARUtils.kinectScale);
-
-            int[] projectorBounds = new int[] { (int)topLeft.x, (int)topLeft.y, (int)topRight.x, (int)topRight.y, (int)bottomRight.x, (int)bottomRight.y, (int)bottomLeft.x, (int)bottomLeft.y };
-
+            float[] projectorBounds = StateManager.instance.getProjectorBounds();
             float[] holdsProjectorTransformed;
 
             if (!StateManager.instance.debugView)
@@ -207,7 +194,7 @@ public class KinectClassify : MonoBehaviour
 
     // classify image (byte array), update the number of holds, 
     // copy bounding boxes into memory
-    int[] ClassifyImage(int numHolds, int imageWidth, int imageHeight)
+    float[] ClassifyImage(int numHolds, int imageWidth, int imageHeight)
     {
         int size = Marshal.SizeOf(this._Data[0]) * this._Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
@@ -220,7 +207,7 @@ public class KinectClassify : MonoBehaviour
 
         int[] holdBoundingBoxes = new int[numHolds * 4];
         Marshal.Copy(_boundingBoxes, holdBoundingBoxes, 0, numHolds * 4);
-        return holdBoundingBoxes;
+        return Array.ConvertAll(holdBoundingBoxes, x => (float)x);
     }
 
 
@@ -321,21 +308,16 @@ public class KinectClassify : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Transforms coordinates given in OpenCV Space to coordinates in Unity ( 0 to 1)
-    /// </summary>
-    /// <param name="coordinates">int array of coordinates in the order top left (x,y), top right, bottom right, bottom left </param>
-    /// <returns>float array of transformed coordinates</returns>
-    private float[] transformOpenCvToUnitySpace(int[] coordinates, int[] boundingBoxArray)
+    private float[] transformOpenCvToUnitySpace(float[] coordinates, float[] boundingBoxArray)
     {
-        int x1 = coordinates[0];
-        int y1 = coordinates[1];
-        int x2 = coordinates[2];
-        int y2 = coordinates[3];
-        int x3 = coordinates[4];
-        int y3 = coordinates[5];
-        int x4 = coordinates[6];
-        int y4 = coordinates[7];
+        float x1 = coordinates[0];
+        float y1 = coordinates[1];
+        float x2 = coordinates[2];
+        float y2 = coordinates[3];
+        float x3 = coordinates[4];
+        float y3 = coordinates[5];
+        float x4 = coordinates[6];
+        float y4 = coordinates[7];
 
         float[] transformedArr = new float[boundingBoxArray.Length];
 
@@ -350,10 +332,10 @@ public class KinectClassify : MonoBehaviour
             int holdIndex = i * 4;
 
             // get coordinates of hold
-            int currentX = boundingBoxArray[holdIndex];
-            int currentY = boundingBoxArray[holdIndex + 1];
-            int holdWidth = boundingBoxArray[holdIndex + 2];
-            int holdHeight = boundingBoxArray[holdIndex + 3];
+            float currentX = boundingBoxArray[holdIndex];
+            float currentY = boundingBoxArray[holdIndex + 1];
+            float holdWidth = boundingBoxArray[holdIndex + 2];
+            float holdHeight = boundingBoxArray[holdIndex + 3];
 
             //Project y on bb side left to get coordinates of the beginning of the horizonal line on which this hold belongs
             float leftX = x1 + leftGradient * (currentY - y1);
