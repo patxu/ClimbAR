@@ -262,7 +262,7 @@ public class KinectClassify : MonoBehaviour
 
 
             float width = (projectorTransformation[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
-            float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
+            float height = (projectorTransformation[holdIndex + 3] / 2) * ca mHeight;
 
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].name = "Handhold " + i;
@@ -412,4 +412,116 @@ public class KinectClassify : MonoBehaviour
             _Sensor = null;
         }
     }
+
+    //----------------------------------------------------
+    // TODO: Test these functions!!!
+    //----------------------------------------------------
+
+    float getDistanceBetweenHolds(GameObject hold1, GameObject hold2)
+    {
+        float x1, x2, y1, y2;
+        x1 = hold1.transform.position.x;
+        y1 = hold1.transform.position.y;
+        x2 = hold2.transform.position.x;
+        y2 = hold2.transform.position.y;
+
+        return Mathf.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    }
+
+    GameObject getNearestHold(GameObject[] handHolds, GameObject currentHold)
+    {
+        // input tests i
+        if (handHolds == null)
+        {
+            Console.Error.WriteLine("Handholds array is null!");
+            return null;
+        }
+        if (handHolds.Length == 0)
+        {
+            Console.Error.WriteLine("Handholds array is empty");
+            return null;
+        }
+
+
+        float minDistance = float.MaxValue;
+        GameObject minHold = null;
+        for (int i = 0; i < handHolds.Length; i++)
+        {
+            if (handHolds[i] != currentHold)
+            {
+                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minHold = handHolds[i];
+            }
+        }
+
+        return minHold;
+    }
+
+
+    GameObject getNearestHoldAbove(GameObject[] handHolds, GameObject currentHold)
+    {
+        float minDistance = float.MaxValue;
+        GameObject minHold = null;
+        for (int i = 0; i < handHolds.Length; i++)
+        {
+            if (handHolds[i] != currentHold && handHolds[i].transform.position.y > currentHold.transform.position.y)
+            {
+                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minHold = handHolds[i];
+            }
+        }
+
+        return minHold;
+    }
+
+    GameObject getNearestHoldBelow(GameObject[] handHolds, GameObject currentHold)
+    {
+        float minDistance = float.MaxValue;
+        GameObject minHold = null;
+        for (int i = 0; i < handHolds.Length; i++)
+        {
+            if (handHolds[i] != currentHold && handHolds[i].transform.position.y < currentHold.transform.position.y)
+            {
+                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minHold = handHolds[i];
+            }
+        }
+
+        return minHold;
+    }
+
+    GameObject getNearestHoldRight(GameObject[] handHolds, GameObject currentHold)
+    {
+        float minDistance = float.MaxValue;
+        GameObject minHold = null;
+        for (int i = 0; i < handHolds.Length; i++)
+        {
+            if (handHolds[i] != currentHold && handHolds[i].transform.position.x > currentHold.transform.position.x)
+            {
+                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minHold = handHolds[i];
+            }
+        }
+
+        return minHold;
+    }
+
+    GameObject getNearestHoldLeft(GameObject[] handHolds, GameObject currentHold)
+    {
+        float minDistance = float.MaxValue;
+        GameObject minHold = null;
+        for (int i = 0; i < handHolds.Length; i++)
+        {
+            if (handHolds[i] != currentHold && handHolds[i].transform.position.x < currentHold.transform.position.x)
+            {
+                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minHold = handHolds[i];
+            }
+        }
+
+        return minHold;
+    }
+
 }
+
+
