@@ -70,13 +70,13 @@ public class KinectClassify : MonoBehaviour
             Debug.Log("quitting application");
             // @ http://answers.unity3d.com/questions/899037/applicationquit-not-working-1.html
             // save any game data here
-#if UNITY_EDITOR
-            // Application.Quit() does not work in the editor so
-            // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
+            #if UNITY_EDITOR
+                // Application.Quit() does not work in the editor so
+                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
                 Application.Quit();
-#endif
+            #endif
         }
     }
 
@@ -164,8 +164,6 @@ public class KinectClassify : MonoBehaviour
                 holdsBoundingBoxes = ClassifyImage(numHolds, imageWidth, imageHeight);
             }
 
-            //TODO: get real coordinates of projector bounding box from OpenCV; move to DEBUG block
-            //int[] projectorBounds = new int[] { 0, 0, 1920, 0, 1920, 1080, 0, 1080 };
             Vector2 topLeft = StateManager.instance.kinectUpperLeft; // ClimbARUtils.worldSpaceToFraction(StateManager.instance.kinectUpperLeft.x, StateManager.instance.kinectUpperLeft.x, mainCam);
             Debug.Log(topLeft);
             topLeft.Scale(ClimbARUtils.kinectScale);
@@ -259,22 +257,20 @@ public class KinectClassify : MonoBehaviour
             float x = projectorTransformation[holdIndex] * camWidth - camWidth / 2f;
             float y = projectorTransformation[holdIndex + 1] * camHeight - camHeight / 2f;
 
-
-
             float width = (projectorTransformation[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
             float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
 
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].name = "Handhold " + i;
 
-            Vector2 pos = new Vector2(x + width,
-                            (y + height) * -1f);
+            Vector2 pos = new Vector2(x + width, (y + height) * -1f);
 
             if (!StateManager.instance.debugView)
             {
                 pos.x = pos.x * -1;
             }
             this.handHolds[i].transform.localPosition = pos;
+            this.handHolds[i].transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
 
             Rigidbody2D rigid = this.handHolds[i].AddComponent<Rigidbody2D>();
             rigid.isKinematic = true;
@@ -296,21 +292,19 @@ public class KinectClassify : MonoBehaviour
 
     // draw the bounding ellipse of the climbing hold
     void DrawBoundingEllipse(float xradius, float yradius)
-
     {
         line.SetColors(UnityEngine.Color.red, UnityEngine.Color.red);
-        //line.material = new Material(Shader.Find("Particles/Additive"));
 
         float x;
         float y;
-        float z = 0f;
 
         // resolution of the sides of the ellipse
         int segments = 50;
         line.SetVertexCount(segments + 2);
 
         // width of line; scaled by width and height of bounding box
-        float lineWidth = Math.Min(xradius, yradius) / 5f;
+        //float lineWidth = Math.Min(xradius, yradius) / 5f;
+        float lineWidth = 0.15f;
         line.SetWidth(lineWidth, lineWidth);
 
         // not currently setting the angle of ellipse
