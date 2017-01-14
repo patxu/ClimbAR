@@ -26,12 +26,12 @@ public class KinectClassify : MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
-        #if UNITY_STANDALONE_WIN
-                [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
-                public static extern int getNumHolds();
-                [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
-                public static extern IntPtr classifyImage(IntPtr data, int width, int height);
-        #endif
+#if UNITY_STANDALONE_WIN
+        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
+        public static extern int getNumHolds();
+        [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
+        public static extern IntPtr classifyImage(IntPtr data, int width, int height);
+#endif
     }
 
     // Game objects
@@ -71,13 +71,13 @@ public class KinectClassify : MonoBehaviour
             Debug.Log("quitting application");
             // @ http://answers.unity3d.com/questions/899037/applicationquit-not-working-1.html
             // save any game data here
-            #if UNITY_EDITOR
-                // Application.Quit() does not work in the editor so
-                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#if UNITY_EDITOR
+            // Application.Quit() does not work in the editor so
+            // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
                 Application.Quit();
-            #endif
+#endif
         }
     }
 
@@ -257,13 +257,13 @@ public class KinectClassify : MonoBehaviour
                 pos.x = pos.x * -1;
             }
             this.handHolds[i].transform.localPosition = pos;
-            this.handHolds[i].transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+            this.handHolds[i].transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
             Rigidbody2D rigid = this.handHolds[i].AddComponent<Rigidbody2D>();
             rigid.isKinematic = true;
 
             CircleCollider2D col = this.handHolds[i].AddComponent<CircleCollider2D>();
-            col.radius = 0.2f; //(float)Math.Max(width, height);
+            col.radius = 0.6f; //(float)Math.Max(width, height);
             col.enabled = true;
             col.isTrigger = true;
             // Create handhold object and draw bounding ellipse
