@@ -236,14 +236,33 @@ public class BodySourceView : MonoBehaviour
 
     private Vector3 GetVector3FromJoint(Kinect.Joint joint)
     {
+        // x and y in [-1,1], I think
         Kinect.CameraSpacePoint cameraPoint = joint.Position;
 
-        return GetUnitySpaceFromKinectCameraPoint(cameraPoint, 0, this.mainCam, 1920, 1080);
+        // x and y in [0, 1080]
+        Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(cameraPoint);
+
+        // Match format for hold bounding box
+        float[] coordinates = new float[] { colorPoint.X, colorPoint.Y, 0, 0 }; // 0, 0 is filler for the bounding box
+        float[] projectorBounds = StateManager.instance.getProjectorBounds();
+
+        // Transform into the appropriate coordinates to project 
+        float[] transformedCoordinates = transformOpenCvToUnitySpace(projectorBounds, coordinates);
+
+
+        // Now convert back into unity space so joints can be added to the scene
+        float camHeight = 2f * this.mainCam.orthographicSize;
+        float camWidth = camHeight * this.mainCam.aspect;
+
+        float x = transformedCoordinates[0] * camWidth - camWidth / 2f;
+        float y = transformedCoordinates[1] * camHeight - camHeight / 2f;
+        return new Vector3(-1f * x, -1f * y, 0);
     }
 
-    private Vector3 GetUnitySpaceFromKinectCameraPoint(Kinect.CameraSpacePoint point, float depth, Camera cam, int kinectWidth, int kinectHeight)
+    private Vector3 transformKinectToUnitySpace(Kinect.CameraSpacePoint point, float depth, Camera cam, int kinectWidth, int kinectHeight)
     {
         Kinect.ColorSpacePoint colorPoint = _Sensor.CoordinateMapper.MapCameraPointToColorSpace(point);
+
         float newX = ((2 * colorPoint.X - kinectWidth) / kinectWidth) * (cam.orthographicSize * cam.aspect);
         float newY = ((kinectHeight - 2 * colorPoint.Y) / kinectHeight) * cam.orthographicSize;
 
@@ -251,6 +270,57 @@ public class BodySourceView : MonoBehaviour
         {
             newX = newX * -1;
         }
+
         return new Vector3(newX, newY, depth);
     }
+
+    // COPIED. REMOVE
+    private float[] transformOpenCvToUnitySpace(float[] projectorBounds, float[] boundingBoxes)
+    {
+        float x1 = projectorBounds[0];
+        float y1 = projectorBounds[1];
+        float x2 = projectorBounds[2];
+        float y2 = projectorBounds[3];
+        float x3 = projectorBounds[4];
+        float y3 = projectorBounds[5];
+        float x4 = projectorBounds[6];
+        float y4 = projectorBounds[7];
+
+        float[] transformedArr = new float[boundingBoxes.Length];
+
+        float height = y4 - y1; //this is assuming y1 and y2 are approximately the same
+
+        float leftGradient = (x4 - x1) / height;
+        float rightGradient = (x3 - x2) / (y3 - y2);
+
+        for (int i = 0; i < boundingBoxes.Length / 4; i++)
+        {
+            //Debug.Log("Hold: ");
+            int holdIndex = i * 4;
+
+            // get coordinates of hold
+            float currentX = boundingBoxes[holdIndex];
+            float currentY = boundingBoxes[holdIndex + 1];
+            float holdWidth = boundingBoxes[holdIndex + 2];
+            float holdHeight = boundingBoxes[holdIndex + 3];
+
+            //Project y on bb side left to get coordinates of the beginning of the horizonal line on which this hold belongs
+            float leftX = x1 + leftGradient * (currentY - y1);
+
+            //Project y on bb side right to get coordinates of the end of the horizonal line on which this hold belongs
+            float rightX = x2 + rightGradient * (currentY - y2);
+
+            //get length of corresponding horizontal line
+            float xLength = rightX - leftX;
+
+            //save values
+            transformedArr.SetValue((currentX - leftX) / xLength, holdIndex);
+            transformedArr.SetValue((currentY - y1) / height, holdIndex + 1);
+            transformedArr.SetValue(holdWidth / xLength, holdIndex + 2);
+            transformedArr.SetValue(holdHeight / height, holdIndex + 3);
+        }
+
+        return transformedArr;
+    }
+
 }
