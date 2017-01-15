@@ -27,7 +27,7 @@ public class ManualSync : MonoBehaviour
             StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[1].transform.localPosition.x, this.cornerCircles[1].transform.localPosition.y, mainCam);
             StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[2].transform.localPosition.x, this.cornerCircles[2].transform.localPosition.y, mainCam);
             StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[3].transform.localPosition.x, this.cornerCircles[3].transform.localPosition.y, mainCam);
-            SceneManager.LoadScene("3_GameScene");
+            SceneManager.LoadScene(SceneUtils.Names.demo);
         }
 
         // reset to outer corners
