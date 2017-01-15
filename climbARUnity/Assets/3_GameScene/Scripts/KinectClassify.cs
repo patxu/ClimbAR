@@ -262,7 +262,7 @@ public class KinectClassify : MonoBehaviour
 
 
             float width = (projectorTransformation[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
-            float height = (projectorTransformation[holdIndex + 3] / 2) * ca mHeight;
+            float height = (projectorTransformation[holdIndex + 3] / 2) * camHeight;
 
             this.handHolds[i] = GameObject.Instantiate(Handhold);
             this.handHolds[i].name = "Handhold " + i;
@@ -447,9 +447,9 @@ public class KinectClassify : MonoBehaviour
         GameObject minHold = null;
         for (int i = 0; i < handHolds.Length; i++)
         {
-            if (handHolds[i] != currentHold)
+            if (handHolds[i] != currentHold && getDistanceBetweenHolds(currentHold, handHolds[i]) < minDistance)
             {
-                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minDistance = getDistanceBetweenHolds(currentHold, handHolds[i]);
                 minHold = handHolds[i];
             }
         }
@@ -464,9 +464,11 @@ public class KinectClassify : MonoBehaviour
         GameObject minHold = null;
         for (int i = 0; i < handHolds.Length; i++)
         {
-            if (handHolds[i] != currentHold && handHolds[i].transform.position.y > currentHold.transform.position.y)
+            if (handHolds[i] != currentHold &&
+                handHolds[i].transform.position.y > currentHold.transform.position.y &&
+                getDistanceBetweenHolds(currentHold, handHolds[i]) < minDistance)
             {
-                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minDistance = getDistanceBetweenHolds(currentHold, handHolds[i]);
                 minHold = handHolds[i];
             }
         }
@@ -480,9 +482,11 @@ public class KinectClassify : MonoBehaviour
         GameObject minHold = null;
         for (int i = 0; i < handHolds.Length; i++)
         {
-            if (handHolds[i] != currentHold && handHolds[i].transform.position.y < currentHold.transform.position.y)
+            if (handHolds[i] != currentHold &&
+                handHolds[i].transform.position.y < currentHold.transform.position.y &&
+                getDistanceBetweenHolds(currentHold, handHolds[i]) < minDistance)
             {
-                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minDistance = getDistanceBetweenHolds(currentHold, handHolds[i]);
                 minHold = handHolds[i];
             }
         }
@@ -496,9 +500,11 @@ public class KinectClassify : MonoBehaviour
         GameObject minHold = null;
         for (int i = 0; i < handHolds.Length; i++)
         {
-            if (handHolds[i] != currentHold && handHolds[i].transform.position.x > currentHold.transform.position.x)
+            if (handHolds[i] != currentHold &&
+                handHolds[i].transform.position.x > currentHold.transform.position.x &&
+                getDistanceBetweenHolds(currentHold, handHolds[i]) < minDistance)
             {
-                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minDistance = getDistanceBetweenHolds(currentHold, handHolds[i]);
                 minHold = handHolds[i];
             }
         }
@@ -512,9 +518,11 @@ public class KinectClassify : MonoBehaviour
         GameObject minHold = null;
         for (int i = 0; i < handHolds.Length; i++)
         {
-            if (handHolds[i] != currentHold && handHolds[i].transform.position.x < currentHold.transform.position.x)
+            if (handHolds[i] != currentHold &&
+                handHolds[i].transform.position.x < currentHold.transform.position.x &&
+                getDistanceBetweenHolds(currentHold, handHolds[i]) < minDistance)
             {
-                minDistance = Math.Min(minDistance, getDistanceBetweenHolds(currentHold, handHolds[i]));
+                minDistance = getDistanceBetweenHolds(currentHold, handHolds[i]);
                 minHold = handHolds[i];
             }
         }
