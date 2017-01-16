@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuHold : MonoBehaviour {
+public class MenuHold : MonoBehaviour
+{
 
     private float startTime;
 
@@ -24,11 +25,11 @@ public class MenuHold : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        this.startTime += Time.deltaTime;
-        if (this.startTime >= 10)
-        {
-            SceneManager.LoadScene("4_DemoGame");
-        }
+        //this.startTime += Time.deltaTime;
+        //if (this.startTime >= 2)
+        // {
+        SceneManager.LoadScene("4_DemoGame");
+        //}
     }
 
     void OnMouseDown()

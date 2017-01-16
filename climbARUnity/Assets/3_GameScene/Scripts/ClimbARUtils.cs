@@ -64,4 +64,4 @@ static class ClimbARUtils
         }
         return position;
     }
-}
+    }
