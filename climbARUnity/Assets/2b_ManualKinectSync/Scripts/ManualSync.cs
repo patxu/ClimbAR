@@ -23,10 +23,22 @@ public class ManualSync : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             // 0,0 is top left, +y points down
-            StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[0].transform.localPosition.x, this.cornerCircles[0].transform.localPosition.y, mainCam);
-            StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[1].transform.localPosition.x, this.cornerCircles[1].transform.localPosition.y, mainCam);
-            StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[2].transform.localPosition.x, this.cornerCircles[2].transform.localPosition.y, mainCam);
-            StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(this.cornerCircles[3].transform.localPosition.x, this.cornerCircles[3].transform.localPosition.y, mainCam);
+            StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
+                this.cornerCircles[0].transform.localPosition.x,
+                this.cornerCircles[0].transform.localPosition.y,
+                mainCam);
+            StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(
+                this.cornerCircles[1].transform.localPosition.x,
+                this.cornerCircles[1].transform.localPosition.y,
+                mainCam);
+            StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(
+                    this.cornerCircles[2].transform.localPosition.x,
+                this.cornerCircles[2].transform.localPosition.y,
+                mainCam);
+            StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(
+                this.cornerCircles[3].transform.localPosition.x,
+                this.cornerCircles[3].transform.localPosition.y,
+                mainCam);
             SceneManager.LoadScene(SceneUtils.Names.demo);
         }
 
@@ -35,10 +47,14 @@ public class ManualSync : MonoBehaviour
         {
             if (this.cornerCircles != null)
             {
-                this.cornerCircles[0].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0f, 0f, this.mainCam);
-                this.cornerCircles[1].transform.localPosition = ClimbARUtils.fractionToWorldSpace(1f, 0f, this.mainCam);
-                this.cornerCircles[2].transform.localPosition = ClimbARUtils.fractionToWorldSpace(1f, 1f, this.mainCam);
-                this.cornerCircles[3].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0f, 1f, this.mainCam);
+                this.cornerCircles[0].transform.localPosition = 
+                    ClimbARUtils.fractionToWorldSpace(0f, 0f, this.mainCam);
+                this.cornerCircles[1].transform.localPosition =
+                    ClimbARUtils.fractionToWorldSpace(1f, 0f, this.mainCam);
+                this.cornerCircles[2].transform.localPosition =
+                    ClimbARUtils.fractionToWorldSpace(1f, 1f, this.mainCam);
+                this.cornerCircles[3].transform.localPosition =
+                    ClimbARUtils.fractionToWorldSpace(0f, 1f, this.mainCam);
             }
         }
     }
@@ -54,9 +70,13 @@ public class ManualSync : MonoBehaviour
             this.cornerCircles[i] = GameObject.Instantiate(CornerCircle);
             this.cornerCircles[i].name = "CornerCircle " + (i);
         }
-        this.cornerCircles[0].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0.1f, 0.1f, this.mainCam);
-        this.cornerCircles[1].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0.9f, 0.1f, this.mainCam);
-        this.cornerCircles[2].transform.localPosition = ClimbARUtils.fractionToWorldSpace(.9f, .9f, this.mainCam);
-        this.cornerCircles[3].transform.localPosition = ClimbARUtils.fractionToWorldSpace(0.1f, 0.9f, this.mainCam);
+        this.cornerCircles[0].transform.localPosition =
+            ClimbARUtils.fractionToWorldSpace(0.1f, 0.1f, this.mainCam);
+        this.cornerCircles[1].transform.localPosition =
+            ClimbARUtils.fractionToWorldSpace(0.9f, 0.1f, this.mainCam);
+        this.cornerCircles[2].transform.localPosition =
+            ClimbARUtils.fractionToWorldSpace(.9f, .9f, this.mainCam);
+        this.cornerCircles[3].transform.localPosition =
+            ClimbARUtils.fractionToWorldSpace(0.1f, 0.9f, this.mainCam);
     }
 }

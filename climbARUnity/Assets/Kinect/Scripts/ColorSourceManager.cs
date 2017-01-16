@@ -13,6 +13,8 @@ public class ColorSourceManager : MonoBehaviour
     private byte[] _Data;
     private Color32[] resetColorArray;
 
+    private bool hasStateManager = true;
+
     public Texture2D GetColorTexture()
     {
         return _Texture;
@@ -20,8 +22,16 @@ public class ColorSourceManager : MonoBehaviour
 
     void Start()
     {
+        if (StateManager.instance)
+        {
+            StateManager.instance.debugView = true;
+        }
+        else
+        {
+            this.hasStateManager = false;
+        }
+
         _Sensor = KinectSensor.GetDefault();
-        StateManager.instance.debugView = true;
 
         if (_Sensor != null)
         {
@@ -48,7 +58,7 @@ public class ColorSourceManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Using image");
+            Debug.Log("cannot get Kinect sensor");
         }
     }
 
@@ -58,7 +68,7 @@ public class ColorSourceManager : MonoBehaviour
         {
             StateManager.instance.debugView = !StateManager.instance.debugView;
         }
-        if (!StateManager.instance.debugView)
+        if (this.hasStateManager && !StateManager.instance.debugView)
         {
             _Texture.SetPixels32(resetColorArray);
             _Texture.Apply();
@@ -75,11 +85,11 @@ public class ColorSourceManager : MonoBehaviour
 
                 frame.Dispose();
                 frame = null;
-            }
+            } 
         }
         else
         {
-            Debug.Log("Using image");
+            Debug.Log("cannot get Kinect reader");
         }
     }
 

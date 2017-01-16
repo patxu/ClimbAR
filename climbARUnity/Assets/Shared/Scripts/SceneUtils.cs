@@ -10,6 +10,6 @@ static class SceneUtils
         public static String kinectCheck = "1_KinectCheck";
         public static String autoSync = "2a_AutoKinectSync";
         public static String manualSync = "2b_ManualKinectSync";
-        public static String demo = "3_GameScene";
+        public static String demo = "3_OverlayDemo";
     }
 }
