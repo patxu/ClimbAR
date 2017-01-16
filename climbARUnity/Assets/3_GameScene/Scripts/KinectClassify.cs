@@ -66,6 +66,26 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition = new Vector3(position.x * -1, position.y, position.z);
             }
         }
+        else if (Input.GetKeyDown("r"))
+        {
+            if (handHolds != null)
+            {
+                //reset colors
+                foreach (GameObject hold in handHolds)
+                {
+                    hold.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.red, UnityEngine.Color.red);
+                }
+                ArrayList routeArray = RouteGeneration.generateRandomRoute(handHolds);
+                foreach (GameObject hold in routeArray)
+                {
+                    hold.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.yellow, UnityEngine.Color.yellow);
+                }
+            }
+            else
+            {
+                print("HandHolds array not instantiated.");
+            }
+        }
         else if (Input.GetKeyDown("q"))
         {
             Debug.Log("quitting application");
@@ -388,4 +408,7 @@ public class KinectClassify : MonoBehaviour
             _Sensor = null;
         }
     }
+
 }
+
+
