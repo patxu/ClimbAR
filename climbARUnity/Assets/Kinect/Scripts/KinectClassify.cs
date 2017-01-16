@@ -71,20 +71,22 @@ public class KinectClassify : MonoBehaviour
             foreach (GameObject hold in handholds)
             {
                 Vector3 position = hold.transform.localPosition;
-                hold.transform.localPosition = 
+                hold.transform.localPosition =
                     new Vector3(position.x * -1, position.y, position.z);
             }
         }
         else if (Input.GetKeyDown("escape"))
         {
-            Debug.Log("quitting application");
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
-                Application.Quit();
-            #endif
+            if (Application.isEditor)
+            {
+                Debug.Log("Cannot quit the application (Application is editor).");
+            }
+            else
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
         }
-        
+
         if (_Reader != null)
         {
             var frame = _Reader.AcquireLatestFrame();
@@ -97,7 +99,7 @@ public class KinectClassify : MonoBehaviour
 
                 frame.Dispose();
                 frame = null;
-            } 
+            }
         }
     }
 
@@ -154,9 +156,9 @@ public class KinectClassify : MonoBehaviour
 
             if (!StateManager.instance.debugView)
             {
-                holdsProjectorTransformed = 
+                holdsProjectorTransformed =
                     ClimbARTransformation.transformOpenCvToUnitySpace(
-                        projectorBounds, 
+                        projectorBounds,
                         holdsBoundingBoxes);
             }
             else
