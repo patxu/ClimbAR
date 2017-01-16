@@ -65,18 +65,33 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition = new Vector3(position.x * -1, position.y, position.z);
             }
         }
+        else if (Input.GetKeyDown("r"))
+        {
+            if (handHolds != null)
+            {
+                ArrayList routeArray = generateRandomRoute(handHolds);
+                foreach (GameObject hold in routeArray)
+                {
+                    hold.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.yellow, UnityEngine.Color.yellow);
+                }
+            }
+            else
+            {
+                print("HandHolds array not instantiated.");
+            }
+        }
         else if (Input.GetKeyDown("q"))
         {
             Debug.Log("quitting application");
             // @ http://answers.unity3d.com/questions/899037/applicationquit-not-working-1.html
             // save any game data here
-            #if UNITY_EDITOR
-                // Application.Quit() does not work in the editor so
-                // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#if UNITY_EDITOR
+            // Application.Quit() does not work in the editor so
+            // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
                 Application.Quit();
-            #endif
+#endif
         }
     }
 
@@ -409,6 +424,8 @@ public class KinectClassify : MonoBehaviour
 
     //----------------------------------------------------
     // TODO: Test these functions!!!
+
+    // also,do we need to pass in handHolds[]?
     //----------------------------------------------------
 
     float getDistanceBetweenHolds(GameObject hold1, GameObject hold2)
@@ -523,6 +540,39 @@ public class KinectClassify : MonoBehaviour
 
         return minHold;
     }
+
+    // returns a list of game objects ordered from lowest to highest
+    ArrayList generateRandomRoute(GameObject[] handHolds)
+    {
+        GameObject currentHold;
+        ArrayList routeHolds = new ArrayList();
+        currentHold = getStartingHold(handHolds);
+
+        while (currentHold != null)
+        {
+            routeHolds.Add(currentHold);
+            currentHold = getNearestHoldAbove(handHolds, currentHold);
+        }
+
+        return routeHolds;
+    }
+
+    private GameObject getStartingHold(GameObject[] handHolds)
+    {
+        GameObject[] sortedArray = new GameObject[handHolds.Length];
+        Array.Copy(handHolds, sortedArray, handHolds.Length);
+        Array.Sort(sortedArray, delegate (GameObject g1, GameObject g2) { return g1.transform.position.y.CompareTo(g2.transform.position.y); });
+
+        //get random index
+        System.Random r = new System.Random();
+        int index = r.Next(0, sortedArray.Length / 4); //start route from lower quarter of holds
+
+        sortedArray[index].GetComponent<LineRenderer>().SetColors(UnityEngine.Color.blue, UnityEngine.Color.blue);
+
+        return sortedArray[index]; //to be changed
+
+    }
+
 
 }
 
