@@ -16,8 +16,6 @@ public class KinectClassify : MonoBehaviour
     bool DEBUG = false;
 
     // Read image from Kinect
-    //public float imageWidth { get; private set; }
-    //public float imageHeight { get; private set; }
     private KinectSensor _Sensor;
     private ColorFrameReader _Reader;
     private Texture2D _Texture;
@@ -26,12 +24,10 @@ public class KinectClassify : MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
-#if UNITY_STANDALONE_WIN
         [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
         public static extern int getNumHolds();
         [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
         public static extern IntPtr classifyImage(IntPtr data, int width, int height);
-#endif
     }
 
     // Game objects
@@ -55,7 +51,6 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-            Debug.Log("starting coroutine");
             StartCoroutine("GrabFrameAndClassify");
         }
         else if (Input.GetKeyDown("t"))
@@ -66,18 +61,14 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition = new Vector3(position.x * -1, position.y, position.z);
             }
         }
-        else if (Input.GetKeyDown("q"))
+        else if (Input.GetKeyDown("escape"))
         {
             Debug.Log("quitting application");
-            // @ http://answers.unity3d.com/questions/899037/applicationquit-not-working-1.html
-            // save any game data here
-#if UNITY_EDITOR
-            // Application.Quit() does not work in the editor so
-            // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
                 Application.Quit();
-#endif
+            #endif
         }
     }
 
@@ -88,36 +79,25 @@ public class KinectClassify : MonoBehaviour
     {
         _Sensor = KinectSensor.GetDefault();
 
-        if (_Sensor != null)
+        print("Acquired sensor"); 
+        _Reader = _Sensor.ColorFrameSource.OpenReader();
+
+        var frameDesc = _Sensor
+            .ColorFrameSource
+            .CreateFrameDescription(ColorImageFormat.Rgba);
+
+        this._Texture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
+        this._Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
+
+        if (!_Sensor.IsOpen)
         {
-            print("Acquired sensor"); // TODO kinda buggy - doesn't actually detect in Kinect is kinected... (pat)
-            _Reader = _Sensor.ColorFrameSource.OpenReader();
-
-            // worth keeping all this as state?
-            var frameDesc = _Sensor
-                .ColorFrameSource
-                .CreateFrameDescription(ColorImageFormat.Rgba);
-
-            this._Texture = new Texture2D(frameDesc.Width, frameDesc.Height, TextureFormat.RGBA32, false);
-            this._Data = new byte[frameDesc.BytesPerPixel * frameDesc.LengthInPixels];
-
-            if (!_Sensor.IsOpen)
-            {
-                print("Sensor is not open; opening");
-                _Sensor.Open();
-            }
-        }
-        else
-        {
-            // TODO integrate with Jon's logic?
-            print("Kinect sensor unavailable, using static image");
-            //this.genHardcodedBoundingBoxes();
+            print("Sensor is not open; opening");
+            _Sensor.Open();
         }
     }
 
 
     // coroutine for overlaying bounding boxes on color image
-    // TODO: add skeleton overlay
     IEnumerator GrabFrameAndClassify()
     {
         if (_Reader == null)
