@@ -56,12 +56,4 @@ static class ClimbARUtils
                            (y / camHeight - 0.5f) * -1f);
     }
 
-    public static Vector2 getPositionForGameObject(Vector2 position, Camera cam, bool debugView)
-    {
-        if (debugView)
-        {
-            position.x = position.x * -1f;
-        }
-        return position;
-    }
 }

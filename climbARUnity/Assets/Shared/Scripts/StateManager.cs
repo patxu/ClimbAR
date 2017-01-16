@@ -5,7 +5,10 @@ public class StateManager : MonoBehaviour
 {
 
     // Variables relating to state
-    public Vector2 kinectUpperLeft, kinectUpperRight, kinectLowerLeft, kinectLowerRight;
+    public Vector2 kinectUpperLeft = new Vector2(0,0);
+    public Vector2 kinectUpperRight = new Vector2(1.0f,0);
+    public Vector2 kinectLowerLeft = new Vector2(0,1.0f);
+    public Vector2 kinectLowerRight = new Vector2(1.0f,1.0f);
     public bool debugView = true;
 
     public static StateManager instance = null;
@@ -33,6 +36,14 @@ public class StateManager : MonoBehaviour
         bottomRight.Scale(ClimbARUtils.kinectScale);
         Vector2 bottomLeft = StateManager.instance.kinectLowerLeft; 
         bottomLeft.Scale(ClimbARUtils.kinectScale);
-        return new float[] { topLeft.x, topLeft.y, topRight.x, topRight.y, bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y };
+        return new float[] {
+            topLeft.x,
+            topLeft.y,
+            topRight.x,
+            topRight.y,
+            bottomRight.x,
+            bottomRight.y,
+            bottomLeft.x,
+            bottomLeft.y };
     }
 }
