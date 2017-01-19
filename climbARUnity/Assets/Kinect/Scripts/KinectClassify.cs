@@ -139,7 +139,7 @@ public class KinectClassify : MonoBehaviour
                 _Texture.LoadRawTextureData(_Data);
 
                 // classify image using OpenCV classifier
-                numHolds = OpenCV.getNumHolds();
+                //numHolds = OpenCV.getNumHolds();
 
                 FrameDescription frameDesc = _Sensor
                     .ColorFrameSource
@@ -147,7 +147,9 @@ public class KinectClassify : MonoBehaviour
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
 
-                holdsBoundingBoxes = classifyWithOpenCV(numHolds, imageWidth, imageHeight);
+                holdsBoundingBoxes = classifyWithOpenCV(10, imageWidth, imageHeight);
+                numHolds = OpenCV.getNumHolds();
+                Debug.Log("GetNumHolds found " + numHolds.ToString());
             }
 
             float[] projectorBounds = StateManager.instance.getProjectorBounds();
@@ -220,8 +222,17 @@ public class KinectClassify : MonoBehaviour
             imageHeight);
         Marshal.FreeHGlobal(ptr);
 
-        int[] holdBoundingBoxes = new int[numHolds * 4];
-        Marshal.Copy(_boundingBoxes, holdBoundingBoxes, 0, numHolds * 4);
+        int[] holdCount = new int[1];
+        Marshal.Copy(_boundingBoxes, holdCount, 0, 1);
+        Debug.Log("Found: " + holdCount[0].ToString());
+
+        int[] holdBoundingBoxesTmp = new int[(holdCount[0] * 4) + 1];
+        Marshal.Copy(_boundingBoxes, holdBoundingBoxesTmp, 0, (holdCount[0] * 4) + 1);
+
+        int[] holdBoundingBoxes = new int[holdCount[0] * 4];
+
+        Array.Copy(holdBoundingBoxesTmp, 1, holdBoundingBoxes, 0, holdCount[0] * 4);
+
         return Array.ConvertAll(holdBoundingBoxes, x => (float)x);
     }
 
