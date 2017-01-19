@@ -43,7 +43,7 @@ static class ClimbARHandhold
             rigid.isKinematic = true;
 
             CircleCollider2D col = handholds[i].AddComponent<CircleCollider2D>();
-            col.radius = 0.6f; //(float)Math.Max(width, height);
+            col.radius = (float)Math.Max(width, height);
             col.enabled = true;
             col.isTrigger = true;
 
@@ -72,7 +72,7 @@ static class ClimbARHandhold
 
         // width of line; scaled by width and height of bounding box
         //float lineWidth = Math.Min(xradius, yradius) / 5f;
-        float lineWidth = 0.15f;
+        float lineWidth = 0.05f;
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
 
