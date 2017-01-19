@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
-using System.Drawing;
 using System.IO;
 using Windows.Kinect;
 using System.Collections;

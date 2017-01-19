@@ -26,7 +26,10 @@ public class ClimbingHold : MonoBehaviour
         enterCount--;
         if (enterCount == 0)
         {
-            gameObject.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.red, UnityEngine.Color.red);
+            gameObject.GetComponent<LineRenderer>()
+                .startColor = UnityEngine.Color.red;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.red;
         }
     }
 
@@ -35,7 +38,10 @@ public class ClimbingHold : MonoBehaviour
         enterCount++;
         if (enterCount > 0)
         {
-            gameObject.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.green, UnityEngine.Color.green);
+            gameObject.GetComponent<LineRenderer>()
+                .startColor = UnityEngine.Color.green;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.green;
         }
     }
 

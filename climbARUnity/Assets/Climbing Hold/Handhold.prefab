@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4000011434302936}
   - component: {fileID: 120000013283221282}
   - component: {fileID: 114000014203043230}
-  - component: {fileID: 114178128401103314}
   m_Layer: 0
   m_Name: Handhold
   m_TagString: Untagged
@@ -53,18 +52,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65e758a901f7554a97a7915f74850a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114178128401103314
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012162831070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a2df52e5da7a7b44b1342cf24a0212f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startTime: 0
 --- !u!120 &120000013283221282
 LineRenderer:
   m_ObjectHideFlags: 1
