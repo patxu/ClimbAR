@@ -37,6 +37,9 @@ extern "C" {
 
 		if (!classifier.load(classifierName)) {
 			cout << "not working";
+			bb_array = new int[0];
+			bb_array[0] = -1;
+			return &bb_array[0];
 			/*return nullptr;*/
 		}
 
