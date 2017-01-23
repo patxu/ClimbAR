@@ -226,9 +226,10 @@ public class KinectClassify : MonoBehaviour
         Marshal.Copy(_boundingBoxes, holdCount, 0, 1);
         Debug.Log("Found: " + holdCount[0].ToString());
 
-        if (holdCount[0] == -1)
+        if (holdCount[0] < 1)
         {
             Debug.Log("Error with classifier!!!");
+            return null;
         }
 
         int[] holdBoundingBoxesTmp = new int[(holdCount[0] * 4) + 1];
