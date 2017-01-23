@@ -221,7 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ab5bea6110edb4081e490c0982748d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Data: 
 --- !u!4 &563150075
 Transform:
   m_ObjectHideFlags: 0
@@ -609,10 +608,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1689806024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f30f77b8f6be014783ea02e8b29d9fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 661a3e664d31aff41b6dd0c14ca934bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kinectManager: {fileID: 563150074}
   handholds: []
   Handhold: {fileID: 1000012162831070, guid: 45cfefdd50ca97e43b5609d3f47b52f9, type: 2}
   mainCam: {fileID: 1689806028}
