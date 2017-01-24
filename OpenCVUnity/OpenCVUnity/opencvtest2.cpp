@@ -37,6 +37,9 @@ extern "C" {
 
 		if (!classifier.load(classifierName)) {
 			cout << "not working";
+			bb_array = new int[0];
+			bb_array[0] = -1;
+			return &bb_array[0];
 			/*return nullptr;*/
 		}
 
@@ -45,8 +48,9 @@ extern "C" {
 		num_holds = holds.size();
 
 		// TODO another func that will clear memory
-		bb_array = new int[holds.size() * 4]; // top left x, top left y, width, height )
-		int array_index = 0;
+		bb_array = new int[1 + (holds.size() * 4)]; // top left x, top left y, width, height )
+		bb_array[0] = num_holds;
+		int array_index = 1;
 		for (int i = 0; i < holds.size(); i++) {
 			bb_array[array_index++] = holds[i].x;
 			bb_array[array_index++] = holds[i].y;
