@@ -39,7 +39,7 @@ public class ManualSync : MonoBehaviour
                 this.cornerCircles[3].transform.localPosition.x,
                 this.cornerCircles[3].transform.localPosition.y,
                 mainCam);
-            SceneManager.LoadScene(SceneUtils.Names.demo);
+            SceneManager.LoadScene(SceneUtils.Names.holdSetup);
         }
 
         // reset to outer corners
@@ -47,7 +47,7 @@ public class ManualSync : MonoBehaviour
         {
             if (this.cornerCircles != null)
             {
-                this.cornerCircles[0].transform.localPosition = 
+                this.cornerCircles[0].transform.localPosition =
                     ClimbARUtils.fractionToWorldSpace(0f, 0f, this.mainCam);
                 this.cornerCircles[1].transform.localPosition =
                     ClimbARUtils.fractionToWorldSpace(1f, 0f, this.mainCam);
