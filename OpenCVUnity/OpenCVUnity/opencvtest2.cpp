@@ -12,13 +12,7 @@ using namespace std;
 
 extern "C" {
 	int *bb_array;
-	int num_holds;
 	String img = "C:\\cs98-senior-project\\OpenCV_files\\img.jpg";
-
-
-	int getNumHolds() {
-		return num_holds;
-	}
 
 	int* classifyImage(unsigned char* data, int width, int height) {
 		CascadeClassifier classifier;
@@ -45,11 +39,10 @@ extern "C" {
 
 		std::vector<Rect> holds;
 		classifier.detectMultiScale(image, holds, 1.2, 30, 0, Size(30, 30), Size(600, 600));
-		num_holds = holds.size();
 
 		// TODO another func that will clear memory
 		bb_array = new int[1 + (holds.size() * 4)]; // top left x, top left y, width, height )
-		bb_array[0] = num_holds;
+		bb_array[0] = holds.size();
 		int array_index = 1;
 		for (int i = 0; i < holds.size(); i++) {
 			bb_array[array_index++] = holds[i].x;
