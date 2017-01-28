@@ -17,6 +17,7 @@ public class ManualSync : MonoBehaviour
     {
         InitCornerCircles();
         DrawBorder(BORDER_WIDTH);
+
     }
 
     // Update is called once per frame
