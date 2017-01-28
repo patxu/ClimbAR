@@ -11,46 +11,52 @@ using namespace cv;
 using namespace std;
 
 extern "C" {
-	int *bb_array;
 	String img = "C:\\cs98-senior-project\\OpenCV_files\\img.jpg";
 
 	int* classifyImage(const char* classifierPath, unsigned char* data, int width, int height) {
-		CascadeClassifier classifier;
-		String classifierName (classifierPath);
-		//this should be a condition that checks whether data is passed in
-		Mat image;
-		if (false)
-		{
-			image = imread(img, CV_LOAD_IMAGE_GRAYSCALE);
-		}
-		else
-		{
-			Mat temp = Mat(height, width, CV_8UC4, data); // might be CV_8UC3?
-			cv::cvtColor(temp, image, CV_BGR2GRAY);
-		}
+		int *bb_array;
+		try {
+			CascadeClassifier classifier;
+			String classifierName(classifierPath);
+			//this should be a condition that checks whether data is passed in
+			Mat image;
+			if (false)
+			{
+				image = imread(img, CV_LOAD_IMAGE_GRAYSCALE);
+			}
+			else
+			{
+				Mat temp = Mat(height, width, CV_8UC4, data); // might be CV_8UC3?
+				cv::cvtColor(temp, image, CV_BGR2GRAY);
+			}
 
-		if (!classifier.load(classifierName)) {
-			cout << "not working";
-			bb_array = new int[0];
+			if (!classifier.load(classifierName)) {
+				bb_array = new int[1];
+				bb_array[0] = -1;
+				return &bb_array[0];
+			}
+
+			std::vector<Rect> holds;
+			classifier.detectMultiScale(image, holds, 1.2, 30, 0, Size(30, 30), Size(600, 600));
+
+			// TODO another func that will clear memory
+			bb_array = new int[1 + (holds.size() * 4)]; // top left x, top left y, width, height )
+			bb_array[0] = holds.size();
+			int array_index = 1;
+			for (int i = 0; i < holds.size(); i++) {
+				bb_array[array_index++] = holds[i].x;
+				bb_array[array_index++] = holds[i].y;
+				bb_array[array_index++] = holds[i].width;
+				bb_array[array_index++] = holds[i].height;
+			}
+			return &bb_array[0];
+		}
+		catch (...) {
+			bb_array = new int[1];
 			bb_array[0] = -1;
 			return &bb_array[0];
-			/*return nullptr;*/
 		}
 
-		std::vector<Rect> holds;
-		classifier.detectMultiScale(image, holds, 1.2, 30, 0, Size(30, 30), Size(600, 600));
-
-		// TODO another func that will clear memory
-		bb_array = new int[1 + (holds.size() * 4)]; // top left x, top left y, width, height )
-		bb_array[0] = holds.size();
-		int array_index = 1;
-		for (int i = 0; i < holds.size(); i++) {
-			bb_array[array_index++] = holds[i].x;
-			bb_array[array_index++] = holds[i].y;
-			bb_array[array_index++] = holds[i].width;
-			bb_array[array_index++] = holds[i].height;
-		}
-		return &bb_array[0];
 	}
 
 	int* findProjectorBox(unsigned char* redData, unsigned char* greenData, unsigned char* blueData, int imageWidth, int imageHeight) {

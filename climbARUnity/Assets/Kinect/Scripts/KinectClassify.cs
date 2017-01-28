@@ -134,7 +134,11 @@ public class KinectClassify : MonoBehaviour
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
 
-                holdsBoundingBoxes = classifyWithOpenCV(10, imageWidth, imageHeight);
+                holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
+                if(holdsBoundingBoxes[0] < 0)
+                {
+                    yield return null;
+                }
                 numHolds = holdsBoundingBoxes.Length / 4;
             }
 
@@ -196,7 +200,7 @@ public class KinectClassify : MonoBehaviour
 
     // classify image (byte array), update the number of holds, 
     // copy bounding boxes into memory
-    float[] classifyWithOpenCV(int numHolds, int imageWidth, int imageHeight)
+    float[] classifyWithOpenCV(int imageWidth, int imageHeight)
     {
         int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
@@ -213,8 +217,10 @@ public class KinectClassify : MonoBehaviour
 
         if (holdCount[0] < 1)
         {
-            Debug.Log("Error with classifier!!!");
-            return new float[0];
+            Debug.Log("Error with classifier");
+            float[] error = new float[1];
+            error[0] = -1f;
+            return error;
         }
 
         int[] holdBoundingBoxesTmp = new int[(holdCount[0] * 4) + 1];
