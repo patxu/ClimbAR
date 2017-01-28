@@ -20,9 +20,9 @@ extern "C" {
 		return num_holds;
 	}
 
-	int* classifyImage(unsigned char* data, int width, int height) {
+	int* classifyImage(const char* classifierPath, unsigned char* data, int width, int height) {
 		CascadeClassifier classifier;
-		String classifierName = "C:\\cs98-senior-project\\OpenCV_files\\cascade.xml";
+		String classifierName (classifierPath);
 		//this should be a condition that checks whether data is passed in
 		Mat image;
 		if (false)
