@@ -68,7 +68,7 @@ public class KinectClassify_V0 : MonoBehaviour
         // PERSIST THE LAYERRRRRR : #ORESTIS <3 #SETH
         else if (Input.GetKeyDown("h"))
         {
-            mainCam.cullingMask = ~(1 << 8);
+            mainCam.cullingMask = ~(1 << 9);
         }
         else if (Input.GetKeyDown("s"))
         {
