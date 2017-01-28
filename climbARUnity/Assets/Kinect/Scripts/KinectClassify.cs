@@ -17,8 +17,6 @@ public class KinectClassify : MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
-        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
-        public static extern int getNumHolds();
         [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
         public static extern IntPtr classifyImage(string classifierPath, IntPtr data, int width, int height);
     }
@@ -63,7 +61,7 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-            print("starting classification coroutine");
+            Debug.Log("starting classification coroutine");
             StartCoroutine("GrabFrameAndClassify");
         }
         else if (Input.GetKeyDown("t"))
@@ -129,7 +127,6 @@ public class KinectClassify : MonoBehaviour
                 _Texture.LoadRawTextureData(_Data);
 
                 // classify image using OpenCV classifier
-                //numHolds = OpenCV.getNumHolds();
 
                 FrameDescription frameDesc = _Sensor
                     .ColorFrameSource
@@ -138,8 +135,7 @@ public class KinectClassify : MonoBehaviour
                 imageHeight = frameDesc.Height;
 
                 holdsBoundingBoxes = classifyWithOpenCV(10, imageWidth, imageHeight);
-                numHolds = OpenCV.getNumHolds();
-                Debug.Log("GetNumHolds found " + numHolds.ToString());
+                numHolds = holdsBoundingBoxes.Length / 4;
             }
 
             float[] projectorBounds = StateManager.instance.getProjectorBounds();
@@ -162,12 +158,11 @@ public class KinectClassify : MonoBehaviour
 
             }
 
-            print("instantiating " + numHolds + " holds");
+            Debug.Log("instantiating " + numHolds + " holds");
 
             cleanHandHolds(ref this.handholds);
             this.handholds = ClimbARHandhold.InstantiateHandholds(
                 this.Handhold,
-                numHolds,
                 this.mainCam,
                 holdsProjectorTransformed);
 
@@ -215,12 +210,11 @@ public class KinectClassify : MonoBehaviour
 
         int[] holdCount = new int[1];
         Marshal.Copy(_boundingBoxes, holdCount, 0, 1);
-        Debug.Log("Found: " + holdCount[0].ToString());
 
         if (holdCount[0] < 1)
         {
             Debug.Log("Error with classifier!!!");
-            return null;
+            return new float[0];
         }
 
         int[] holdBoundingBoxesTmp = new int[(holdCount[0] * 4) + 1];
