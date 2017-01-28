@@ -69,6 +69,17 @@ public class ColorSourceManager : MonoBehaviour
             StateManager.instance.debugView = 
                 !StateManager.instance.debugView;
         }
+        else if (Input.GetKeyDown("escape"))
+        {
+            if (Application.isEditor)
+            {
+                Debug.Log("Cannot quit the application (Application is editor).");
+            }
+            else
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+        }
         if (this.hasStateManager && !StateManager.instance.debugView)
         {
             _Texture.SetPixels32(resetColorArray);

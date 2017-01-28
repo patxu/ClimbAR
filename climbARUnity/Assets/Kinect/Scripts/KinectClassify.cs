@@ -75,17 +75,6 @@ public class KinectClassify : MonoBehaviour
                     new Vector3(position.x * -1, position.y, position.z);
             }
         }
-        else if (Input.GetKeyDown("escape"))
-        {
-            if (Application.isEditor)
-            {
-                Debug.Log("Cannot quit the application (Application is editor).");
-            }
-            else
-            {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
-        }
 
         if (_Reader != null)
         {
