@@ -33,6 +33,7 @@ public class KinectClassify : MonoBehaviour
     public GameObject[] handholds = new GameObject[0];
     public GameObject Handhold;
     public Camera mainCam;
+    public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
 
     void Start()
     {
@@ -217,7 +218,7 @@ public class KinectClassify : MonoBehaviour
         IntPtr ptr = Marshal.AllocHGlobal(size);
         Marshal.Copy(_Data, 0, ptr, _Data.Length);
         IntPtr _boundingBoxes = OpenCV.classifyImage(
-            "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml",
+            classifierPath,
             ptr,
             imageWidth,
             imageHeight);
