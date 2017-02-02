@@ -184,7 +184,6 @@ public class KinectClassify_V0 : MonoBehaviour
             cleanHandHolds(ref this.handholds);
             this.handholds = ClimbARHandhold.InstantiateHandholds(
                 this.Handhold,
-                numHolds,
                 this.mainCam,
                 holdsProjectorTransformed);
 
