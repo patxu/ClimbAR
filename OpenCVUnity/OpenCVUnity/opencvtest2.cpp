@@ -12,9 +12,9 @@ using namespace std;
 
 extern "C" {
 	String img = "C:\\cs98-senior-project\\OpenCV_files\\img.jpg";
+	int *bb_array;
 
 	int* classifyImage(const char* classifierPath, unsigned char* data, int width, int height) {
-		int *bb_array;
 		try {
 			CascadeClassifier classifier;
 			String classifierName(classifierPath);
@@ -39,7 +39,6 @@ extern "C" {
 			std::vector<Rect> holds;
 			classifier.detectMultiScale(image, holds, 1.2, 30, 0, Size(30, 30), Size(600, 600));
 
-			// TODO another func that will clear memory
 			bb_array = new int[1 + (holds.size() * 4)]; // top left x, top left y, width, height )
 			bb_array[0] = holds.size();
 			int array_index = 1;
@@ -57,6 +56,10 @@ extern "C" {
 			return &bb_array[0];
 		}
 
+	}
+
+	void cleanupBBArray() {
+		delete[] bb_array;
 	}
 
 	int* findProjectorBox(unsigned char* redData, unsigned char* greenData, unsigned char* blueData, int imageWidth, int imageHeight) {

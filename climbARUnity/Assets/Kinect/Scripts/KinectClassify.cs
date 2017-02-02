@@ -19,6 +19,9 @@ public class KinectClassify : MonoBehaviour
     {
         [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
         public static extern IntPtr classifyImage(string classifierPath, IntPtr data, int width, int height);
+
+        [DllImport("OpenCVUnity", EntryPoint = "cleanupBBArray")]
+        public static extern void cleanupBBArray();
     }
 
     // to access the Kinect
@@ -137,11 +140,16 @@ public class KinectClassify : MonoBehaviour
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
                 if(holdsBoundingBoxes[0] < 0)
                 {
-                    yield return null;
+                    if (!DEBUG)
+                    {
+                        frame.Dispose();
+                        frame = null;
+                    } 
+                    yield break;
                 }
                 numHolds = holdsBoundingBoxes.Length / 4;
             }
-
+            
             float[] projectorBounds = StateManager.instance.getProjectorBounds();
             float[] holdsProjectorTransformed;
 
@@ -218,6 +226,7 @@ public class KinectClassify : MonoBehaviour
         if (holdCount[0] < 1)
         {
             Debug.Log("Error with classifier");
+            OpenCV.cleanupBBArray();
             float[] error = new float[1];
             error[0] = -1f;
             return error;
@@ -225,7 +234,7 @@ public class KinectClassify : MonoBehaviour
 
         int[] holdBoundingBoxesTmp = new int[(holdCount[0] * 4) + 1];
         Marshal.Copy(_boundingBoxes, holdBoundingBoxesTmp, 0, (holdCount[0] * 4) + 1);
-
+        OpenCV.cleanupBBArray();
         int[] holdBoundingBoxes = new int[holdCount[0] * 4];
 
         Array.Copy(holdBoundingBoxesTmp, 1, holdBoundingBoxes, 0, holdCount[0] * 4);
