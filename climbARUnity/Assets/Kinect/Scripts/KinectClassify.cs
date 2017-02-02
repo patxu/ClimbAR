@@ -36,6 +36,7 @@ public class KinectClassify : MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
     public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
+    bool classifyRunning = false;
 
     void Start()
     {
@@ -65,8 +66,11 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-            Debug.Log("starting classification coroutine");
-            StartCoroutine("GrabFrameAndClassify");
+           
+            if (!classifyRunning)
+            {
+                StartCoroutine("GrabFrameAndClassify");
+            }
         }
         else if (Input.GetKeyDown("t"))
         {
@@ -117,6 +121,9 @@ public class KinectClassify : MonoBehaviour
     // coroutine for overlaying bounding boxes on color image
     IEnumerator GrabFrameAndClassify()
     {
+        Debug.Log("starting classification coroutine");
+        classifyRunning = true;
+
         if (_Reader == null)
         {
             Debug.Log("Using hardcoded bounding boxes or image");
@@ -165,7 +172,9 @@ public class KinectClassify : MonoBehaviour
                     {
                         frame.Dispose();
                         frame = null;
-                    } 
+                    }
+                    Debug.Log("Error with classifying. Exiting coroutine");
+                    classifyRunning = false;
                     yield break;
                 }
                 numHolds = holdsBoundingBoxes.Length / 4;
@@ -205,7 +214,7 @@ public class KinectClassify : MonoBehaviour
                 frame = null;
             }
         }
-
+        classifyRunning = false;
         yield return null;
     }
 
