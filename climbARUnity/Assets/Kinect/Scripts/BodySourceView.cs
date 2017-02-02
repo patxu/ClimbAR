@@ -120,6 +120,7 @@ public class BodySourceView : MonoBehaviour
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
+        body.layer = LayerMask.NameToLayer("skeleton");
 
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
@@ -147,6 +148,7 @@ public class BodySourceView : MonoBehaviour
             jointObj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
+            jointObj.layer = body.layer;
         }
 
         return body;
@@ -182,6 +184,7 @@ public class BodySourceView : MonoBehaviour
                     jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
                     jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
                 {
+                    // TO DO: Should this be in the above createBody function?
                     CircleCollider2D col = jointObj.gameObject.GetComponent<CircleCollider2D>();
                     if (col != null)
                     {

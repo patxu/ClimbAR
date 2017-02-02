@@ -21,9 +21,9 @@ GameObject:
   - component: {fileID: 4000011434302936}
   - component: {fileID: 120000013283221282}
   - component: {fileID: 114000014203043230}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Handhold
-  m_TagString: Untagged
+  m_TagString: Hold
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

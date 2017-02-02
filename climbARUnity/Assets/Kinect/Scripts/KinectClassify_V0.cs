@@ -1,16 +1,15 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
 using System.IO;
 using Windows.Kinect;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class KinectClassify : MonoBehaviour
+public class KinectClassify_V0 : MonoBehaviour
 {
     // true if you want to use the hardcoded bounding boxes
     bool DEBUG = false;
@@ -18,11 +17,10 @@ public class KinectClassify : MonoBehaviour
     // import OpenCV dll wrapper functions
     static class OpenCV
     {
+        [DllImport("OpenCVUnity", EntryPoint = "getNumHolds")]
+        public static extern int getNumHolds();
         [DllImport("OpenCVUnity", EntryPoint = "classifyImage")]
-        public static extern IntPtr classifyImage(string classifierPath, IntPtr data, int width, int height);
-
-        [DllImport("OpenCVUnity", EntryPoint = "cleanupBBArray")]
-        public static extern void cleanupBBArray();
+        public static extern IntPtr classifyImage(IntPtr data, int width, int height);
     }
 
     // to access the Kinect
@@ -35,7 +33,6 @@ public class KinectClassify : MonoBehaviour
     public GameObject[] handholds = new GameObject[0];
     public GameObject Handhold;
     public Camera mainCam;
-    public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
 
     void Start()
     {
@@ -65,8 +62,17 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-            Debug.Log("starting classification coroutine");
+            print("starting classification coroutine");
             StartCoroutine("GrabFrameAndClassify");
+        }
+        // PERSIST THE LAYERRRRRR : #ORESTIS <3 #SETH
+        else if (Input.GetKeyDown("h"))
+        {
+            mainCam.cullingMask = ~(1 << 9);
+        }
+        else if (Input.GetKeyDown("s"))
+        {
+            mainCam.cullingMask = 0xffff;
         }
         else if (Input.GetKeyDown("t"))
         {
@@ -76,15 +82,6 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition =
                     new Vector3(position.x * -1, position.y, position.z);
             }
-        }
-        else if (Input.GetKeyDown("space"))
-        {
-            for (int i = 0; i < this.handholds.Length; i++)
-            {
-                DontDestroyOnLoad(this.handholds[i]);
-            }
-
-            SceneManager.LoadScene(SceneUtils.Names.testGame);
         }
         else if (Input.GetKeyDown("escape"))
         {
@@ -151,6 +148,7 @@ public class KinectClassify : MonoBehaviour
                 _Texture.LoadRawTextureData(_Data);
 
                 // classify image using OpenCV classifier
+                numHolds = OpenCV.getNumHolds();
 
                 FrameDescription frameDesc = _Sensor
                     .ColorFrameSource
@@ -158,19 +156,9 @@ public class KinectClassify : MonoBehaviour
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
 
-                holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
-                if(holdsBoundingBoxes[0] < 0)
-                {
-                    if (!DEBUG)
-                    {
-                        frame.Dispose();
-                        frame = null;
-                    } 
-                    yield break;
-                }
-                numHolds = holdsBoundingBoxes.Length / 4;
+                holdsBoundingBoxes = classifyWithOpenCV(numHolds, imageWidth, imageHeight);
             }
-            
+
             float[] projectorBounds = StateManager.instance.getProjectorBounds();
             float[] holdsProjectorTransformed;
 
@@ -191,11 +179,12 @@ public class KinectClassify : MonoBehaviour
 
             }
 
-            Debug.Log("instantiating " + numHolds + " holds");
+            print("instantiating " + numHolds + " holds");
 
             cleanHandHolds(ref this.handholds);
             this.handholds = ClimbARHandhold.InstantiateHandholds(
                 this.Handhold,
+                numHolds,
                 this.mainCam,
                 holdsProjectorTransformed);
 
@@ -229,37 +218,19 @@ public class KinectClassify : MonoBehaviour
 
     // classify image (byte array), update the number of holds, 
     // copy bounding boxes into memory
-    float[] classifyWithOpenCV(int imageWidth, int imageHeight)
+    float[] classifyWithOpenCV(int numHolds, int imageWidth, int imageHeight)
     {
         int size = Marshal.SizeOf(_Data[0]) * _Data.Length;
         IntPtr ptr = Marshal.AllocHGlobal(size);
         Marshal.Copy(_Data, 0, ptr, _Data.Length);
         IntPtr _boundingBoxes = OpenCV.classifyImage(
-            classifierPath,
             ptr,
             imageWidth,
             imageHeight);
         Marshal.FreeHGlobal(ptr);
 
-        int[] holdCount = new int[1];
-        Marshal.Copy(_boundingBoxes, holdCount, 0, 1);
-
-        if (holdCount[0] < 1)
-        {
-            Debug.Log("Error with classifier");
-            OpenCV.cleanupBBArray();
-            float[] error = new float[1];
-            error[0] = -1f;
-            return error;
-        }
-
-        int[] holdBoundingBoxesTmp = new int[(holdCount[0] * 4) + 1];
-        Marshal.Copy(_boundingBoxes, holdBoundingBoxesTmp, 0, (holdCount[0] * 4) + 1);
-        OpenCV.cleanupBBArray();
-        int[] holdBoundingBoxes = new int[holdCount[0] * 4];
-
-        Array.Copy(holdBoundingBoxesTmp, 1, holdBoundingBoxes, 0, holdCount[0] * 4);
-
+        int[] holdBoundingBoxes = new int[numHolds * 4];
+        Marshal.Copy(_boundingBoxes, holdBoundingBoxes, 0, numHolds * 4);
         return Array.ConvertAll(holdBoundingBoxes, x => (float)x);
     }
 
