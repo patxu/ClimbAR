@@ -152,7 +152,8 @@ public static class RouteGeneration
         System.Random r = new System.Random();
         int index = r.Next(0, sortedArray.Length / 4); //start route from lower quarter of holds
 
-        sortedArray[index].GetComponent<LineRenderer>().SetColors(UnityEngine.Color.blue, UnityEngine.Color.blue);
+        sortedArray[index].GetComponent<LineRenderer>().startColor = UnityEngine.Color.blue;
+        sortedArray[index].GetComponent<LineRenderer>().endColor = UnityEngine.Color.blue;
 
         return sortedArray[index]; //to be changed
 
