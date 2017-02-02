@@ -71,6 +71,10 @@ public class KinectClassify : MonoBehaviour
             {
                 StartCoroutine("GrabFrameAndClassify");
             }
+            else
+            {
+                Debug.Log("Routine already running");
+            }
         }
         else if (Input.GetKeyDown("t"))
         {
@@ -121,17 +125,16 @@ public class KinectClassify : MonoBehaviour
     // coroutine for overlaying bounding boxes on color image
     IEnumerator GrabFrameAndClassify()
     {
-        Debug.Log("starting classification coroutine");
         classifyRunning = true;
+        Debug.Log("starting classification coroutine");
+        
 
         if (_Reader == null)
         {
             Debug.Log("Using hardcoded bounding boxes or image");
             yield return null;
         }
-
         ColorFrame frame = _Reader.AcquireLatestFrame();
-
         if (frame != null)
         {
             int numHolds;
@@ -164,7 +167,6 @@ public class KinectClassify : MonoBehaviour
                     .CreateFrameDescription(ColorImageFormat.Bgra);
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
-
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
                 if(holdsBoundingBoxes[0] < 0)
                 {
@@ -214,8 +216,11 @@ public class KinectClassify : MonoBehaviour
                 frame = null;
             }
         }
+        else
+        {
+            Debug.Log("Frame was null");
+        }
         classifyRunning = false;
-        yield return null;
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
