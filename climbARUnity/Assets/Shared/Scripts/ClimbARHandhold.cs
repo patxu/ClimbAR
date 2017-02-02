@@ -6,16 +6,16 @@ using UnityEngine;
 
 static class ClimbARHandhold
 {
-    // holdBoundingBoxes should be transformed to the correct space
+    // holdBoundingBoxes should be transformed to the final "projector" space
     public static GameObject[] InstantiateHandholds(
         GameObject Handhold, // handhold prefab
-        int numHolds, // can we just use holdBoundingBoxes?
         Camera camera,
         float[] holdBoundingBoxes)
     {
         float camHeight = 2f * camera.orthographicSize;
         float camWidth = camHeight * camera.aspect;
 
+        int numHolds = holdBoundingBoxes.Length / 4;
         GameObject[] handholds = new GameObject[numHolds];
 
         for (int i = 0; i < numHolds; i++)

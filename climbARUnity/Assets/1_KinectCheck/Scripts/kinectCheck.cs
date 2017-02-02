@@ -44,6 +44,17 @@ public class kinectCheck : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown("escape"))
+        {
+            if (Application.isEditor)
+            {
+                Debug.Log("Cannot quit the application (Application is editor).");
+            }
+            else
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+        }
     }
 
     IEnumerator TransitionToSceneWithDelay(string sceneName, float delay)
