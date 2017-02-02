@@ -13,6 +13,7 @@ public class Menu : MonoBehaviour {
         holds = GameObject.FindGameObjectsWithTag("Hold");
 
         foreach (string menuItem in menuItems) {
+            Debug.Log(menuItem);
             GameObject menuHold = getHoldForMenu();
             if (menuHold == null)
             {
