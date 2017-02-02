@@ -84,7 +84,7 @@ public class KinectClassify : MonoBehaviour
                 DontDestroyOnLoad(this.handholds[i]);
             }
 
-            SceneManager.LoadScene(SceneUtils.Names.testGame);
+            SceneManager.LoadScene(SceneUtils.Names.menu);
         }
         else if (Input.GetKeyDown("escape"))
         {

@@ -12,7 +12,6 @@ static class SceneUtils
         public static String manualSync = "2b_ManualKinectSync";
         public static String demo = "3_OverlayDemo";
         public static String holdSetup = "4_HoldSetup";
-        public static String testGame = "5_TestGame";
         public static String menu = "5_Menu";
         public static String menuExampleGame = "5_MenuExampleGame";
     }
