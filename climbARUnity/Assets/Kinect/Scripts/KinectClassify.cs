@@ -36,6 +36,7 @@ public class KinectClassify : MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
     public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
+    bool classifyRunning = false;
 
     void Start()
     {
@@ -65,8 +66,15 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-            Debug.Log("starting classification coroutine");
-            StartCoroutine("GrabFrameAndClassify");
+           
+            if (!classifyRunning)
+            {
+                StartCoroutine("GrabFrameAndClassify");
+            }
+            else
+            {
+                Debug.Log("Routine already running");
+            }
         }
         else if (Input.GetKeyDown("t"))
         {
@@ -117,14 +125,16 @@ public class KinectClassify : MonoBehaviour
     // coroutine for overlaying bounding boxes on color image
     IEnumerator GrabFrameAndClassify()
     {
+        classifyRunning = true;
+        Debug.Log("starting classification coroutine");
+        
+
         if (_Reader == null)
         {
             Debug.Log("Using hardcoded bounding boxes or image");
             yield return null;
         }
-
         ColorFrame frame = _Reader.AcquireLatestFrame();
-
         if (frame != null)
         {
             int numHolds;
@@ -157,7 +167,6 @@ public class KinectClassify : MonoBehaviour
                     .CreateFrameDescription(ColorImageFormat.Bgra);
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
-
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
                 if(holdsBoundingBoxes[0] < 0)
                 {
@@ -165,7 +174,9 @@ public class KinectClassify : MonoBehaviour
                     {
                         frame.Dispose();
                         frame = null;
-                    } 
+                    }
+                    Debug.Log("Error with classifying. Exiting coroutine");
+                    classifyRunning = false;
                     yield break;
                 }
                 numHolds = holdsBoundingBoxes.Length / 4;
@@ -205,8 +216,11 @@ public class KinectClassify : MonoBehaviour
                 frame = null;
             }
         }
-
-        yield return null;
+        else
+        {
+            Debug.Log("Frame was null");
+        }
+        classifyRunning = false;
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
