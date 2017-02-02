@@ -27,6 +27,10 @@ public class Menu : MonoBehaviour {
 
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
                 menuHoldScript.setup(menuItem);
+                menuHold.GetComponent<LineRenderer>()
+                    .startColor = UnityEngine.Color.cyan;
+                menuHold.GetComponent<LineRenderer>()
+                    .endColor = UnityEngine.Color.cyan;
             }
         }
     }
