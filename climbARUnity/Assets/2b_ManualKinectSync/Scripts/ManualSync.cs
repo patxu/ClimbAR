@@ -42,8 +42,8 @@ public class ManualSync : MonoBehaviour
                 this.cornerCircles[3].transform.localPosition.x,
                 this.cornerCircles[3].transform.localPosition.y,
                 mainCam);
-            //SceneManager.LoadScene(SceneUtils.Names.holdSetup);
-            SceneManager.LoadScene(SceneUtils.Names.demo);
+            SceneManager.LoadScene(SceneUtils.Names.holdSetup);
+            //SceneManager.LoadScene(SceneUtils.Names.demo);
         }
 
         // reset to outer corners

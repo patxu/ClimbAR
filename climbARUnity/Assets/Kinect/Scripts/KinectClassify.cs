@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using Windows.Kinect;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -73,6 +74,15 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition =
                     new Vector3(position.x * -1, position.y, position.z);
             }
+        }
+        else if (Input.GetKeyDown("space"))
+        {
+            for (int i = 0; i < this.handholds.Length; i++)
+            {
+                DontDestroyOnLoad(this.handholds[i]);
+            }
+
+            SceneManager.LoadScene(SceneUtils.Names.testGame);
         }
         else if (Input.GetKeyDown("escape"))
         {
