@@ -140,7 +140,6 @@ public class KinectClassify : MonoBehaviour
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
                 if(holdsBoundingBoxes[0] < 0)
                 {
-                    Debug.Log("another error message");
                     if (!DEBUG)
                     {
                         frame.Dispose();
