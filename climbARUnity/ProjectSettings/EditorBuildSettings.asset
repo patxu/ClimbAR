@@ -17,3 +17,5 @@ EditorBuildSettings:
     path: Assets/4_DemoGame.unity
   - enabled: 1
     path: Assets/4_HoldSetup.unity
+  - enabled: 1
+    path: Assets/5_TestGame.unity

@@ -90,5 +90,14 @@ static class ClimbARHandhold
         }
     }
 
+    public static GameObject[] getHoldsInScene(
+    GameObject Handhold, // handhold prefab
+    int numHolds, // can we just use holdBoundingBoxes?
+    Camera camera,
+    float[] holdBoundingBoxes)
+    {
 
+        return null;
+
+    }
 }
