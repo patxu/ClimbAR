@@ -12,7 +12,7 @@ static class SceneUtils
         public static String manualSync = "2b_ManualKinectSync";
         public static String demo = "3_OverlayDemo";
         public static String holdSetup = "4_HoldSetup";
-        public static String menu = "5_Menu";
+        public static String menu = "MusicGame"; //reset to 5_Menu
         public static String menuExampleGame = "5_MenuExampleGame";
     }
 }
