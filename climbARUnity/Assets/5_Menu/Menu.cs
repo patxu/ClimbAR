@@ -1,28 +1,29 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Menu : MonoBehaviour {
 
-    string[] menuItems = new string[1] { SceneUtils.Names.menuExampleGame };
-    GameObject[] holds;
+    private Dictionary<string, GameObject> menuItems = new Dictionary<string, GameObject>()
+    {
+        { SceneUtils.SceneNames.musicGame, null },
+        { SceneUtils.SceneNames.menuExampleGame, null },
+    };
 
 	// Use this for initialization
 	void Start () {
+        pairMenuItemsWithHolds();
 
-        holds = GameObject.FindGameObjectsWithTag("Hold");
-
-        foreach (string menuItem in menuItems) {
-            Debug.Log(menuItem);
-            GameObject menuHold = getHoldForMenu();
+        foreach (string menuItem in menuItems.Keys) {
+            GameObject menuHold = menuItems[menuItem];
             if (menuHold == null)
             {
-                Debug.Log("no valid hold for menu");
+                Debug.Log("No hold for menu item " + menuItem);
             }
             else
             {
                 Debug.Log("init menu hold");
-                ClimbingHold climbingHoldScript = menuHold.GetComponent<ClimbingHold>();
+                ClimbingHold climbingHoldScript = menuHold.GetComponent<ClimbingHold>(); // issue 147
                 Destroy(climbingHoldScript);
 
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
@@ -34,21 +35,21 @@ public class Menu : MonoBehaviour {
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-    GameObject getHoldForMenu()
+    void pairMenuItemsWithHolds()
     {
-        int numHolds = holds.Length;
-        if (holds.Length == 0)
+        GameObject[] holds = GameObject.FindGameObjectsWithTag("Hold");
+        List<string> keys = new List<string>(menuItems.Keys);
+        if (holds.Length < keys.Count)
         {
-            return null;
+            Debug.Log("Not enough handholds for the number of menu items");
         }
-        GameObject menuHold = holds[Random.Range(0, holds.Length)]; // TODO smarter picking of the menu hold
 
-        return menuHold;
+        // right now, just pair them arbitrarily
+        for (int i = 0; i < Math.Min(holds.Length, keys.Count); i++)
+        {
+            menuItems[keys[i]] = holds[i];
+        }
     }
+
 }

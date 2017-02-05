@@ -18,7 +18,6 @@ public class HoldSetup : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            UnityEngine.EventSystems.Physics2DRaycaster r;
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
@@ -34,11 +33,6 @@ public class HoldSetup : MonoBehaviour
             }
         }
 
-    }
-
-    void OnMouseDown()
-    {
-        System.Console.WriteLine("Mouse DOwn! #SETH");
     }
 }
 

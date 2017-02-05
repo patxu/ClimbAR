@@ -20,7 +20,7 @@ public class kinectCheck : MonoBehaviour
         if (sensor.IsAvailable)
         {
             txt.text = "Connected! Transitioning...";
-            StartCoroutine(TransitionToSceneWithDelay(SceneUtils.Names.manualSync, 0.3f));
+            StartCoroutine(TransitionToSceneWithDelay(SceneUtils.SceneNames.manualSync, 0.3f));
         }
         else
         {

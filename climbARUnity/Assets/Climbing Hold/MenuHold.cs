@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuHold : ClimbingHold
 {
@@ -20,6 +21,13 @@ public class MenuHold : ClimbingHold
     {
         this.sceneName = sceneName;
         coroutine = TransitionToSceneWithDelay(sceneName, 2);
+
+        TextMesh textMesh = gameObject.AddComponent<TextMesh>();
+        //textMesh.font = Resources.Load<Font>("Fonts/CaviarDreams");
+        textMesh.characterSize = 0.1f;
+        textMesh.fontSize = 50;
+        textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
+        textMesh.anchor = TextAnchor.MiddleLeft;
     }
 
     void OnUpdate()
@@ -55,7 +63,7 @@ public class MenuHold : ClimbingHold
 
     void OnMouseDown()
     {
-        Destroy(gameObject);
+        OnTriggerEnter2D(null);
     }
 
     IEnumerator TransitionToSceneWithDelay(string sceneName, float delay)
