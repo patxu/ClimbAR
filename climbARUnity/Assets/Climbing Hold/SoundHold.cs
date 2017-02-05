@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundHold : ClimbingHold {
-    public AudioClip audio;
+    public AudioClip audioClip;
     private AudioSource source;
 
     bool audioPlaying;
 
 	// Use this for initialization
 	void Start () {
-        //Add the audiosource
-        source = gameObject.AddComponent<AudioSource>();
         audioPlaying = false;
 	}
 	
@@ -20,9 +18,11 @@ public class SoundHold : ClimbingHold {
 		
 	}
 
-    public void setup(string audioPath)
+    public void Setup(string audioPath)
     {
-        audio = Resources.Load<AudioClip>(audioPath);
+        audioClip = Resources.Load<AudioClip>(audioPath); //path relative to Resources folder
+        source = this.gameObject.AddComponent<AudioSource>();
+        source.clip = audioClip;
     }
 
     private void OnMouseDown()
@@ -45,9 +45,9 @@ public class SoundHold : ClimbingHold {
         }
     }
 
-    IEnumerator PlayAudioTrack()
+    void PlayAudioTrack()
     {
-        source.PlayOneShot(audio);
-        yield return new WaitForSeconds(audio.length);
+        this.source.volume = 4.0f;
+        this.source.Play();
     }
 }
