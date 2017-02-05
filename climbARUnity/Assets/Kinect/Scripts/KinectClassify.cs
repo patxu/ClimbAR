@@ -64,7 +64,7 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-           
+
             if (!classifyRunning)
             {
                 StartCoroutine("GrabFrameAndClassify");
@@ -116,7 +116,7 @@ public class KinectClassify : MonoBehaviour
     {
         classifyRunning = true;
         Debug.Log("starting classification coroutine");
-        
+
 
         if (_Reader == null)
         {
@@ -170,7 +170,7 @@ public class KinectClassify : MonoBehaviour
                 }
                 numHolds = holdsBoundingBoxes.Length / 4;
             }
-            
+
             float[] projectorBounds = StateManager.instance.getProjectorBounds();
             float[] holdsProjectorTransformed;
 
@@ -222,7 +222,7 @@ public class KinectClassify : MonoBehaviour
     {
         for (int i = 0; i < handholds.Length; i++)
         {
-            // Make sure this hold has not been manually deleted by the user 
+            // Make sure this hold has not been manually deleted by the user
             // due to a false positive in the classification stage
             if (handholds[i])
             {
@@ -236,7 +236,7 @@ public class KinectClassify : MonoBehaviour
         }
     }
 
-    // classify image (byte array), update the number of holds, 
+    // classify image (byte array), update the number of holds,
     // copy bounding boxes into memory
     float[] classifyWithOpenCV(int imageWidth, int imageHeight)
     {

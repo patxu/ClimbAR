@@ -27,7 +27,7 @@ public class SoundHold : ClimbingHold {
 
     private void OnMouseDown()
     {
-        Destroy(gameObject);
+        OnTriggerEnter2D(null);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -45,9 +45,13 @@ public class SoundHold : ClimbingHold {
         }
     }
 
-    void PlayAudioTrack()
+
+    IEnumerator PlayAudioTrack()
     {
-        this.source.volume = 4.0f;
-        this.source.Play();
+        while (true)
+        {
+            this.source.Play();
+            yield return new WaitForSeconds(source.clip.length);
+        }
     }
 }
