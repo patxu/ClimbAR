@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class MusicGame : MonoBehaviour {
 
-    bool DEBUG = false;
+    bool DEBUG = true;
     public GameObject prefabHold;
 
-    string[] soundItems = new string[1] { "Sounds/foghorn" }; //path relative to Resources folder
+    string[] soundItems = new string[] { "Sounds/snare1", "Sounds/kick1", "Sounds/hihat1", "Sounds/cow1" }; //path relative to Resources folder
     GameObject[] holds;
 
 	// Use this for initialization
@@ -30,31 +30,22 @@ public class MusicGame : MonoBehaviour {
         }
 
         // Otherwise we actually have holds, assign it to hold
-        HashSet<int> usedIndexes = new HashSet<int>();
-        int index;
+        HashSet<int> usedHoldIndexes = new HashSet<int>();
+        HashSet<int> usedSoundIndexes = new HashSet<int>();
 
         for (int i = 0; i < Mathf.Min(holds.Length, soundItems.Length); i++) { 
-
-            // Make sure we don't assign a hold multiple sounds
-            do
-            {
-                index = UnityEngine.Random.Range(0, holds.Length);
-            } while (usedIndexes.Contains(index));
-            usedIndexes.Add(index);
-
-            GameObject soundHold = holds[index];
+            GameObject soundHold = holds[getUniqueRandom(usedHoldIndexes, holds.Length)];
             if (soundHold == null)
             {
                 Debug.Log("no valid hold found");
             }
             else
             {
-                Debug.Log("init sound hold");
                 ClimbingHold holdScript = soundHold.GetComponent<ClimbingHold>();
                 Destroy(holdScript);
 
                 SoundHold soundHoldScript = soundHold.AddComponent<SoundHold>();
-                soundHoldScript.Setup(soundItems[i]);
+                soundHoldScript.Setup(soundItems[getUniqueRandom(usedSoundIndexes, soundItems.Length)]);
                 soundHoldScript.GetComponent<LineRenderer>()
                     .startColor = UnityEngine.Color.cyan;
                 soundHoldScript.GetComponent<LineRenderer>()
@@ -62,6 +53,17 @@ public class MusicGame : MonoBehaviour {
             }
         }	
 	}
+
+    private int getUniqueRandom(HashSet<int> used, int maxExclusive)
+    {
+        int index;
+        do
+        {
+            index = UnityEngine.Random.Range(0, maxExclusive);
+        } while (used.Contains(index));
+        used.Add(index);
+        return index;
+    }
 	
 	// Update is called once per frame
 	void Update () {
