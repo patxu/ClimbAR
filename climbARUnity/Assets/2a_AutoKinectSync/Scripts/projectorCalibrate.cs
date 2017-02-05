@@ -103,7 +103,7 @@ public class projectorCalibrate : MonoBehaviour
                 currentStage = Stages.DONE;
                 break;
             case Stages.DONE:
-                SceneManager.LoadScene(SceneUtils.Names.demo);
+                SceneManager.LoadScene(SceneUtils.SceneNames.demo);
                 break;
         }
     }
