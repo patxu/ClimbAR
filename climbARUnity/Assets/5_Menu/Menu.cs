@@ -7,6 +7,7 @@ public class Menu : MonoBehaviour {
     // declare menu items here
     public Dictionary<string, GameObject> menuItems = new Dictionary<string, GameObject>()
     {
+        { SceneUtils.SceneNames.rocManGamePlay, null },
         { SceneUtils.SceneNames.musicGame, null },
         //{ SceneUtils.SceneNames.exampleGame, null },
     };
