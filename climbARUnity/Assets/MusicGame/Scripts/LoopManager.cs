@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LoopManager : MonoBehaviour {
+public class LoopManager : MonoBehaviour
+{
 
     private AudioSource[] sources;
     public AudioClip[] clips;
-    private Dictionary<Guid, int> soundMap;
+    private Dictionary<int, int> soundMap;
     private bool[] activeSounds;
     private float SLEEP_TIME = 1.0f;
 
-	// Use this for initialization
-	void Start () {
-        
-	}
+    // Use this for initialization
+    void Start()
+    {
+
+    }
 
     public void Setup(string[] audioPaths)
     {
-        soundMap = new Dictionary<Guid, int>();
+        soundMap = new Dictionary<int, int>();
         clips = new AudioClip[audioPaths.Length];
         sources = new AudioSource[audioPaths.Length];
         activeSounds = new bool[audioPaths.Length];
@@ -28,52 +30,44 @@ public class LoopManager : MonoBehaviour {
             clips[i] = Resources.Load<AudioClip>(audioPaths[i]);
             activeSounds[i] = false;
         }
-        StartCoroutine("PlayLoop");
+        StartCoroutine("StartTrackPlayback");
     }
 
-    public void RegisterHold(Guid holdId, int soundId)
+    public void RegisterHold(int holdIndex, int soundId)
     {
-        Debug.Log(holdId);
-        soundMap.Add(holdId, soundId);
+        soundMap.Add(holdIndex, soundId);
     }
 
-    public void StartPlay(Guid holdGuid)
+    public void Mute(int holdIndex)
     {
-        Debug.Log(holdGuid.ToString());
-        if (soundMap.ContainsKey(holdGuid))
+        if (soundMap.ContainsKey(holdIndex))
         {
-            activeSounds[soundMap[holdGuid]] = true;
-        } else
-        {
-            Debug.Log("not in dict");
-        }
-    } 
-
-    public void StopPlay(Guid holdGuid)
-    {
-        if (soundMap.ContainsKey(holdGuid))
-        {
-            activeSounds[soundMap[holdGuid]] = false;
+            sources[holdIndex].volume = 0;
         }
     }
 
-    IEnumerator PlayLoop ()
+    public void Unmute(int holdIndex)
     {
-        while (true)
+        if (soundMap.ContainsKey(holdIndex))
         {
-            for (int i = 0; i < activeSounds.Length; i++)
-            {
-                if (activeSounds[i])
-                {
-                    sources[i].PlayOneShot(clips[i]);
-                }
-            }
-            yield return new WaitForSeconds(SLEEP_TIME);
+            sources[holdIndex].volume = 1;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    IEnumerator StartTrackPlayback()
+    {
+
+        for (int i = 0; i < activeSounds.Length; i++)
+        {
+            sources[i].PlayOneShot(clips[i]);
+        }
+        yield return new WaitForSeconds(clips[0].length);
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }
