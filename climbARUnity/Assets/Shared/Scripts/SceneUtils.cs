@@ -23,5 +23,6 @@ static class SceneUtils
     {
         { SceneNames.menuExampleGame, "    Example\n    Game" },
         { SceneNames.musicGame, "    Music\n    Game" },
+        { SceneNames.rocManGamePlay, "    RocMan\n    Game" },
     };
 }
