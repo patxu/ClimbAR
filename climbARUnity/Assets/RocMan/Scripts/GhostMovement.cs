@@ -38,6 +38,6 @@ public class GhostMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        SceneManager.LoadScene("YouDied");
+        SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
     }
 }

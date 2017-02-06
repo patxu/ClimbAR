@@ -14,6 +14,8 @@ static class SceneUtils
         public static String menu = "5_menu"; //reset to 5_Menu
         public static String menuExampleGame = "5_MenuExampleGame";
         public static String musicGame = "MusicGame";
+        public static String rocManGamePlay = "RocManGamePlay";
+        public static String rocManYouDied = "RocManYouDied";
     }
 
     // name of the scene which we would display on the menu
