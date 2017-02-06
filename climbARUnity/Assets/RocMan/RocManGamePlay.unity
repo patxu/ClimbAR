@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoneMaterial: {fileID: 2100000, guid: f2ea145c63353784985576f08398a815, type: 2}
   BodySourceManager: {fileID: 1557256090}
-  mainCam: {fileID: 0}
+  mainCam: {fileID: 2038593976}
   Bone: {fileID: 0}
 --- !u!4 &1382317861
 Transform:
@@ -581,6 +581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04298640594472b49ae54e1a76a5444d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
+  mainCam: {fileID: 2038593976}
   ghosts: []
-  ghost: {fileID: 0}
+  ghost: {fileID: 1785000464321050, guid: c656df448300f634a823c7e8aa425db6, type: 2}

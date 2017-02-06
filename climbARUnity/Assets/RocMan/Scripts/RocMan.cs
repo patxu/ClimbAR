@@ -15,7 +15,7 @@ public class RocMan : MonoBehaviour
     // TODO: include skeleton tracking game objects...
 
     // Constants
-    public const int numGhosts = 2;
+    public const int numGhosts = 1;
 
     void Start()
     {
