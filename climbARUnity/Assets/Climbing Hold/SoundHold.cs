@@ -16,8 +16,6 @@ public class SoundHold : ClimbingHold
     void Start()
     {
         audioPlaying = false;
-
-
     }
 
     // Update is called once per frame

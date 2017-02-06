@@ -59,7 +59,8 @@ public class LoopManager : MonoBehaviour
 
         for (int i = 0; i < activeSounds.Length; i++)
         {
-            sources[i].PlayOneShot(clips[i], 0);
+            sources[i].PlayOneShot(clips[i]);
+            sources[i].volume = 0;
         }
         yield return new WaitForSeconds(clips[0].length);
     }
