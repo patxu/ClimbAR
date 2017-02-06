@@ -1,10 +1,8 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
-using System.IO;
 using Windows.Kinect;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -35,7 +33,7 @@ public class KinectClassify : MonoBehaviour
     public GameObject[] handholds = new GameObject[0];
     public GameObject Handhold;
     public Camera mainCam;
-    public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
+    public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_17_demo_lbp.xml";
     bool classifyRunning = false;
 
     void Start()
@@ -84,15 +82,6 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition =
                     new Vector3(position.x * -1, position.y, position.z);
             }
-        }
-        else if (Input.GetKeyDown("space"))
-        {
-            for (int i = 0; i < this.handholds.Length; i++)
-            {
-                DontDestroyOnLoad(this.handholds[i]);
-            }
-
-            SceneManager.LoadScene(SceneUtils.SceneNames.menu);
         }
         else if (Input.GetKeyDown("escape"))
         {
@@ -209,6 +198,12 @@ public class KinectClassify : MonoBehaviour
                 this.Handhold,
                 this.mainCam,
                 holdsProjectorTransformed);
+
+            // persist holds
+            for (int i = 0; i < this.handholds.Length; i++)
+            {
+                DontDestroyOnLoad(this.handholds[i]);
+            }
 
             if (!DEBUG)
             {

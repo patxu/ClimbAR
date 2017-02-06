@@ -49,7 +49,7 @@ static class ClimbARHandhold
 
             // Create handhold object and draw bounding ellipse
             LineRenderer lineRenderer = handholds[i].GetComponent<LineRenderer>();
-            DrawBoundingEllipse(lineRenderer, width, height);
+            DrawBoundingEllipse(lineRenderer, col.radius, col.radius);
         }
         return handholds;
     }

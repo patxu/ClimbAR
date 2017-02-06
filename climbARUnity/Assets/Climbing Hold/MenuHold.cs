@@ -15,12 +15,29 @@ public class MenuHold : ClimbingHold
     {
         enterCount = 0;
     }
+    public GameObject canvasGameObject;
 
     // must call setup script
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
         coroutine = TransitionToSceneWithDelay(sceneName, 2);
+
+        //canvasGameObject = new GameObject();
+        //canvasGameObject.name = "MenuCanvas:" + sceneName;
+        //canvasGameObject.AddComponent<Canvas>();
+        //Canvas canvas = canvasGameObject.GetComponent<Canvas>();
+        //canvas.renderMode = RenderMode.ScreenSpaceOverlay; // ?
+        //canvasGameObject.AddComponent<CurvedText>();
+        //CurvedText textComponent = canvasGameObject.GetComponent<CurvedText>();
+        //textComponent.text = sceneName;
+
+        //Material newMaterialRef = Resources.Load<Material>("3DTextCoolVetica");
+        //Font myFont = Resources.Load<Font>("coolvetica rg");
+
+        //textComponent.font = myFont;
+        //textComponent.material = newMaterialRef;
+        //textComponent.text = "Hello World";
 
         TextMesh textMesh = gameObject.AddComponent<TextMesh>();
         //textMesh.font = Resources.Load<Font>("Fonts/CaviarDreams");

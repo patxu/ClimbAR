@@ -120,7 +120,7 @@ public class BodySourceView : MonoBehaviour
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
-        body.layer = LayerMask.NameToLayer("skeleton");
+        body.layer = LayerMask.NameToLayer("Skeleton");
 
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {

@@ -24,7 +24,7 @@ public class ColorSourceManager : MonoBehaviour
     {
         if (StateManager.instance)
         {
-            StateManager.instance.debugView = true;
+            //StateManager.instance.debugView = true;
         }
         else
         {

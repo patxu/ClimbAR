@@ -1,35 +1,32 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HoldSetup : MonoBehaviour
 {
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown("space"))
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
+            // don't move until we've flipped hold orientation - future scenes shouldn't have the live image
+            if (StateManager.instance.debugView == true)
             {
-                if (hit.transform.tag == "Hold")
-                {
-                    Debug.Log("hit");
-                }
-                else
-                {
-                    Debug.Log("No hit");
-                }
+                Debug.Log("Color view must be toggled off! Press <t>");
+            }
+            else
+            {
+                SceneManager.LoadScene(SceneUtils.SceneNames.menu);
+            }
+        }
+        else if (Input.GetKeyDown("escape"))
+        {
+            if (Application.isEditor)
+            {
+                Debug.Log("Cannot quit the application (Application is editor).");
+            }
+            else
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
             }
         }
 
