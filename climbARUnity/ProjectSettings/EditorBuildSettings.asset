@@ -25,3 +25,7 @@ EditorBuildSettings:
     path: Assets/5_MenuExampleGame.unity
   - enabled: 1
     path: Assets/MusicGame.unity
+  - enabled: 1
+    path: Assets/RocMan/RocManGamePlay.unity
+  - enabled: 1
+    path: Assets/RocMan/RocManYouDied.unity
