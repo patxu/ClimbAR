@@ -1,6 +1,6 @@
 # Opencv classifier readme
 
-Files are named as follows: cascade\_<number of levels\>\_<intended use\>\_<feature type\>.xml
+Files are named as follows: cascade\_[number of levels]\_[intended use]\_[feature type].xml
 
 In general, the greater the number of levels, the more selective the classifier is (fewer false positives but also maybe misses more).
 
