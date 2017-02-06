@@ -61,6 +61,18 @@ public class ManualSync : MonoBehaviour
                     ClimbARUtils.fractionToWorldSpace(0f, 1f, this.mainCam);
             }
         }
+
+        if (Input.GetKeyDown("escape"))
+        {
+            if (Application.isEditor)
+            {
+                Debug.Log("Cannot quit the application (Application is editor).");
+            }
+            else
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+        }
     }
 
     /// <summary>
