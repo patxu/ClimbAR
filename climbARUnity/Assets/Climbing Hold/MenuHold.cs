@@ -23,14 +23,15 @@ public class MenuHold : ClimbingHold
         this.sceneName = sceneName;
         coroutine = TransitionToSceneWithDelay(sceneName, 2);
 
-        canvasGameObject = new GameObject();
-        canvasGameObject.name = "MenuCanvas:" + sceneName;
-        canvasGameObject.AddComponent<Canvas>();
-        Canvas canvas = canvasGameObject.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay; // ?
-        canvasGameObject.AddComponent<CurvedText>();
-        CurvedText textComponent = canvasGameObject.GetComponent<CurvedText>();
-        textComponent.text = sceneName;
+        //canvasGameObject = new GameObject();
+        //canvasGameObject.name = "MenuCanvas:" + sceneName;
+        //canvasGameObject.AddComponent<Canvas>();
+        //Canvas canvas = canvasGameObject.GetComponent<Canvas>();
+        //canvas.renderMode = RenderMode.ScreenSpaceOverlay; // ?
+        //canvasGameObject.AddComponent<CurvedText>();
+        //CurvedText textComponent = canvasGameObject.GetComponent<CurvedText>();
+        //textComponent.text = sceneName;
+
         //Material newMaterialRef = Resources.Load<Material>("3DTextCoolVetica");
         //Font myFont = Resources.Load<Font>("coolvetica rg");
 
