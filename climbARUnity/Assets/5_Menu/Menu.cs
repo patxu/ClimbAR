@@ -8,7 +8,7 @@ public class Menu : MonoBehaviour {
     public Dictionary<string, GameObject> menuItems = new Dictionary<string, GameObject>()
     {
         { SceneUtils.SceneNames.musicGame, null },
-        { SceneUtils.SceneNames.menuExampleGame, null },
+        //{ SceneUtils.SceneNames.exampleGame, null },
     };
 
     private GameObject[] holds;
@@ -61,7 +61,6 @@ public class Menu : MonoBehaviour {
             }
             else
             {
-                Debug.Log("init menu hold");
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
                 menuHoldScript.setup(menuItem);
                 menuHold.GetComponent<LineRenderer>()
