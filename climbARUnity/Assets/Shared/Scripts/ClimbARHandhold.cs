@@ -55,7 +55,7 @@ static class ClimbARHandhold
     }
 
     // draw the bounding ellipse of the climbing hold
-    private static void DrawBoundingEllipse(
+    public static void DrawBoundingEllipse(
         LineRenderer lineRenderer,
         float xradius,
         float yradius)
@@ -88,16 +88,5 @@ static class ClimbARHandhold
 
             angle += (360f / segments);
         }
-    }
-
-    public static GameObject[] getHoldsInScene(
-    GameObject Handhold, // handhold prefab
-    int numHolds, // can we just use holdBoundingBoxes?
-    Camera camera,
-    float[] holdBoundingBoxes)
-    {
-
-        return null;
-
     }
 }

@@ -110,10 +110,10 @@ LineRenderer:
     colorGradient:
       key0:
         serializedVersion: 2
-        rgba: 4294967295
+        rgba: 4294967040
       key1:
         serializedVersion: 2
-        rgba: 4294967295
+        rgba: 4294967040
       key2:
         serializedVersion: 2
         rgba: 0
