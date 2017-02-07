@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/5_TestGame.unity
   - enabled: 1
     path: Assets/5_Menu.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/5_MenuExampleGame.unity
   - enabled: 1
     path: Assets/MusicGame.unity

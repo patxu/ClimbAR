@@ -46,7 +46,18 @@ public class BodySourceManager : MonoBehaviour
                 frame.Dispose();
                 frame = null;
             }
-        }    
+        }
+        if (Input.GetKeyDown("escape"))
+        {
+            if (Application.isEditor)
+            {
+                Debug.Log("Cannot quit the application (Application is editor).");
+            }
+            else
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+        }
     }
     
     void OnApplicationQuit()
