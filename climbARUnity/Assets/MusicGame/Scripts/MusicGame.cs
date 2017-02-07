@@ -6,7 +6,7 @@ using UnityEngine;
 public class MusicGame : MonoBehaviour
 {
 
-    bool DEBUG = true;
+    bool DEBUG = false;
     public GameObject prefabHold;
 
     string[] soundItems = new string[] { "acapella1", "acapella2", "acapella3", "acapella4" }; //path relative to Resources folder
@@ -38,6 +38,11 @@ public class MusicGame : MonoBehaviour
         // Otherwise we actually have holds, assign it to hold
         HashSet<int> usedHoldIndexes = new HashSet<int>();
         HashSet<int> usedSoundIndexes = new HashSet<int>();
+
+        if (holds.Length < soundItems.Length)
+        {
+            Debug.Log("Not enough handholds for the number of sound items");
+        }
 
         for (int i = 0; i < Mathf.Min(holds.Length, soundItems.Length); i++)
         {

@@ -49,4 +49,5 @@ public class ClimbingHold : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
 }
