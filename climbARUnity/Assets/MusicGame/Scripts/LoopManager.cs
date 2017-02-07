@@ -56,13 +56,20 @@ public class LoopManager : MonoBehaviour
 
     IEnumerator StartTrackPlayback()
     {
-
-        for (int i = 0; i < activeSounds.Length; i++)
+        bool firstTime = true;
+        while (true)
         {
-            sources[i].PlayOneShot(clips[i]);
-            sources[i].volume = 0;
+            for (int i = 0; i < activeSounds.Length; i++)
+            {
+                sources[i].PlayOneShot(clips[i]);
+                if (firstTime)
+                {
+                    sources[i].volume = 0;
+                }
+            }
+            firstTime = false;
+            yield return new WaitForSeconds(clips[0].length);
         }
-        yield return new WaitForSeconds(clips[0].length);
     }
 
 

@@ -55,9 +55,9 @@ public class SoundHold : ClimbingHold
             audioPlaying = true;
             loopManager.Unmute(holdIndex);
             gameObject.GetComponent<LineRenderer>()
-               .startColor = UnityEngine.Color.red;
+               .startColor = UnityEngine.Color.green;
             gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.red;
+                .endColor = UnityEngine.Color.green;
         }
     }
 }
