@@ -11,11 +11,13 @@ public class Menu : MonoBehaviour {
         { SceneUtils.SceneNames.menuExampleGame, null },
     };
 
+    private GameObject[] holds;
+
 	// Use this for initialization
 	void Start () {
-        Menu.PairMenuItemsWithHolds(menuItems);
-        Menu.AttachMenuHoldToHold(menuItems);
-        Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton
+        pairMenuItemsWithHolds(menuItems);
+        attachMenuHoldToHold(menuItems);
+        //Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton
     }
 
     void Update()
@@ -33,9 +35,9 @@ public class Menu : MonoBehaviour {
         }
     }
 
-    static void PairMenuItemsWithHolds(Dictionary<string, GameObject> menuItems)
+    void pairMenuItemsWithHolds(Dictionary<string, GameObject> menuItems)
     {
-        GameObject[] holds = GameObject.FindGameObjectsWithTag("Hold");
+        holds = GameObject.FindGameObjectsWithTag("Hold");
         List<string> keys = new List<string>(menuItems.Keys);
         if (holds.Length < keys.Count)
         {
@@ -49,7 +51,7 @@ public class Menu : MonoBehaviour {
         }
     }
 
-    static void AttachMenuHoldToHold(Dictionary<string, GameObject> menuItems)
+    void attachMenuHoldToHold(Dictionary<string, GameObject> menuItems)
     {
         foreach (string menuItem in menuItems.Keys) {
             GameObject menuHold = menuItems[menuItem];
@@ -60,9 +62,6 @@ public class Menu : MonoBehaviour {
             else
             {
                 Debug.Log("init menu hold");
-                ClimbingHold climbingHoldScript = menuHold.GetComponent<ClimbingHold>(); // issue 147
-                Destroy(climbingHoldScript);
-
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
                 menuHoldScript.setup(menuItem);
                 menuHold.GetComponent<LineRenderer>()
@@ -70,6 +69,15 @@ public class Menu : MonoBehaviour {
                 menuHold.GetComponent<LineRenderer>()
                     .endColor = UnityEngine.Color.cyan;
             }
+        }
+    }
+
+    private void OnDisable()
+    {
+        foreach (GameObject hold in holds)
+        {
+            MenuHold script = hold.GetComponent<MenuHold>();
+            Destroy(script);
         }
     }
 

@@ -21,7 +21,7 @@ public class MenuHold : ClimbingHold
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
-        coroutine = TransitionToSceneWithDelay(sceneName, 2);
+        coroutine = TransitionToSceneWithDelay(sceneName, 1);
 
         //canvasGameObject = new GameObject();
         //canvasGameObject.name = "MenuCanvas:" + sceneName;
@@ -87,5 +87,10 @@ public class MenuHold : ClimbingHold
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+    }
+    private void OnDisable()
+    {
+        TextMesh textMesh = gameObject.GetComponent<TextMesh>();
+        Destroy(textMesh);
     }
 }
