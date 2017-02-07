@@ -11,7 +11,7 @@ using UnityEditor;
 public class KinectClassify : MonoBehaviour
 {
     // true if you want to use the hardcoded bounding boxes
-    bool DEBUG = true;
+    bool DEBUG = false;
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -131,20 +131,15 @@ public class KinectClassify : MonoBehaviour
             int imageWidth;
             int imageHeight;
 
-            FrameDescription frameDesc = _Sensor
-                .ColorFrameSource
-                .CreateFrameDescription(ColorImageFormat.Bgra);
-            imageWidth = frameDesc.Width;
-            imageHeight = frameDesc.Height;
-
             if (DEBUG)
             {
                 Debug.Log("In debug mode; using hardcoded bounding boxes");
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-                holdsBoundingBoxes = new float[] { imageWidth - imageWidth/4, imageHeight - imageHeight/4, 100, 100,
-                    imageWidth - imageWidth/4, imageHeight - imageHeight/2, 100, 100,
-                    imageWidth - imageWidth/4, imageHeight - 3*imageHeight/4, 100, 100 };
+                holdsBoundingBoxes = new float[] { 0, 0, 100, 100, 1800, 900, 100, 100 };
                 numHolds = holdsBoundingBoxes.Length / 4;
+
+                imageWidth = 1000;
+                imageHeight = 1000;
             }
             else
             {
@@ -155,6 +150,12 @@ public class KinectClassify : MonoBehaviour
                 _Texture.LoadRawTextureData(_Data);
 
                 // classify image using OpenCV classifier
+
+                FrameDescription frameDesc = _Sensor
+                    .ColorFrameSource
+                    .CreateFrameDescription(ColorImageFormat.Bgra);
+                imageWidth = frameDesc.Width;
+                imageHeight = frameDesc.Height;
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
                 if(holdsBoundingBoxes[0] < 0)
                 {
