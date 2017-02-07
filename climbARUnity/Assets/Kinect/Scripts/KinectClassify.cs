@@ -1,10 +1,8 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
-using System.IO;
 using Windows.Kinect;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,7 +11,7 @@ using UnityEditor;
 public class KinectClassify : MonoBehaviour
 {
     // true if you want to use the hardcoded bounding boxes
-    bool DEBUG = true;
+    bool DEBUG = false;
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -66,7 +64,7 @@ public class KinectClassify : MonoBehaviour
     {
         if (Input.GetKeyDown("c"))
         {
-           
+
             if (!classifyRunning)
             {
                 StartCoroutine("GrabFrameAndClassify");
@@ -84,15 +82,6 @@ public class KinectClassify : MonoBehaviour
                 hold.transform.localPosition =
                     new Vector3(position.x * -1, position.y, position.z);
             }
-        }
-        else if (Input.GetKeyDown("space"))
-        {
-            for (int i = 0; i < this.handholds.Length; i++)
-            {
-                DontDestroyOnLoad(this.handholds[i]);
-            }
-
-            SceneManager.LoadScene(SceneUtils.SceneNames.menu);
         }
         else if (Input.GetKeyDown("escape"))
         {
@@ -127,7 +116,7 @@ public class KinectClassify : MonoBehaviour
     {
         classifyRunning = true;
         Debug.Log("starting classification coroutine");
-        
+
 
         if (_Reader == null)
         {
@@ -142,20 +131,15 @@ public class KinectClassify : MonoBehaviour
             int imageWidth;
             int imageHeight;
 
-            FrameDescription frameDesc = _Sensor
-                .ColorFrameSource
-                .CreateFrameDescription(ColorImageFormat.Bgra);
-            imageWidth = frameDesc.Width;
-            imageHeight = frameDesc.Height;
-
             if (DEBUG)
             {
                 Debug.Log("In debug mode; using hardcoded bounding boxes");
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-                holdsBoundingBoxes = new float[] { imageWidth - imageWidth/4, imageHeight - imageHeight/4, 100, 100,
-                    imageWidth - imageWidth/4, imageHeight - imageHeight/2, 100, 100,
-                    imageWidth - imageWidth/4, imageHeight - 3*imageHeight/4, 100, 100 };
+                holdsBoundingBoxes = new float[] { 0, 0, 100, 100, 1800, 900, 100, 100 };
                 numHolds = holdsBoundingBoxes.Length / 4;
+
+                imageWidth = 1000;
+                imageHeight = 1000;
             }
             else
             {
@@ -166,6 +150,12 @@ public class KinectClassify : MonoBehaviour
                 _Texture.LoadRawTextureData(_Data);
 
                 // classify image using OpenCV classifier
+
+                FrameDescription frameDesc = _Sensor
+                    .ColorFrameSource
+                    .CreateFrameDescription(ColorImageFormat.Bgra);
+                imageWidth = frameDesc.Width;
+                imageHeight = frameDesc.Height;
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
                 if(holdsBoundingBoxes[0] < 0)
                 {
@@ -180,7 +170,7 @@ public class KinectClassify : MonoBehaviour
                 }
                 numHolds = holdsBoundingBoxes.Length / 4;
             }
-            
+
             float[] projectorBounds = StateManager.instance.getProjectorBounds();
             float[] holdsProjectorTransformed;
 
@@ -209,6 +199,12 @@ public class KinectClassify : MonoBehaviour
                 this.mainCam,
                 holdsProjectorTransformed);
 
+            // persist holds
+            for (int i = 0; i < this.handholds.Length; i++)
+            {
+                DontDestroyOnLoad(this.handholds[i]);
+            }
+
             if (!DEBUG)
             {
                 frame.Dispose();
@@ -226,7 +222,7 @@ public class KinectClassify : MonoBehaviour
     {
         for (int i = 0; i < handholds.Length; i++)
         {
-            // Make sure this hold has not been manually deleted by the user 
+            // Make sure this hold has not been manually deleted by the user
             // due to a false positive in the classification stage
             if (handholds[i])
             {
@@ -240,7 +236,7 @@ public class KinectClassify : MonoBehaviour
         }
     }
 
-    // classify image (byte array), update the number of holds, 
+    // classify image (byte array), update the number of holds,
     // copy bounding boxes into memory
     float[] classifyWithOpenCV(int imageWidth, int imageHeight)
     {
