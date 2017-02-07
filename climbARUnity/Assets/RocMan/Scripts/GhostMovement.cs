@@ -8,11 +8,13 @@ public class GhostMovement : MonoBehaviour
 
     // State variables
     private float moveSpeed;
+    private int lives;
 
     // Use this for initialization
     void Start()
     {
         this.moveSpeed = 0.5f;
+        this.lives = 3;
     }
 
     // Update is called once per frame
@@ -38,6 +40,12 @@ public class GhostMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y * (-1));
+        this.lives--;
+        Debug.Log("You now have " + this.lives + " lives.");
+        if (this.lives <= 0)
+        {
+           SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
+        }
     }
 }

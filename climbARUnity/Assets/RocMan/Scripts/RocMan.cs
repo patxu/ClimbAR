@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RocMan : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class RocMan : MonoBehaviour
     // TODO: include handholds when the game state requires access to them...
     // TODO: include skeleton tracking game objects...
 
-    // Constants
+    // Other variables 
     public const int numGhosts = 1;
 
     void Start()
@@ -24,7 +25,7 @@ public class RocMan : MonoBehaviour
 
     void Update()
     {
-
+        
     }
 
     void CreateGhosts()
