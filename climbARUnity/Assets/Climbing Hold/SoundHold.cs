@@ -12,6 +12,7 @@ public class SoundHold : ClimbingHold
 
     private System.DateTime lastCountedCollision;
     private int smoothing = 1000;
+    private int enterCount = 0;
 
     bool audioPlaying;
 
@@ -39,11 +40,27 @@ public class SoundHold : ClimbingHold
 
     private void OnMouseDown()
     {
-        OnTriggerEnter2D(null);
+       enterCount = 0;
+       OnTriggerEnter2D(null); 
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        enterCount--;
+        lastCountedCollision = System.DateTime.UtcNow;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        enterCount++;
+
+        // If there is already some hand joint inside circle, we dont want to count another joint entering as a new event
+        if (enterCount > 1)
+        {
+            return;
+        }
+
         System.DateTime currentTime = System.DateTime.UtcNow;
         TimeSpan diff = currentTime - lastCountedCollision;
 
