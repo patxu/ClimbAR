@@ -10,6 +10,10 @@ public class SoundHold : ClimbingHold
     public LoopManager loopManager;
     public int holdIndex;
 
+    private System.DateTime lastCountedCollision;
+    private int smoothing = 1000;
+    private int enterCount = 0;
+
     bool audioPlaying;
 
     // Use this for initialization
@@ -26,6 +30,7 @@ public class SoundHold : ClimbingHold
 
     public void Setup(string audioPath, int holdIndex, LoopManager loopManager)
     {
+        lastCountedCollision = System.DateTime.UtcNow;
         this.loopManager = loopManager;
         this.holdIndex = holdIndex;
         //audioClip = Resources.Load<AudioClip>(audioPath); //path relative to Resources folder
@@ -35,12 +40,38 @@ public class SoundHold : ClimbingHold
 
     private void OnMouseDown()
     {
-        OnTriggerEnter2D(null);
+       enterCount = 0;
+       OnTriggerEnter2D(null); 
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        enterCount--;
+        lastCountedCollision = System.DateTime.UtcNow;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(holdIndex);
+        enterCount++;
+
+        // If there is already some hand joint inside circle, we dont want to count another joint entering as a new event
+        if (enterCount > 1)
+        {
+            return;
+        }
+
+        System.DateTime currentTime = System.DateTime.UtcNow;
+        TimeSpan diff = currentTime - lastCountedCollision;
+
+        // If there has been a collision in the last second, ignore it
+        if (diff.TotalMilliseconds < smoothing)
+        {
+            return;
+        }
+
+        // If it has been more than a second, update last collision time and switch audio
+        lastCountedCollision = System.DateTime.UtcNow;
         if (audioPlaying)
         {
             audioPlaying = false;
