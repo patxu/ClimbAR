@@ -6,12 +6,11 @@ static class SceneUtils
     // name of the scene to use with transitions
     public static class SceneNames
     {
-        public static String kinectCheck = "1_KinectCheck";
-        public static String autoSync = "2a_AutoKinectSync";
-        public static String manualSync = "2b_ManualKinectSync";
-        public static String demo = "3_OverlayDemo";
-        public static String holdSetup = "4_HoldSetup";
-        public static String menu = "5_menu";
+        public static String kinectCheck = "ClimbAR_Start";
+        public static String autoSync = "ClimbAR_ProjectorCalibrateAuto";
+        public static String manualSync = "ClimbAR_ProjectorCalibrateManual";
+        public static String holdSetup = "ClimbAR_FindHolds";
+        public static String menu = "ClimbAR_Menu";
         public static String exampleGame = "ExampleGame";
         public static String musicGame = "MusicGame";
         public static String rocManGamePlay = "RocManGamePlay";
