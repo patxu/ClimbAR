@@ -14,6 +14,8 @@ public class BodySourceView : MonoBehaviour
 
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
+    public string updateTextMesh;
+    string textMeshText;
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -54,20 +56,24 @@ public class BodySourceView : MonoBehaviour
 
     void Update()
     {
+        textMeshText = updateTextMesh;
         if (BodySourceManager == null)
         {
+            setTextMesh(textMeshText);
             return;
         }
 
         _BodyManager = BodySourceManager.GetComponent<BodySourceManager>();
         if (_BodyManager == null)
         {
+            setTextMesh(textMeshText);
             return;
         }
 
         Kinect.Body[] data = _BodyManager.GetData();
         if (data == null)
         {
+            setTextMesh(textMeshText);
             return;
         }
 
@@ -96,7 +102,7 @@ public class BodySourceView : MonoBehaviour
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
             }
-        }
+        } 
 
         foreach (var body in data)
         {
@@ -115,6 +121,13 @@ public class BodySourceView : MonoBehaviour
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
             }
         }
+
+        setTextMesh(textMeshText);
+    }
+
+    private void setTextMesh(string text)
+    {
+        gameObject.GetComponent<TextMesh>().text = text;
     }
 
     private GameObject CreateBodyObject(ulong id)
@@ -132,12 +145,12 @@ public class BodySourceView : MonoBehaviour
                 jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
                 jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
             {
-
                 Rigidbody2D rigid = jointObj.AddComponent<Rigidbody2D>();
                 rigid.isKinematic = true;
                 CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
                 col.enabled = true;
                 col.isTrigger = true;
+                col.radius = 1.0f;
             }
 
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
@@ -151,7 +164,6 @@ public class BodySourceView : MonoBehaviour
             jointObj.transform.parent = body.transform;
             jointObj.layer = body.layer;
         }
-
         return body;
     }
 
@@ -185,13 +197,7 @@ public class BodySourceView : MonoBehaviour
                     jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
                     jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
                 {
-                    // TO DO: Should this be in the above createBody function?
-                    CircleCollider2D col = jointObj.gameObject.GetComponent<CircleCollider2D>();
-                    if (col != null)
-                    {
-                        col.radius = 1.0f;
-                        //col.offset = new Vector2(jointObj.localPosition.x, jointObj.localPosition.y); 
-                    }
+                    textMeshText = "";
                 }
                 lr.SetPosition(0, jointObj.localPosition);
                 lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));
@@ -300,7 +306,6 @@ public class BodySourceView : MonoBehaviour
 
         for (int i = 0; i < boundingBoxes.Length / 4; i++)
         {
-            //Debug.Log("Hold: ");
             int holdIndex = i * 4;
 
             // get coordinates of hold
