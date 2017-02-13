@@ -25,25 +25,26 @@ public class ManualSync : MonoBehaviour
         // continue to next scene, saving the coordinates of the corner circles as state
         if (Input.GetKeyDown("space"))
         {
-            // 0,0 is top left, +y points down
-            float upperX = (this.cornerCircles[0].transform.localPosition.x + this.cornerCircles[1].transform.localPosition.x) / 2;
-            float lowerX = (this.cornerCircles[2].transform.localPosition.x + this.cornerCircles[3].transform.localPosition.x) / 2;
 
+            float upperY = (this.cornerCircles[0].transform.localPosition.y + this.cornerCircles[1].transform.localPosition.y) / 2;
+            float lowerY = (this.cornerCircles[2].transform.localPosition.y + this.cornerCircles[3].transform.localPosition.y) / 2;
+
+            // 0,0 is top left, +y points down
             StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
-                upperX,
-                this.cornerCircles[0].transform.localPosition.y,
+                this.cornerCircles[0].transform.localPosition.x,
+                upperY,
                 mainCam);
             StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(
-                upperX,
-                this.cornerCircles[1].transform.localPosition.y,
+                this.cornerCircles[1].transform.localPosition.x,
+                upperY,
                 mainCam);
             StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(
-                lowerX,
-                this.cornerCircles[2].transform.localPosition.y,
+                this.cornerCircles[2].transform.localPosition.x,
+                lowerY,
                 mainCam);
             StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(
-                lowerX,
-                this.cornerCircles[3].transform.localPosition.y,
+                this.cornerCircles[3].transform.localPosition.x,
+                lowerY,
                 mainCam);
             SceneManager.LoadScene(SceneUtils.SceneNames.holdSetup);
             //SceneManager.LoadScene(SceneUtils.Names.demo);
