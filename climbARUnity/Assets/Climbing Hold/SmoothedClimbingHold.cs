@@ -19,36 +19,58 @@ public class SmoothedClimbingHold : ClimbingHold {
 		
 	}
 
-    public new bool ShouldTriggerExit2D(Collider2D col)
-    {
-        return base.ShouldTriggerExit2D(col);
-    }
-
-    public new bool ShouldTriggerEnter2D(Collider2D col)
-    {
-        System.DateTime currentTime = System.DateTime.UtcNow;
-        TimeSpan diff = currentTime - lastCountedCollision;
-
-        return (base.ShouldTriggerEnter2D(col) && enterCount <= 1 && diff.TotalMilliseconds < smoothing);
-    }
-
-
-    public bool HoldReleased(params object[] args)
+    public bool HoldReleased()
     {
         enterCount--;
         lastCountedCollision = System.DateTime.UtcNow;
         return true;
     }
 
-    public new void OnTriggerExit2D(Collider2D col)
+
+    public new bool ShouldRegisterHoldReleased(Collider2D col)
     {
-        HoldAction action = HoldReleased;
-        HandHoldReleased(col, action);
+        if (!base.ShouldRegisterHoldReleased(col))
+        {
+            return false;
+        }
+
+        enterCount--;
+        lastCountedCollision = System.DateTime.UtcNow;
+
+        return true;
     }
 
-    public void OnTriggerEnter2D(Collider2D col)
+    public new bool ShouldRegisterHoldGrabbed(Collider2D col)
     {
+        if (!base.ShouldRegisterHoldGrabbed(col))
+        {
+            return false;
+        }
+
         enterCount++;
-        base.OnTriggerEnter2D(col);
+        System.DateTime currentTime = System.DateTime.UtcNow;
+        TimeSpan diff = currentTime - lastCountedCollision;
+
+        if (enterCount > 1 || diff.TotalMilliseconds >= smoothing)
+        {
+            return false;
+        }
+
+
+        lastCountedCollision = System.DateTime.UtcNow;
+        return true;
     }
+
+    private new void OnTriggerEnter2D(Collider2D collision)
+    {
+        ShouldRegisterHoldGrabbed(collision);
+    }
+
+    private new void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.Log("Smoothed hold exit being called");
+        ShouldRegisterHoldReleased(collision);
+    }
+
+    
 }
