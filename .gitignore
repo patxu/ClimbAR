@@ -1,5 +1,8 @@
 # Data
 
+# Mac Pro Specific Nonsense
+climbARUnity/Assets/Plugins/x86.meta
+
 MacOS
 .DS_STORE
 
