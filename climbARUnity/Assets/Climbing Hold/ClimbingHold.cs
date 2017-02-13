@@ -4,6 +4,7 @@ using System;
 
 public class ClimbingHold : MonoBehaviour
 {
+    public static Sprite customHoldSprite;
     private int enterCount;
     private System.DateTime lastCountedCollision;
     private int smoothing = 750;
@@ -45,6 +46,12 @@ public class ClimbingHold : MonoBehaviour
 
     public bool ShouldRegisterHoldReleased(Collider2D col)
     {
+        customHoldSprite = Resources.Load<Sprite>("customHold");
+        if (customHoldSprite == null)
+        {
+            Debug.Log("No custom hold found in resources folder");
+        }
+
         if (col != null && col.gameObject.tag == "Hold")
         {
             return false;
@@ -87,6 +94,4 @@ public class ClimbingHold : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    
 }
