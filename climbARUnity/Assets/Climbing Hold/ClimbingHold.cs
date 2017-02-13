@@ -18,38 +18,35 @@ public class ClimbingHold : MonoBehaviour
 
     }
 
-    public delegate bool HoldAction(params object[] arguments);
+    public delegate bool HoldAction();
 
-    public bool HandHoldGrabbed(Collider2D col, HoldAction action, params object[] arguments)
+    public bool ShouldRegisterHoldGrabbed(Collider2D col)
     {
         if (col.gameObject.tag != "Hold")
         {
             return false;
         }
-        if (action == null)
+        else
         {
             return true;
         }
-        return action(arguments);
     }
 
-    public bool HandHoldReleased(Collider2D col, HoldAction action, params object[] arguments)
+    public bool ShouldRegisterHoldReleased(Collider2D col)
     {
         if (col.gameObject.tag != "Hold")
         {
             return false;
         }
-        if (action == null)
+        else
         {
             return true;
         }
-
-        return action(arguments);
     }
 
     public void OnTriggerExit2D(Collider2D col)
     {
-        HandHoldReleased(col, null);
+        
 
         /*
         enterCount--;
@@ -64,7 +61,7 @@ public class ClimbingHold : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D col)
     {
-        HandHoldGrabbed(col, null);
+      
 
         /*
         enterCount++;
