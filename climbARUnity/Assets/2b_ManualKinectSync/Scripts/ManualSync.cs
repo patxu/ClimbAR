@@ -26,20 +26,23 @@ public class ManualSync : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             // 0,0 is top left, +y points down
+            float upperX = (this.cornerCircles[0].transform.localPosition.x + this.cornerCircles[0].transform.localPosition.x) / 2;
+            float lowerX = (this.cornerCircles[2].transform.localPosition.x + this.cornerCircles[3].transform.localPosition.x) / 2;
+
             StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[0].transform.localPosition.x,
+                upperX,
                 this.cornerCircles[0].transform.localPosition.y,
                 mainCam);
             StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[1].transform.localPosition.x,
+                upperX,
                 this.cornerCircles[1].transform.localPosition.y,
                 mainCam);
             StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(
-                    this.cornerCircles[2].transform.localPosition.x,
+                lowerX,
                 this.cornerCircles[2].transform.localPosition.y,
                 mainCam);
             StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[3].transform.localPosition.x,
+                lowerX,
                 this.cornerCircles[3].transform.localPosition.y,
                 mainCam);
             SceneManager.LoadScene(SceneUtils.SceneNames.holdSetup);
