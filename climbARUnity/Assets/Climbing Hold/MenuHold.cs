@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuHold : ClimbingHold
+public class MenuHold : SmoothedClimbingHold
 {
 
     public string sceneName;
@@ -21,62 +21,43 @@ public class MenuHold : ClimbingHold
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
-        coroutine = TransitionToSceneWithDelay(sceneName, 1);
-
-        //canvasGameObject = new GameObject();
-        //canvasGameObject.name = "MenuCanvas:" + sceneName;
-        //canvasGameObject.AddComponent<Canvas>();
-        //Canvas canvas = canvasGameObject.GetComponent<Canvas>();
-        //canvas.renderMode = RenderMode.ScreenSpaceOverlay; // ?
-        //canvasGameObject.AddComponent<CurvedText>();
-        //CurvedText textComponent = canvasGameObject.GetComponent<CurvedText>();
-        //textComponent.text = sceneName;
-
-        //Material newMaterialRef = Resources.Load<Material>("3DTextCoolVetica");
-        //Font myFont = Resources.Load<Font>("coolvetica rg");
-
-        //textComponent.font = myFont;
-        //textComponent.material = newMaterialRef;
-        //textComponent.text = "Hello World";
-
+        coroutine = TransitionToSceneWithDelay(sceneName, 0.5f);
         TextMesh textMesh = gameObject.AddComponent<TextMesh>();
-        //textMesh.font = Resources.Load<Font>("Fonts/CaviarDreams");
         textMesh.characterSize = 0.1f;
         textMesh.fontSize = 50;
         textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
         textMesh.anchor = TextAnchor.MiddleLeft;
     }
 
-    void Update()
+
+    private new void OnTriggerExit2D(Collider2D col)
     {
+        if (!ShouldRegisterHoldReleased(col))
+        {
+            return;
+        }
+
+        StopCoroutine(coroutine);
+
+        gameObject.GetComponent<LineRenderer>()
+            .startColor = UnityEngine.Color.cyan;
+        gameObject.GetComponent<LineRenderer>()
+            .endColor = UnityEngine.Color.cyan;
+
     }
 
-    void OnTriggerExit2D(Collider2D col)
+    private new void OnTriggerEnter2D(Collider2D col)
     {
-        
-        enterCount--;
-        if (enterCount == 0)
+        if (!ShouldRegisterHoldGrabbed(col))
         {
-            StopCoroutine(coroutine);
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.cyan;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.cyan;
+            return;
         }
-    }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-       
-        enterCount++;
-        if (enterCount == 1)
-        {
-            StartCoroutine(coroutine);
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.green;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.green;
-        }
+        StartCoroutine(coroutine);
+        gameObject.GetComponent<LineRenderer>()
+            .startColor = UnityEngine.Color.cyan;
+        gameObject.GetComponent<LineRenderer>()
+            .endColor = UnityEngine.Color.cyan;
     }
 
     void OnMouseDown()
@@ -89,6 +70,7 @@ public class MenuHold : ClimbingHold
         yield return new WaitForSeconds(delay);
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     }
+
     private void OnDisable()
     {
         TextMesh textMesh = gameObject.GetComponent<TextMesh>();

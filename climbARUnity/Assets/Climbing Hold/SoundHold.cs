@@ -22,27 +22,17 @@ public class SoundHold : SmoothedClimbingHold
         audioPlaying = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void Setup(string audioPath, int holdIndex, LoopManager loopManager)
     {
         lastCountedCollision = System.DateTime.UtcNow;
         this.loopManager = loopManager;
         this.holdIndex = holdIndex;
-        //audioClip = Resources.Load<AudioClip>(audioPath); //path relative to Resources folder
-        //source = this.gameObject.AddComponent<AudioSource>();
-        //source.clip = audioClip;
     }
 
     private void OnMouseDown()
     {
-       enterCount = 0;
-       OnTriggerEnter2D(null); 
-
+        enterCount = 0;
+        OnTriggerEnter2D(null);
     }
 
     private new void OnTriggerEnter2D(Collider2D collision)
