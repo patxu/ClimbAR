@@ -24,11 +24,11 @@ public class ClimbingHold : MonoBehaviour
     {
         if (col.gameObject.tag != "Hold")
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
@@ -36,42 +36,28 @@ public class ClimbingHold : MonoBehaviour
     {
         if (col.gameObject.tag != "Hold")
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
     public void OnTriggerExit2D(Collider2D col)
     {
-        
-
-        /*
-        enterCount--;
-        if (enterCount == 0)
-        {
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.red;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.red;
-        } */
+        gameObject.GetComponent<LineRenderer>()
+            .startColor = UnityEngine.Color.red;
+        gameObject.GetComponent<LineRenderer>()
+            .endColor = UnityEngine.Color.red;
     }
-
     public void OnTriggerEnter2D(Collider2D col)
     {
-      
+        gameObject.GetComponent<LineRenderer>()
+            .startColor = UnityEngine.Color.green;
+        gameObject.GetComponent<LineRenderer>()
+            .endColor = UnityEngine.Color.green;
 
-        /*
-        enterCount++;
-        if (enterCount > 0)
-        {
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.green;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.green;
-        }*/
     }
 
     void OnMouseDown()

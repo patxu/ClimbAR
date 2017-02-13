@@ -6,7 +6,7 @@ using System;
 public class SmoothedClimbingHold : ClimbingHold {
 
     private System.DateTime lastCountedCollision;
-    private int smoothing = 1000;
+    private int smoothing = 750;
     private int enterCount = 0;
 
     // Use this for initialization
@@ -19,16 +19,9 @@ public class SmoothedClimbingHold : ClimbingHold {
 		
 	}
 
-    public bool HoldReleased()
-    {
-        enterCount--;
-        lastCountedCollision = System.DateTime.UtcNow;
-        return true;
-    }
-
 
     public new bool ShouldRegisterHoldReleased(Collider2D col)
-    {
+    { 
         if (!base.ShouldRegisterHoldReleased(col))
         {
             return false;
@@ -51,11 +44,10 @@ public class SmoothedClimbingHold : ClimbingHold {
         System.DateTime currentTime = System.DateTime.UtcNow;
         TimeSpan diff = currentTime - lastCountedCollision;
 
-        if (enterCount > 1 || diff.TotalMilliseconds >= smoothing)
+        if (enterCount > 1 || diff.TotalMilliseconds < smoothing)
         {
             return false;
         }
-
 
         lastCountedCollision = System.DateTime.UtcNow;
         return true;
@@ -68,7 +60,6 @@ public class SmoothedClimbingHold : ClimbingHold {
 
     private new void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Smoothed hold exit being called");
         ShouldRegisterHoldReleased(collision);
     }
 
