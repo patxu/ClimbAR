@@ -115,10 +115,18 @@ public class BodySourceView : MonoBehaviour
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
             }
         }
+
+    }
+
+    private void setTextMesh(string text)
+    {
+        gameObject.GetComponent<TextMesh>().text = text;
+        Debug.Log("setting text mesh to " + text);
     }
 
     private GameObject CreateBodyObject(ulong id)
     {
+        string textMeshText = "No Hands Detected!";
         GameObject body = new GameObject("Body:" + id);
         body.layer = LayerMask.NameToLayer("Skeleton");
 
@@ -132,7 +140,7 @@ public class BodySourceView : MonoBehaviour
                 jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
                 jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
             {
-
+                textMeshText = "";
                 Rigidbody2D rigid = jointObj.AddComponent<Rigidbody2D>();
                 rigid.isKinematic = true;
                 CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
@@ -151,7 +159,7 @@ public class BodySourceView : MonoBehaviour
             jointObj.transform.parent = body.transform;
             jointObj.layer = body.layer;
         }
-
+        setTextMesh(textMeshText);
         return body;
     }
 
