@@ -26,7 +26,7 @@ public class ManualSync : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             // 0,0 is top left, +y points down
-            float upperX = (this.cornerCircles[0].transform.localPosition.x + this.cornerCircles[0].transform.localPosition.x) / 2;
+            float upperX = (this.cornerCircles[0].transform.localPosition.x + this.cornerCircles[1].transform.localPosition.x) / 2;
             float lowerX = (this.cornerCircles[2].transform.localPosition.x + this.cornerCircles[3].transform.localPosition.x) / 2;
 
             StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
