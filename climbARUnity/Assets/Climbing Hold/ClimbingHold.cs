@@ -9,14 +9,20 @@ public class ClimbingHold : MonoBehaviour
     //    gameObject.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.green, UnityEngine.Color.green);
     //}
 
+    public static Sprite customHoldSprite;
     private int enterCount;
 
-    void OnStart()
+    void Start()
     {
         enterCount = 0;
+        customHoldSprite = Resources.Load<Sprite>("customHold");
+        if (customHoldSprite == null)
+        {
+            Debug.Log("No custom hold found in resources folder");
+        }
     }
 
-    void OnUpdate()
+    void Update()
     {
 
     }
