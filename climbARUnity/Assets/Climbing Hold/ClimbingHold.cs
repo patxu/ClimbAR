@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+
 
 public class ClimbingHold : MonoBehaviour
 {
-    //void OnTriggerEnter2D(Collider2D col)
-    //{
-    //    Debug.Log("There was a collision!");
-    //    gameObject.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.green, UnityEngine.Color.green);
-    //}
-
+  
     private int enterCount;
 
     void OnStart()
@@ -21,8 +18,40 @@ public class ClimbingHold : MonoBehaviour
 
     }
 
-    void OnTriggerExit2D(Collider2D col)
+    public delegate bool HoldAction(params object[] arguments);
+
+    public bool HandHoldGrabbed(Collider2D col, HoldAction action, params object[] arguments)
     {
+        if (col.gameObject.tag != "Hold")
+        {
+            return false;
+        }
+        if (action == null)
+        {
+            return true;
+        }
+        return action(arguments);
+    }
+
+    public bool HandHoldReleased(Collider2D col, HoldAction action, params object[] arguments)
+    {
+        if (col.gameObject.tag != "Hold")
+        {
+            return false;
+        }
+        if (action == null)
+        {
+            return true;
+        }
+
+        return action(arguments);
+    }
+
+    public void OnTriggerExit2D(Collider2D col)
+    {
+        HandHoldReleased(col, null);
+
+        /*
         enterCount--;
         if (enterCount == 0)
         {
@@ -30,11 +59,14 @@ public class ClimbingHold : MonoBehaviour
                 .startColor = UnityEngine.Color.red;
             gameObject.GetComponent<LineRenderer>()
                 .endColor = UnityEngine.Color.red;
-        }
+        } */
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    public void OnTriggerEnter2D(Collider2D col)
     {
+        HandHoldGrabbed(col, null);
+
+        /*
         enterCount++;
         if (enterCount > 0)
         {
@@ -42,7 +74,7 @@ public class ClimbingHold : MonoBehaviour
                 .startColor = UnityEngine.Color.green;
             gameObject.GetComponent<LineRenderer>()
                 .endColor = UnityEngine.Color.green;
-        }
+        }*/
     }
 
     void OnMouseDown()
@@ -50,4 +82,5 @@ public class ClimbingHold : MonoBehaviour
         Destroy(gameObject);
     }
 
+    
 }
