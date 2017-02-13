@@ -89,4 +89,20 @@ static class ClimbARHandhold
             angle += (360f / segments);
         }
     }
+
+    public static GameObject[] GetValidClimbingHolds()
+    {
+        GameObject[] holds = GameObject.FindGameObjectsWithTag("Hold");
+        List<GameObject> visibleHolds = new List<GameObject>();
+        foreach (GameObject hold in holds)
+        {
+            if (hold.GetComponent<Renderer>().isVisible)
+            {
+                visibleHolds.Add(hold);
+            }
+        }
+
+        return visibleHolds.ToArray();
+
+    }
 }

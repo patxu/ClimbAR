@@ -15,8 +15,7 @@ public class MusicGame : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
-        holds = GameObject.FindGameObjectsWithTag("Hold");
+        holds = ClimbARHandhold.GetValidClimbingHolds();
         LoopManager loopManager = gameObject.AddComponent<LoopManager>();
         loopManager.Setup(soundItems);
 

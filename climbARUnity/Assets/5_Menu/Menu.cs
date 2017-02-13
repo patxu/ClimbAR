@@ -38,7 +38,7 @@ public class Menu : MonoBehaviour {
 
     void pairMenuItemsWithHolds(Dictionary<string, GameObject> menuItems)
     {
-        holds = GameObject.FindGameObjectsWithTag("Hold");
+        holds = ClimbARHandhold.GetValidClimbingHolds(); 
         List<string> keys = new List<string>(menuItems.Keys);
         if (holds.Length < keys.Count)
         {
