@@ -102,7 +102,7 @@ public class BodySourceView : MonoBehaviour
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
             }
-        } 
+        }
 
         foreach (var body in data)
         {
@@ -132,6 +132,7 @@ public class BodySourceView : MonoBehaviour
 
     private GameObject CreateBodyObject(ulong id)
     {
+        string textMeshText = "No Hands Detected!";
         GameObject body = new GameObject("Body:" + id);
         body.layer = LayerMask.NameToLayer("Skeleton");
 
@@ -257,7 +258,7 @@ public class BodySourceView : MonoBehaviour
         float[] coordinates = new float[] { colorPoint.X, colorPoint.Y, 0, 0 }; // 0, 0 is filler for the bounding box
         float[] projectorBounds = StateManager.instance.getProjectorBounds();
 
-        // Transform into the appropriate coordinates to project 
+        // Transform into the appropriate coordinates to project
         float[] transformedCoordinates = transformOpenCvToUnitySpace(projectorBounds, coordinates);
 
 
