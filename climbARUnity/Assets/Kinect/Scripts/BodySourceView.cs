@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using Kinect = Windows.Kinect;
@@ -16,6 +17,7 @@ public class BodySourceView : MonoBehaviour
     private BodySourceManager _BodyManager;
     public string updateTextMesh;
     string textMeshText;
+    public bool shouldShowTextMesh;
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -52,6 +54,7 @@ public class BodySourceView : MonoBehaviour
     void Start()
     {
         _Sensor = Kinect.KinectSensor.GetDefault();
+        shouldShowTextMesh = true;
     }
 
     void Update()
@@ -121,11 +124,17 @@ public class BodySourceView : MonoBehaviour
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
             }
         }
-
-        setTextMesh(textMeshText);
+        if (shouldShowTextMesh)
+        {
+            setTextMesh(textMeshText);
+        }
+        else
+        {
+            setTextMesh("");
+        }
     }
 
-    private void setTextMesh(string text)
+    public void setTextMesh(string text)
     {
         gameObject.GetComponent<TextMesh>().text = text;
     }

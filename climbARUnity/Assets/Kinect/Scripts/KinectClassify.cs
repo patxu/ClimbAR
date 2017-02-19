@@ -58,6 +58,9 @@ public class KinectClassify : MonoBehaviour
         {
             Debug.Log("cannot get Kinect sensor");
         }
+        GameObject bodyView = GameObject.Find("KinectBodyView");
+        BodySourceView view = bodyView.GetComponent<BodySourceView>();
+        view.shouldShowTextMesh = false;
     }
 
     void Update()
