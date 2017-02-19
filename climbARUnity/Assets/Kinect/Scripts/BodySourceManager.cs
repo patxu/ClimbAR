@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using Windows.Kinect;
 
@@ -56,6 +57,14 @@ public class BodySourceManager : MonoBehaviour
             else
             {
                 System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+        }
+
+        if (Input.GetKeyDown("backspace"))
+        {
+            if (SceneManager.GetActiveScene().name != "ClimbAR_Menu")
+            {
+                SceneManager.LoadSceneAsync("ClimbAR_Menu", LoadSceneMode.Single);
             }
         }
     }
