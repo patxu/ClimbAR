@@ -11,7 +11,7 @@ public class MenuHold : ClimbingHold
     private IEnumerator coroutine;
     private int enterCount;
 
-    void OnStart()
+    void Start()
     {
         enterCount = 0;
     }
@@ -47,17 +47,17 @@ public class MenuHold : ClimbingHold
         textMesh.anchor = TextAnchor.MiddleLeft;
     }
 
-    void OnUpdate()
+    void Update()
     {
-
     }
 
     void OnTriggerExit2D(Collider2D col)
     {
-        StopCoroutine(coroutine);
+        
         enterCount--;
         if (enterCount == 0)
         {
+            StopCoroutine(coroutine);
             gameObject.GetComponent<LineRenderer>()
                 .startColor = UnityEngine.Color.cyan;
             gameObject.GetComponent<LineRenderer>()
@@ -67,10 +67,11 @@ public class MenuHold : ClimbingHold
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        StartCoroutine(coroutine);
+       
         enterCount++;
-        if (enterCount > 0)
+        if (enterCount == 1)
         {
+            StartCoroutine(coroutine);
             gameObject.GetComponent<LineRenderer>()
                 .startColor = UnityEngine.Color.green;
             gameObject.GetComponent<LineRenderer>()
