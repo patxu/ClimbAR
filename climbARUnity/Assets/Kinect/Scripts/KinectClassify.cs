@@ -11,7 +11,7 @@ using UnityEditor;
 public class KinectClassify : MonoBehaviour
 {
     // true if you want to use the hardcoded bounding boxes
-    bool DEBUG = false;
+    bool DEBUG = true;
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -83,7 +83,7 @@ public class KinectClassify : MonoBehaviour
                     new Vector3(position.x * -1, position.y, position.z);
             }
         }
-       
+
 
         if (_Reader != null)
         {
@@ -114,7 +114,7 @@ public class KinectClassify : MonoBehaviour
             yield return null;
         }
         ColorFrame frame = _Reader.AcquireLatestFrame();
-        if (frame != null)
+        if (true) //frame != null)
         {
             int numHolds;
             float[] holdsBoundingBoxes;
@@ -125,7 +125,7 @@ public class KinectClassify : MonoBehaviour
             {
                 Debug.Log("In debug mode; using hardcoded bounding boxes");
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-                holdsBoundingBoxes = new float[] { 500, 500, 100, 100};
+                holdsBoundingBoxes = new float[] { 500, 500, 100, 100 };
                 numHolds = holdsBoundingBoxes.Length / 4;
 
                 imageWidth = 1000;
@@ -147,7 +147,7 @@ public class KinectClassify : MonoBehaviour
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
-                if(holdsBoundingBoxes[0] < 0)
+                if (holdsBoundingBoxes[0] < 0)
                 {
                     if (!DEBUG)
                     {

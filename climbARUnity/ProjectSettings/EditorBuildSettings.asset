@@ -7,19 +7,27 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/ClimbAR_Start.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/ClimbAR_ProjectorCalibrateAuto.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/ClimbAR_ProjectorCalibrateManual.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/ClimbAR_FindHolds.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/ClimbAR_Menu.unity
   - enabled: 0
-    path: Assets/ExampleGame.unity
+    path: Assets/Example Game/ExampleGame.unity
   - enabled: 1
     path: Assets/MusicGame.unity
   - enabled: 1
     path: Assets/RocMan/RocManGamePlay.unity
   - enabled: 1
     path: Assets/RocMan/RocManYouDied.unity
+  - enabled: 1
+    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateManual.unity
+  - enabled: 1
+    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateAuto.unity
+  - enabled: 1
+    path: Assets/ClimbAR/ClimbAR_Menu.unity
+  - enabled: 1
+    path: Assets/ClimbAR/ClimbAR_FindHolds.unity
