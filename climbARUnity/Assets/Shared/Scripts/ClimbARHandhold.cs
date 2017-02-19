@@ -57,9 +57,9 @@ static class ClimbARHandhold
             else
             {
                 Debug.Log("Drawing custom hold");
-                SpriteRenderer spriteRenderer = handholds[i].AddComponent<SpriteRenderer>();
-                DrawHoldSprite(spriteRenderer, col.radius/camWidth, col.radius/camWidth);
-            } 
+                SpriteRenderer spriteRenderer = handholds[i].GetComponent<SpriteRenderer>();
+                DrawHoldSprite(spriteRenderer, col.radius / camWidth, col.radius / camWidth);
+            }
         }
         return handholds;
     }

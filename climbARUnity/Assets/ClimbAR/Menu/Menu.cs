@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Menu : MonoBehaviour {
+public class Menu : MonoBehaviour
+{
 
     // declare menu items here
     public Dictionary<string, GameObject> menuItems = new Dictionary<string, GameObject>()
@@ -14,8 +15,9 @@ public class Menu : MonoBehaviour {
 
     private GameObject[] holds;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         pairMenuItemsWithHolds(menuItems);
         attachMenuHoldToHold(menuItems);
         //Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton
@@ -38,7 +40,7 @@ public class Menu : MonoBehaviour {
 
     void pairMenuItemsWithHolds(Dictionary<string, GameObject> menuItems)
     {
-        holds = ClimbARHandhold.GetValidClimbingHolds(); 
+        holds = ClimbARHandhold.GetValidClimbingHolds();
         List<string> keys = new List<string>(menuItems.Keys);
         if (holds.Length < keys.Count)
         {
@@ -54,11 +56,12 @@ public class Menu : MonoBehaviour {
 
     void attachMenuHoldToHold(Dictionary<string, GameObject> menuItems)
     {
-        foreach (string menuItem in menuItems.Keys) {
+        foreach (string menuItem in menuItems.Keys)
+        {
             GameObject menuHold = menuItems[menuItem];
             if (menuHold == null)
             {
-              Debug.Log("No hold for menu item " + menuItem);
+                Debug.Log("No hold for menu item " + menuItem);
             }
             else
             {

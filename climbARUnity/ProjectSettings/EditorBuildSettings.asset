@@ -4,20 +4,4 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/ClimbAR_Start.unity
-  - enabled: 1
-    path: Assets/MusicGame.unity
-  - enabled: 1
-    path: Assets/RocMan/RocManGamePlay.unity
-  - enabled: 1
-    path: Assets/RocMan/RocManYouDied.unity
-  - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_FindHolds.unity
-  - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_Menu.unity
-  - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateAuto.unity
-  - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateManual.unity
+  m_Scenes: []
