@@ -85,4 +85,14 @@ public class MusicGame : MonoBehaviour
     {
 
     }
+
+    private void OnDisable()
+    {
+        foreach (GameObject hold in holds)
+        {
+            SoundHold script = hold.GetComponent<SoundHold>();
+            Destroy(script);
+        }
+    }
+
 }
