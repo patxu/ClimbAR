@@ -46,6 +46,7 @@ public class MenuHold : SmoothedClimbingHold
 
     }
 
+
     private new void OnTriggerEnter2D(Collider2D col)
     {
         if (!ShouldRegisterHoldGrabbed(col))

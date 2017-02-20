@@ -31,8 +31,13 @@ public class SoundHold : SmoothedClimbingHold
 
     private void OnMouseDown()
     {
+<<<<<<< HEAD
         enterCount = 0;
         OnTriggerEnter2D(null);
+=======
+       enterCount = 0;
+       OnTriggerEnter2D(null); 
+>>>>>>> 176698e03df7a545d4cadf679e226664d1ebf62e
     }
 
     private new void OnTriggerEnter2D(Collider2D collision)
