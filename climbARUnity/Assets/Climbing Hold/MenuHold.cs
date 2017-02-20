@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuHold : SmoothedClimbingHold
+public class MenuHold : ClimbingHold
 {
 
     public string sceneName;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class SoundHold : SmoothedClimbingHold
+public class SoundHold : ClimbingHold
 {
     public AudioClip audioClip;
     private AudioSource source;
