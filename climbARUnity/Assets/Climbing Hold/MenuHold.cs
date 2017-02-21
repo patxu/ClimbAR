@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class MenuHold : ClimbingHold
 {
 
-    public string sceneName;
-    private IEnumerator coroutine;
     private int enterCount;
+    private IEnumerator coroutine;
+    public string sceneName;
 
     void OnStart()
     {
@@ -17,39 +17,22 @@ public class MenuHold : ClimbingHold
     }
     public GameObject canvasGameObject;
 
+    void OnUpdate()
+    {
+
+    }
+
     // must call setup script
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
         coroutine = TransitionToSceneWithDelay(sceneName, 1);
-
-        //canvasGameObject = new GameObject();
-        //canvasGameObject.name = "MenuCanvas:" + sceneName;
-        //canvasGameObject.AddComponent<Canvas>();
-        //Canvas canvas = canvasGameObject.GetComponent<Canvas>();
-        //canvas.renderMode = RenderMode.ScreenSpaceOverlay; // ?
-        //canvasGameObject.AddComponent<CurvedText>();
-        //CurvedText textComponent = canvasGameObject.GetComponent<CurvedText>();
-        //textComponent.text = sceneName;
-
-        //Material newMaterialRef = Resources.Load<Material>("3DTextCoolVetica");
-        //Font myFont = Resources.Load<Font>("coolvetica rg");
-
-        //textComponent.font = myFont;
-        //textComponent.material = newMaterialRef;
-        //textComponent.text = "Hello World";
-
-        TextMesh textMesh = gameObject.AddComponent<TextMesh>();
-        //textMesh.font = Resources.Load<Font>("Fonts/CaviarDreams");
-        textMesh.characterSize = 0.1f;
-        textMesh.fontSize = 50;
-        textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
-        textMesh.anchor = TextAnchor.MiddleLeft;
     }
 
-    void OnUpdate()
+    IEnumerator TransitionToSceneWithDelay(string sceneName, float delay)
     {
-
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     }
 
     void OnTriggerExit2D(Collider2D col)
@@ -67,6 +50,7 @@ public class MenuHold : ClimbingHold
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log("Triggering collision");
         StartCoroutine(coroutine);
         enterCount++;
         if (enterCount > 0)
@@ -83,14 +67,10 @@ public class MenuHold : ClimbingHold
         OnTriggerEnter2D(null);
     }
 
-    IEnumerator TransitionToSceneWithDelay(string sceneName, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-    }
     private void OnDisable()
     {
-        TextMesh textMesh = gameObject.GetComponent<TextMesh>();
-        Destroy(textMesh);
+        // Get child text game object and destroy 
+        GameObject holdText = gameObject.transform.GetChild(0).gameObject;
+        Destroy(holdText);
     }
 }

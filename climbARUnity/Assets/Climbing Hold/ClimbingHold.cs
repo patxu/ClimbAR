@@ -3,11 +3,6 @@ using System.Collections;
 
 public class ClimbingHold : MonoBehaviour
 {
-    //void OnTriggerEnter2D(Collider2D col)
-    //{
-    //    Debug.Log("There was a collision!");
-    //    gameObject.GetComponent<LineRenderer>().SetColors(UnityEngine.Color.green, UnityEngine.Color.green);
-    //}
 
     public static Sprite customHoldSprite;
     private int enterCount;
