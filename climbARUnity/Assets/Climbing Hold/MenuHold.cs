@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class MenuHold : ClimbingHold
 {
 
-    public string sceneName;
-    private IEnumerator coroutine;
     private int enterCount;
+    private IEnumerator coroutine;
+    public string sceneName;
 
     void Start()
     {
@@ -17,16 +17,16 @@ public class MenuHold : ClimbingHold
     }
     public GameObject canvasGameObject;
 
+    void OnUpdate()
+    {
+
+    }
+
     // must call setup script
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
         coroutine = TransitionToSceneWithDelay(sceneName, 0.5f);
-        TextMesh textMesh = gameObject.AddComponent<TextMesh>();
-        textMesh.characterSize = 0.1f;
-        textMesh.fontSize = 50;
-        textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
-        textMesh.anchor = TextAnchor.MiddleLeft;
     }
 
 
@@ -74,7 +74,8 @@ public class MenuHold : ClimbingHold
 
     private void OnDisable()
     {
-        TextMesh textMesh = gameObject.GetComponent<TextMesh>();
-        Destroy(textMesh);
+        // Get child text game object and destroy 
+        GameObject holdText = gameObject.transform.GetChild(0).gameObject;
+        Destroy(holdText);
     }
 }

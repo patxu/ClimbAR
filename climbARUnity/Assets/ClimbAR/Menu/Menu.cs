@@ -62,8 +62,13 @@ public class Menu : MonoBehaviour {
             }
             else
             {
+                GameObject holdText = new GameObject();
+                HoldText holdTextScript = holdText.AddComponent<HoldText>();
+                holdTextScript.setup(menuItem, holdText, menuHold);
+
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
                 menuHoldScript.setup(menuItem);
+
                 menuHold.GetComponent<LineRenderer>()
                     .startColor = UnityEngine.Color.cyan;
                 menuHold.GetComponent<LineRenderer>()
