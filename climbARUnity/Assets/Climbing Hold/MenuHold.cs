@@ -29,7 +29,6 @@ public class MenuHold : ClimbingHold
         coroutine = TransitionToSceneWithDelay(sceneName, 0.5f);
     }
 
-
     private new void OnTriggerExit2D(Collider2D col)
     {
         if (!ShouldRegisterHoldReleased(col))
@@ -39,12 +38,12 @@ public class MenuHold : ClimbingHold
 
         StopCoroutine(coroutine);
 
-        if (gameObject.GetComponent<SpriteRenderer>() != null)
+        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
         {
             Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
             gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
-               ? ClimbingHold.customHoldSprite1
-               : ClimbingHold.customHoldSprite0;
+                ? ClimbingHold.customHoldSprite1
+                : ClimbingHold.customHoldSprite0;
         }
         else
         {
@@ -55,7 +54,6 @@ public class MenuHold : ClimbingHold
         }
     }
 
-
     private new void OnTriggerEnter2D(Collider2D col)
     {
         if (!ShouldRegisterHoldGrabbed(col))
@@ -65,12 +63,12 @@ public class MenuHold : ClimbingHold
 
         StartCoroutine(coroutine);
 
-        if (gameObject.GetComponent<SpriteRenderer>() != null)
+        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
         {
             Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
             gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
-               ? ClimbingHold.customHoldSprite1
-               : ClimbingHold.customHoldSprite0;
+                ? ClimbingHold.customHoldSprite1
+                : ClimbingHold.customHoldSprite0;
         }
         else
         {
