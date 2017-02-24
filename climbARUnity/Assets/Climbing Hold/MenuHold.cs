@@ -41,10 +41,20 @@ public class MenuHold : ClimbingHold
         enterCount--;
         if (enterCount == 0)
         {
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.cyan;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.cyan;
+            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            {
+                Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+                gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
+                    ? ClimbingHold.customHoldSprite1
+                    : ClimbingHold.customHoldSprite0;
+            }
+            else
+            {
+                gameObject.GetComponent<LineRenderer>()
+                    .startColor = UnityEngine.Color.cyan;
+                gameObject.GetComponent<LineRenderer>()
+                    .endColor = UnityEngine.Color.cyan;
+            }
         }
     }
 
@@ -55,10 +65,20 @@ public class MenuHold : ClimbingHold
         enterCount++;
         if (enterCount > 0)
         {
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.green;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.green;
+            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            {
+                Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+                gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
+                    ? ClimbingHold.customHoldSprite1
+                    : ClimbingHold.customHoldSprite0;
+            }
+            else
+            {
+                gameObject.GetComponent<LineRenderer>()
+                    .startColor = UnityEngine.Color.green;
+                gameObject.GetComponent<LineRenderer>()
+                    .endColor = UnityEngine.Color.green;
+            }
         }
     }
 
