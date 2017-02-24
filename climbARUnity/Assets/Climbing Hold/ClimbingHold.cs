@@ -17,6 +17,12 @@ public class ClimbingHold : MonoBehaviour
         enterCount = 0;
         smoothingEnabled = true;
         lastCountedCollision = System.DateTime.UtcNow;
+        customHoldSprite0 = Resources.Load<Sprite>("customHold0");
+        customHoldSprite1 = Resources.Load<Sprite>("customHold1");
+        if (customHoldSprite0 == null || customHoldSprite1 == null)
+        {
+            Debug.Log("Could not find both custom hold sprites necessary in Resources folder");
+        }
     }
 
     public bool ShouldRegisterHoldGrabbed(Collider2D col)
