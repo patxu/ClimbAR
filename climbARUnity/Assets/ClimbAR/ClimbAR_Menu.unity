@@ -523,10 +523,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoneMaterial: {fileID: 2100000, guid: f2ea145c63353784985576f08398a815, type: 2}
-  BodySourceManager: {fileID: 0}
-  mainCam: {fileID: 0}
+  BodySourceManager: {fileID: 1246944923}
+  mainCam: {fileID: 13437374}
   Bone: {fileID: 0}
   updateTextMesh: No Hands Detected!
+  shouldShowTextMesh: 0
 --- !u!4 &1825385646
 Transform:
   m_ObjectHideFlags: 0
