@@ -39,11 +39,20 @@ public class MenuHold : ClimbingHold
 
         StopCoroutine(coroutine);
 
-        gameObject.GetComponent<LineRenderer>()
-            .startColor = UnityEngine.Color.cyan;
-        gameObject.GetComponent<LineRenderer>()
-            .endColor = UnityEngine.Color.cyan;
-
+        if (gameObject.GetComponent<SpriteRenderer>() != null)
+        {
+            Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
+               ? ClimbingHold.customHoldSprite1
+               : ClimbingHold.customHoldSprite0;
+        }
+        else
+        {
+            gameObject.GetComponent<LineRenderer>()
+               .startColor = UnityEngine.Color.cyan;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.cyan;
+        }
     }
 
 
@@ -55,10 +64,21 @@ public class MenuHold : ClimbingHold
         }
 
         StartCoroutine(coroutine);
-        gameObject.GetComponent<LineRenderer>()
-            .startColor = UnityEngine.Color.cyan;
-        gameObject.GetComponent<LineRenderer>()
-            .endColor = UnityEngine.Color.cyan;
+
+        if (gameObject.GetComponent<SpriteRenderer>() != null)
+        {
+            Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
+               ? ClimbingHold.customHoldSprite1
+               : ClimbingHold.customHoldSprite0;
+        }
+        else
+        {
+            gameObject.GetComponent<LineRenderer>()
+               .startColor = UnityEngine.Color.cyan;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.cyan;
+        }
     }
 
     void OnMouseDown()

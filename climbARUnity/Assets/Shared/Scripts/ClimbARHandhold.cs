@@ -48,7 +48,7 @@ static class ClimbARHandhold
             col.isTrigger = true;
 
             // Create handhold object and draw hold sprite or bounding ellipse
-            if (ClimbingHold.customHoldSprite == null)
+            if (ClimbingHold.customHoldSprite0 == null || ClimbingHold.customHoldSprite1 == null)
             {
                 Debug.Log("Drawing bounding ellipse instead of custom hold");
                 LineRenderer lineRenderer = handholds[i].GetComponent<LineRenderer>();
@@ -71,7 +71,7 @@ static class ClimbARHandhold
         float yscale)
     {
         Debug.Log("Attaching custom hold to game object before instantiation");
-        spriteRenderer.sprite = ClimbingHold.customHoldSprite;
+        spriteRenderer.sprite = ClimbingHold.customHoldSprite0;
         spriteRenderer.transform.localScale = new Vector3(xscale, yscale);
     }
 

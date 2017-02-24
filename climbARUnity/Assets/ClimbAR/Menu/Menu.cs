@@ -69,10 +69,15 @@ public class Menu : MonoBehaviour {
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
                 menuHoldScript.setup(menuItem);
 
-                menuHold.GetComponent<LineRenderer>()
-                    .startColor = UnityEngine.Color.cyan;
-                menuHold.GetComponent<LineRenderer>()
-                    .endColor = UnityEngine.Color.cyan;
+                if (menuHold.GetComponent<SpriteRenderer>() != null)
+                {
+                    menuHold.GetComponent<SpriteRenderer>().sprite = ClimbingHold.customHoldSprite1;
+                }
+                else
+                {
+                    menuHold.GetComponent<LineRenderer>().startColor = UnityEngine.Color.cyan;
+                    menuHold.GetComponent<LineRenderer>().endColor = UnityEngine.Color.cyan;
+                }
             }
         }
     }
