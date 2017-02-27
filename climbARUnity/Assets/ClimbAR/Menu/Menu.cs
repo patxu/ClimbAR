@@ -10,7 +10,7 @@ public class Menu : MonoBehaviour
     {
         { SceneUtils.SceneNames.rocManGamePlay, null },
         { SceneUtils.SceneNames.musicGame, null },
-        //{ SceneUtils.SceneNames.exampleGame, null },
+        { SceneUtils.SceneNames.exampleGame, null },
     };
 
     private GameObject[] holds;
@@ -65,6 +65,7 @@ public class Menu : MonoBehaviour
             }
             else
             {
+                // Set empty game object with textmesh component as child of menuHold
                 GameObject holdText = new GameObject();
                 HoldText holdTextScript = holdText.AddComponent<HoldText>();
                 holdTextScript.setup(menuItem, holdText, menuHold);
@@ -72,7 +73,7 @@ public class Menu : MonoBehaviour
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
                 menuHoldScript.setup(menuItem);
 
-                if (menuHold.GetComponent<SpriteRenderer>() != null)
+                if (menuHold.GetComponent<SpriteRenderer>().sprite != null)
                 {
                     menuHold.GetComponent<SpriteRenderer>().sprite = ClimbingHold.customHoldSprite1;
                 }
@@ -89,8 +90,13 @@ public class Menu : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
-            MenuHold script = hold.GetComponent<MenuHold>();
-            Destroy(script);
+            // Which components do we want to destroy?
+            MenuHold mHoldScript = hold.GetComponent<MenuHold>();
+            HoldText hTextScript = hold.GetComponent<HoldText>();
+            // Hide the rendered sprite
+            hold.GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(mHoldScript);
+            Destroy(hTextScript);
         }
     }
 

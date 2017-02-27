@@ -29,7 +29,7 @@ public class ClimbingHold : MonoBehaviour
         enterCount--;
         if (enterCount == 0)
         {
-            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
                 Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
                 gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
@@ -52,7 +52,7 @@ public class ClimbingHold : MonoBehaviour
         enterCount++;
         if (enterCount > 0)
         {
-            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
                 Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
                 gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)

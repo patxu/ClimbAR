@@ -41,7 +41,7 @@ public class MenuHold : ClimbingHold
         enterCount--;
         if (enterCount == 0)
         {
-            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
                 Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
                 gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
@@ -65,7 +65,7 @@ public class MenuHold : ClimbingHold
         enterCount++;
         if (enterCount > 0)
         {
-            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
                 Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
                 gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
@@ -89,8 +89,7 @@ public class MenuHold : ClimbingHold
 
     private void OnDisable()
     {
-        // Get child text game object and destroy 
-        GameObject holdText = gameObject.transform.GetChild(0).gameObject;
-        Destroy(holdText);
+        TextMesh textMesh = gameObject.GetComponentInChildren<TextMesh>();
+        Destroy(textMesh);
     }
 }

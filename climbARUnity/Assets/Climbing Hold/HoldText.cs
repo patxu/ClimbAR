@@ -6,8 +6,6 @@ public class HoldText : MonoBehaviour
 {
 
     public string sceneName;
-    GameObject menuHold; // parent
-    GameObject holdText; // child
 
     // Use this for initialization
     void Start()
@@ -18,15 +16,14 @@ public class HoldText : MonoBehaviour
     // must call setup script
     public void setup(string sceneName, GameObject holdText, GameObject menuHold)
     {
-        this.menuHold = menuHold;
-        this.holdText = holdText;
-        this.holdText.transform.SetParent(this.menuHold.transform); // set empty gameobject with textmesh as child of sprite
+        holdText.transform.SetParent(menuHold.transform); // set empty gameobject with textmesh as child of sprite
 
-        TextMesh textMesh = gameObject.AddComponent<TextMesh>();
+        TextMesh textMesh = holdText.AddComponent<TextMesh>();
         textMesh.characterSize = 0.1f;
-        textMesh.fontSize = 50;
+        textMesh.fontSize = 25;
         textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
-        textMesh.anchor = TextAnchor.MiddleLeft;
+        textMesh.transform.localPosition = menuHold.transform.localPosition;
+        //textMesh.anchor = TextAnchor.MiddleCenter;
 
         var parentRenderer = menuHold.GetComponent<SpriteRenderer>();
         var renderer = holdText.GetComponent<MeshRenderer>();
