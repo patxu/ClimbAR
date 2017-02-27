@@ -10,7 +10,7 @@ public class Menu : MonoBehaviour
     {
         { SceneUtils.SceneNames.rocManGamePlay, null },
         { SceneUtils.SceneNames.musicGame, null },
-        //{ SceneUtils.SceneNames.exampleGame, null },
+        { SceneUtils.SceneNames.exampleGame, null },
     };
 
     private GameObject[] holds;
