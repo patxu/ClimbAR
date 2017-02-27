@@ -18,16 +18,20 @@ We are building an augmented reality climbing game platform, with a focus on rel
 
 to allow developers to build 2D, interactive climbing games via Unity (e.g. these are some games that inspired our work [1](https://www.youtube.com/watch?v=W0ErnsIVzkc), [2](https://www.youtube.com/watch?v=kg2uRGf_04g), [3](http://augmentedclimbing.com/games/)).
 
+<img src="readme_imgs/videos/music_game_demo.gif">
+<caption>This is an example of what our project can do. David is activating and deactivating holds, each of which have an associated music track</caption>
+
 ## Game Mockups
 Some basic mockups for how we envision the project. See a simple game UI displayed on the wall. Then, grab a hold to select an option.
 
 <img src="readme_imgs/game_menu.png" width=400x>
 <img src="readme_imgs/game_route_generation.png" width=400x>
 
-## Unity Scene
-The Unity scene so far! Displays the bounding boxes (ellipses) given by the OpenCV classifier. Read about our Unity architecture to get an idea of how we use OpenCV in Unity.
+## The Unity Project
+The Unity scene so far! It displays a circle around each climbing hold, given by the OpenCV classifier. Read about our Unity architecture to get an idea of how we use OpenCV in Unity.
 
 <img src="readme_imgs/overlay2.jpg" width=400x>
+<caption>This is what the Kinect "sees". We take this, run some transformations, and then display it on the actual wall/person via a projector.</caption>
 
 ## Architecture
 - Unity – connecting OpenCV and Kinect
