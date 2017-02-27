@@ -1,6 +1,6 @@
 #include "opencvtest2.h"
 #include <opencv2/opencv.hpp>
-#include <opencv\highgui.h>
+#include <opencv2/highgui.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
@@ -22,7 +22,7 @@ extern "C" {
 			Mat image;
 			if (false)
 			{
-				image = imread(img, CV_LOAD_IMAGE_GRAYSCALE);
+				//image = imread(img, CV_LOAD_IMAGE_GRAYSCALE);
 			}
 			else
 			{
@@ -139,7 +139,8 @@ extern "C" {
 		line(cdst, Point(minX, minY), Point(minX + width, minY), Scalar(255, 0, 0), 3);
 		line(cdst, Point(minX + width, minY), Point(minX + width, minY + height), Scalar(255, 0, 0), 3);
 		line(cdst, Point(minX, minY + height), Point(minX + width, minY + height), Scalar(255, 0, 0), 3);
-		
+	
+		/*
 		if (debugImages) {
 			imwrite("C:\\Users\\f000z5z\\redOrig.jpg", redImage);
 			imwrite("C:\\Users\\f000z5z\\blueOrig.jpg", blueImage);
@@ -150,7 +151,7 @@ extern "C" {
 			imwrite("C:\\Users\\f000z5z\\blueInRange.jpg", blue);
 			imwrite("C:\\Users\\f000z5z\\canny.jpg", dst);
 			imwrite("C:\\Users\\f000z5z\\hough.jpg", cdst);
-		}
+		}*/
 		int *projectorCoord = new int[4]; //TODO: this will leak memory
 		projectorCoord[0] = minX;
 		projectorCoord[1] = minY;
