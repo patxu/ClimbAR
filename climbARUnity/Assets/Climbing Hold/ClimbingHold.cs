@@ -75,7 +75,7 @@ public class ClimbingHold : MonoBehaviour
     {
         if (ShouldRegisterHoldReleased(col))
         {
-            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
                 Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
                 gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
@@ -96,7 +96,7 @@ public class ClimbingHold : MonoBehaviour
     {
         if (ShouldRegisterHoldGrabbed(col))
         {
-            if (gameObject.GetComponent<SpriteRenderer>() != null)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
                 Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
                 gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)

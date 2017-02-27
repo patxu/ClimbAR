@@ -94,8 +94,7 @@ public class MenuHold : ClimbingHold
 
     private void OnDisable()
     {
-        // Get child text game object and destroy 
-        GameObject holdText = gameObject.transform.GetChild(0).gameObject;
-        Destroy(holdText);
+        TextMesh textMesh = gameObject.GetComponentInChildren<TextMesh>();
+        Destroy(textMesh);
     }
 }
