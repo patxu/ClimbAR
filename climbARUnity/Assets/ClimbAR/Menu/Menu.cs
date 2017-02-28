@@ -94,7 +94,7 @@ public class Menu : MonoBehaviour
             MenuHold mHoldScript = hold.GetComponent<MenuHold>();
             HoldText hTextScript = hold.GetComponent<HoldText>();
             // Hide the rendered sprite
-            hold.GetComponent<SpriteRenderer>().enabled = false;
+            // hold.GetComponent<SpriteRenderer>().enabled = false;
             Destroy(mHoldScript);
             Destroy(hTextScript);
         }
