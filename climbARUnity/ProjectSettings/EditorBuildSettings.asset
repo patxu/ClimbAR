@@ -4,22 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-<<<<<<< HEAD
-  m_Scenes: []
-=======
   m_Scenes:
   - enabled: 1
     path: Assets/ClimbAR_Start.unity
-  - enabled: 0
-    path: Assets/ClimbAR_ProjectorCalibrateAuto.unity
-  - enabled: 0
-    path: Assets/ClimbAR_ProjectorCalibrateManual.unity
-  - enabled: 0
-    path: Assets/ClimbAR_FindHolds.unity
-  - enabled: 0
-    path: Assets/ClimbAR_Menu.unity
-  - enabled: 0
-    path: Assets/Example Game/ExampleGame.unity
   - enabled: 1
     path: Assets/MusicGame.unity
   - enabled: 1
@@ -27,11 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/RocMan/RocManYouDied.unity
   - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateManual.unity
-  - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateAuto.unity
+    path: Assets/ClimbAR/ClimbAR_FindHolds.unity
   - enabled: 1
     path: Assets/ClimbAR/ClimbAR_Menu.unity
   - enabled: 1
-    path: Assets/ClimbAR/ClimbAR_FindHolds.unity
->>>>>>> 57c1f8c206ffd55b2ea17154726a991553863a31
+    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateAuto.unity
+  - enabled: 1
+    path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateManual.unity
