@@ -36,9 +36,9 @@ public class MenuHold : ClimbingHold
         if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
         {
             Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
-                ? ClimbingHold.customHoldSprite1
-                : ClimbingHold.customHoldSprite0;
+            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
+                ? Menu.customHoldSprite1
+                : Menu.customHoldSprite0;
         }
         else
         {
@@ -61,9 +61,9 @@ public class MenuHold : ClimbingHold
         if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
         {
             Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
-                ? ClimbingHold.customHoldSprite1
-                : ClimbingHold.customHoldSprite0;
+            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
+                ? Menu.customHoldSprite1
+                : Menu.customHoldSprite0;
         }
         else
         {
