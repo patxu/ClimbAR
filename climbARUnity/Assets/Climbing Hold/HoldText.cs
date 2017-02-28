@@ -19,11 +19,11 @@ public class HoldText : MonoBehaviour
         holdText.transform.SetParent(menuHold.transform); // set empty gameobject with textmesh as child of sprite
 
         TextMesh textMesh = holdText.AddComponent<TextMesh>();
-        textMesh.characterSize = 0.1f;
-        textMesh.fontSize = 25;
+        textMesh.characterSize = 0.12f;
+        textMesh.fontSize = 40;
         textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
-        textMesh.transform.localPosition = menuHold.transform.localPosition;
-        //textMesh.anchor = TextAnchor.MiddleCenter;
+        textMesh.transform.position = menuHold.transform.position;
+        textMesh.anchor = TextAnchor.MiddleLeft;
 
         var parentRenderer = menuHold.GetComponent<SpriteRenderer>();
         var renderer = holdText.GetComponent<MeshRenderer>();
