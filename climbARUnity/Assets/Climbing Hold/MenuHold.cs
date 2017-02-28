@@ -17,11 +17,6 @@ public class MenuHold : ClimbingHold
     }
     public GameObject canvasGameObject;
 
-    void OnUpdate()
-    {
-
-    }
-
     // must call setup script
     public void setup(string sceneName)
     {
