@@ -86,7 +86,7 @@ public class KinectClassify : MonoBehaviour
                     new Vector3(position.x * -1, position.y, position.z);
             }
         }
-       
+
 
         if (_Reader != null)
         {
@@ -128,7 +128,7 @@ public class KinectClassify : MonoBehaviour
             {
                 Debug.Log("In debug mode; using hardcoded bounding boxes");
                 //holdsBoundingBoxes = new int[] { 500, 500, 100, 100, 700, 700, 150, 150 };
-                holdsBoundingBoxes = new float[] { 0, 0, 100, 100, 1800, 900, 100, 100 };
+                holdsBoundingBoxes = new float[] { 500, 500, 100, 100 };
                 numHolds = holdsBoundingBoxes.Length / 4;
 
                 imageWidth = 1000;
@@ -150,7 +150,7 @@ public class KinectClassify : MonoBehaviour
                 imageWidth = frameDesc.Width;
                 imageHeight = frameDesc.Height;
                 holdsBoundingBoxes = classifyWithOpenCV(imageWidth, imageHeight);
-                if(holdsBoundingBoxes[0] < 0)
+                if (holdsBoundingBoxes[0] < 0)
                 {
                     if (!DEBUG)
                     {

@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class MenuHold : ClimbingHold
 {
 
-    public string sceneName;
-    private IEnumerator coroutine;
     private int enterCount;
+    private IEnumerator coroutine;
+    public string sceneName;
 
     void Start()
     {
@@ -22,13 +22,7 @@ public class MenuHold : ClimbingHold
     {
         this.sceneName = sceneName;
         coroutine = TransitionToSceneWithDelay(sceneName, 0.5f);
-        TextMesh textMesh = gameObject.AddComponent<TextMesh>();
-        textMesh.characterSize = 0.1f;
-        textMesh.fontSize = 50;
-        textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
-        textMesh.anchor = TextAnchor.MiddleLeft;
     }
-
 
     private new void OnTriggerExit2D(Collider2D col)
     {
@@ -39,13 +33,21 @@ public class MenuHold : ClimbingHold
 
         StopCoroutine(coroutine);
 
-        gameObject.GetComponent<LineRenderer>()
-            .startColor = UnityEngine.Color.cyan;
-        gameObject.GetComponent<LineRenderer>()
-            .endColor = UnityEngine.Color.cyan;
-
+        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
+        {
+            Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
+                ? ClimbingHold.customHoldSprite1
+                : ClimbingHold.customHoldSprite0;
+        }
+        else
+        {
+            gameObject.GetComponent<LineRenderer>()
+               .startColor = UnityEngine.Color.cyan;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.cyan;
+        }
     }
-
 
     private new void OnTriggerEnter2D(Collider2D col)
     {
@@ -55,10 +57,21 @@ public class MenuHold : ClimbingHold
         }
 
         StartCoroutine(coroutine);
-        gameObject.GetComponent<LineRenderer>()
-            .startColor = UnityEngine.Color.cyan;
-        gameObject.GetComponent<LineRenderer>()
-            .endColor = UnityEngine.Color.cyan;
+
+        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
+        {
+            Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == ClimbingHold.customHoldSprite0)
+                ? ClimbingHold.customHoldSprite1
+                : ClimbingHold.customHoldSprite0;
+        }
+        else
+        {
+            gameObject.GetComponent<LineRenderer>()
+                .startColor = UnityEngine.Color.cyan;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.cyan;
+        }
     }
 
     void OnMouseDown()
@@ -74,7 +87,7 @@ public class MenuHold : ClimbingHold
 
     private void OnDisable()
     {
-        TextMesh textMesh = gameObject.GetComponent<TextMesh>();
+        TextMesh textMesh = gameObject.GetComponentInChildren<TextMesh>();
         Destroy(textMesh);
     }
 }
