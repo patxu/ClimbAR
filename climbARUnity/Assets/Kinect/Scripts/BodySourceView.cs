@@ -124,19 +124,18 @@ public class BodySourceView : MonoBehaviour
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
             }
         }
-        if (shouldShowTextMesh)
-        {
-            setTextMesh(textMeshText);
-        }
-        else
-        {
-            setTextMesh("");
-        }
     }
 
     public void setTextMesh(string text)
     {
-        gameObject.GetComponent<TextMesh>().text = text;
+        if (shouldShowTextMesh)
+        {
+            gameObject.GetComponent<TextMesh>().text = text;
+        }
+        else
+        {
+            gameObject.GetComponent<TextMesh>().text = "";
+        }
     }
 
     private GameObject CreateBodyObject(ulong id)

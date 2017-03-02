@@ -35,17 +35,6 @@ public class Menu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("escape"))
-        {
-            if (Application.isEditor)
-            {
-                Debug.Log("Cannot quit the application (Application is editor).");
-            }
-            else
-            {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
-        }
     }
 
     void pairMenuItemsWithHolds(Dictionary<string, GameObject> menuItems)
