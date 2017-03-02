@@ -102,6 +102,7 @@ public class Menu : MonoBehaviour
             hold.GetComponent<SpriteRenderer>().enabled = false;
             ClimbARHandhold.DestroyChildren(hold);
             ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+            hold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             Destroy(mHoldScript);
             Destroy(hTextScript);
         }

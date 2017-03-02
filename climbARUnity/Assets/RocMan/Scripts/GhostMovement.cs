@@ -16,8 +16,6 @@ public class GhostMovement : MonoBehaviour
     void Start()
     {
         this.moveSpeed = 0.5f;
-        this.lives = 3;
-
         foreach (Transform child in gameObject.transform)
         {
             if (child.gameObject.tag == "HoldSprite")
@@ -25,6 +23,7 @@ public class GhostMovement : MonoBehaviour
                 childSpriteObject = child.gameObject;
             }
         }
+        this.lives = 10;
     }
 
     // Update is called once per frame
@@ -65,7 +64,7 @@ public class GhostMovement : MonoBehaviour
         // make ghost look left or right depending on x velocity
         // don't flip if == 0 so it doesn't change when moving up/down
         if (GetComponent<Rigidbody2D>().velocity.x < 0)
-{
+        {
             childSpriteObject.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (GetComponent<Rigidbody2D>().velocity.x > 0)
@@ -74,22 +73,25 @@ public class GhostMovement : MonoBehaviour
         }
     }
 
+    void ReverseDirection()
+    {
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y * (-1));
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
-        // reverse velocity
-        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
-
-        if (col != null && col.gameObject.tag == "Hold")
+        this.ReverseDirection();
+        string layerName = LayerMask.LayerToName(col.gameObject.layer);
+        switch (layerName)
         {
-        }
-        else
-        {
-            decrementLivesRemaining();
-        }
-
-        if (this.lives <= 0)
-        {
-            SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
+            case "Holds":
+                // currently a nop
+                break;
+            case "Skeleton":
+                this.lives--;
+                break;
+            default:
+                break;
         }
     }
 
