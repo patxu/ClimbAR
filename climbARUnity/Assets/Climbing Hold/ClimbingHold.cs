@@ -16,6 +16,11 @@ public class ClimbingHold : MonoBehaviour
         lastCountedCollision = System.DateTime.UtcNow;
     }
 
+    void Update()
+    {
+        
+    }
+
     public bool ShouldRegisterHoldGrabbed(Collider2D col)
     {
         if (col != null && col.gameObject.tag == "Hold")
@@ -51,9 +56,16 @@ public class ClimbingHold : MonoBehaviour
         else if (smoothingEnabled)
         {
             enterCount--;
-            lastCountedCollision = System.DateTime.UtcNow;
 
-            return true;
+            if (enterCount == 0)
+            {
+                lastCountedCollision = System.DateTime.UtcNow;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else 
         {
