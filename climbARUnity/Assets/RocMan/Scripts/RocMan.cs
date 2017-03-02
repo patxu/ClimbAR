@@ -10,8 +10,8 @@ public class RocMan : MonoBehaviour
     public Camera mainCam;
     public GameObject[] ghosts;
     public GameObject ghost;
-    //public GameObject[] handholds;
-    //public GameObject Handhold;
+    public GameObject[] handholds;
+    public GameObject Handhold;
     // TODO: include handholds when the game state requires access to them...
     // TODO: include skeleton tracking game objects...
 
@@ -52,8 +52,5 @@ public class RocMan : MonoBehaviour
 
             offset += 3;
         }
-        // TODO: in GhostMovement script add movement and collision detection -- and upon collision, migrate to new scene: https://docs.unity3d.com/Manual/CollidersOverview.html
-        // TODO: after collision stuff, add skeleton stuff
-        // TODO: after skeleton collision, brainstorm mini game to build for RocMan
     }
 }
