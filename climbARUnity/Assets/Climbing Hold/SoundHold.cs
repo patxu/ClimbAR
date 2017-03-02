@@ -62,4 +62,12 @@ public class SoundHold : ClimbingHold
         }
 
     }
+
+    private new void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!ShouldRegisterHoldReleased(collision))
+        {
+            return;
+        }
+    }
 }

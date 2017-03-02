@@ -160,7 +160,7 @@ public class BodySourceView : MonoBehaviour
                 CircleCollider2D col = jointObj.AddComponent<CircleCollider2D>();
                 col.enabled = true;
                 col.isTrigger = true;
-                col.radius = 1.0f;
+                col.radius = 4.0f;
             }
 
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
