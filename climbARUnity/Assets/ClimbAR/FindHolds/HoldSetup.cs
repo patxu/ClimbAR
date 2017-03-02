@@ -26,18 +26,6 @@ public class HoldSetup : MonoBehaviour
                 SceneManager.LoadScene(SceneUtils.SceneNames.menu);
             }
         }
-        else if (Input.GetKeyDown("escape"))
-        {
-            if (Application.isEditor)
-            {
-                Debug.Log("Cannot quit the application (Application is editor).");
-            }
-            else
-            {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
-        }
-
     }
 
     private void OnDisable()
