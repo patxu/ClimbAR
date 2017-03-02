@@ -103,6 +103,9 @@ public class Menu : MonoBehaviour
             ClimbARHandhold.DestroyChildren(hold);
             ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
             hold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            // Reset line renderer to uniform color
+            hold.GetComponent<LineRenderer>().startColor = UnityEngine.Color.cyan;
+            hold.GetComponent<LineRenderer>().endColor = UnityEngine.Color.cyan;
             Destroy(mHoldScript);
             Destroy(hTextScript);
         }
