@@ -50,7 +50,7 @@ public class HoldSetup : MonoBehaviour
         {
             if (Application.isEditor)
             {
-                Debug.Log("Cannot quit the application (Application is editor).");
+                ClimbARUtils.LogError("Cannot quit the application (Application is editor).");
             }
             else
             {

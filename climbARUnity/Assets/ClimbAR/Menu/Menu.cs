@@ -26,7 +26,7 @@ public class Menu : MonoBehaviour
         customHoldSprite1 = Resources.Load<Sprite>("customHold1");
         if (customHoldSprite0 == null || customHoldSprite1 == null)
         {
-            Debug.Log("Could not find both custom hold sprites necessary in Resources folder");
+            ClimbARUtils.LogError("Could not find both custom hold sprites necessary in Resources folder");
         }
         pairMenuItemsWithHolds(menuItems);
         attachMenuHoldToHold(menuItems);
@@ -39,7 +39,7 @@ public class Menu : MonoBehaviour
         {
             if (Application.isEditor)
             {
-                Debug.Log("Cannot quit the application (Application is editor).");
+                ClimbARUtils.LogError("Cannot quit the application (Application is editor).");
             }
             else
             {
