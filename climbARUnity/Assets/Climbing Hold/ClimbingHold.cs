@@ -54,7 +54,7 @@ public class ClimbingHold : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         // if after the sleep we are still in pending state, change to released
-        if (currentState == States.ReleasePending) ;
+        if (currentState == States.ReleasePending) 
         {
             currentState = States.Released;
             endStateKnown = true;
