@@ -11,7 +11,10 @@ using UnityEditor;
 public class KinectClassify : MonoBehaviour
 {
     // true if you want to use the hardcoded bounding boxes
-    bool DEBUG = false;
+    private bool DEBUG = false;
+
+    public readonly string ClassifyImage = "GrabFrameAndClassify";
+    public readonly string ClassifyImageWithDelay = "GrabFrameAndClassifyWithDelay";
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -209,6 +212,12 @@ public class KinectClassify : MonoBehaviour
             Debug.Log("Frame was null");
         }
         classifyRunning = false;
+    }
+
+    IEnumerable GrabFrameAndClassifyWithDelay(int delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StartCoroutine("GrabFrameAndClassify");
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
