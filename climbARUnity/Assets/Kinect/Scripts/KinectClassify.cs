@@ -59,7 +59,7 @@ public class KinectClassify : MonoBehaviour
         }
         else
         {
-            Debug.Log("cannot get Kinect sensor");
+            ClimbARUtils.LogError("cannot get Kinect sensor");
         }
         GameObject bodyView = GameObject.Find("KinectBodyView");
         BodySourceView view = bodyView.GetComponent<BodySourceView>();
@@ -160,7 +160,7 @@ public class KinectClassify : MonoBehaviour
                         frame.Dispose();
                         frame = null;
                     }
-                    Debug.Log("Error with classifying. Exiting coroutine");
+                    ClimbARUtils.LogError("Error with classifying. Exiting coroutine");
                     classifyRunning = false;
                     yield break;
                 }
@@ -209,7 +209,7 @@ public class KinectClassify : MonoBehaviour
         }
         else
         {
-            Debug.Log("Frame was null");
+            ClimbARUtils.LogError("Frame was null");
         }
         classifyRunning = false;
     }
@@ -257,7 +257,7 @@ public class KinectClassify : MonoBehaviour
 
         if (holdCount[0] < 1)
         {
-            Debug.Log("Error with classifier");
+            ClimbARUtils.LogError("Error with classifier");
             OpenCV.cleanupBBArray();
             float[] error = new float[1];
             error[0] = -1f;
