@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 using System.Threading;
 
-
 public class ClimbingHold : MonoBehaviour
 {
     private int enterCount;
@@ -16,7 +15,6 @@ public class ClimbingHold : MonoBehaviour
     public States currentState;
 
     private Guid id;
-
 
     void Start()
     {
