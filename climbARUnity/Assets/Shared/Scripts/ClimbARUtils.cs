@@ -56,4 +56,9 @@ static class ClimbARUtils
                            (y / camHeight - 0.5f) * -1f);
     }
 
+    public static void LogError(string error)
+    {
+        Debug.LogError("ClimbAR Error: " + error);
+    }
+
 }

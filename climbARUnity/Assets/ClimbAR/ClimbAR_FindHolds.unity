@@ -125,6 +125,7 @@ MonoBehaviour:
   mainCam: {fileID: 2038593976}
   Bone: {fileID: 0}
   updateTextMesh: No Hands Detected!
+  shouldShowTextMesh: 0
 --- !u!4 &397444429
 Transform:
   m_ObjectHideFlags: 0
@@ -633,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1e40de6a6056c4cb3dcd5b072db656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  classifier: {fileID: 1916355715}
 --- !u!224 &2038593980
 RectTransform:
   m_ObjectHideFlags: 0

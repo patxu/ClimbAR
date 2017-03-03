@@ -4,10 +4,30 @@ using UnityEngine.SceneManagement;
 public class HoldSetup : MonoBehaviour
 {
 
-    GameObject[] holds;
+    private GameObject[] holds;
+    public KinectClassify classifier;
+    public bool autoClassify = true;
+    public bool autoTransition = true;
 
     private void Start()
     {
+        if (autoClassify)
+        {
+            if (classifier == null)
+            {
+                ClimbARUtils.LogError("No classifier specified for hold setup so cannot automatically classify and transition");
+            }
+            else
+            {
+                StateManager.instance.debugView = false;
+                classifier.StartCoroutine(classifier.ClassifyImage);
+            }
+
+            if (autoTransition)
+            {
+                SceneManager.LoadScene(SceneUtils.SceneNames.menu);
+            }
+        }
     }
 
     void Update()
@@ -19,7 +39,7 @@ public class HoldSetup : MonoBehaviour
             // don't move until we've flipped hold orientation - future scenes shouldn't have the live image
             if (StateManager.instance.debugView == true)
             {
-                Debug.Log("Color view must be toggled off! Press <t>");
+                ClimbARUtils.LogError("Color view must be toggled off! Press <t>");
             }
             else
             {
