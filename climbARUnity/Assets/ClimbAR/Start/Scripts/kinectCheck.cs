@@ -61,5 +61,6 @@ public class kinectCheck : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        Destroy(this, 1);
     }
 }
