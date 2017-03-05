@@ -36,13 +36,13 @@ The Unity scene so far! It displays a circle around each climbing hold, given by
 *This is what our game looks like from the perspective of the Kinect. We take this, run some transformations, and then display it on the actual wall/person via a projector.*
 
 ## Architecture
+- OpenCV
+  - read about specifics with the OpenCV wrapper [here](./OpenCVUnity/OpenCVUnity)
 - Unity – connecting OpenCV and Kinect
-  - following [this guide](http://dogfeatherdesign.com/opencv-3-0-microsoft-visual-studio-2015-cmake-and-c/), we build OpenCV via CMake as a dll (Dynamically-Linked Library) for Windows
-  - we write a C++ wrapper that imports OpenCV
-  - we build and export this wrapper as a dll
-  - a Unity C# script imports the dll so now we can now use OpenCV! (there is an OpenCV asset on the Unity asset store, but it costs $95 so we opted to write our own wrapper)
-  - use the Kinect SDK to access live color images, skeleton, etc. – we give this data to OpenCV to do real-time classification
-- Hold Recognition Classifier
+  - OpenCV exists in C++ but not in C#, so we build it as a dll
+  - a Unity C# script imports the dll so now we can now use OpenCV in Unity! while there is an OpenCV asset on the Unity asset store, but it costs $95 so we opted to write our own wrapper
+  - we use the Kinect SDK to access live color images, skeleton and give this data to OpenCV to do classification on each game startup
+- OpenCV Hold Recognition Classifier
   - start with ~500 positive & negative images focusing on climbing holds and train an OpenCV custom object detection classifier (Haar classifier) to detect climbing holds
     - we have to define a bounding box for our custom object in each of our images. this took a while until David smartened up and chose to make the bounding box the entire image by making each image a close-up of the climbing hold.
     - we store all of our images on a [Google Drive](https://drive.google.com/drive/folders/0B2FwMr5goxlja1JJWW1TZlhCM2s?usp=sharing)

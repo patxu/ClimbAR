@@ -11,7 +11,10 @@ using UnityEditor;
 public class KinectClassify : MonoBehaviour
 {
     // true if you want to use the hardcoded bounding boxes
-    bool DEBUG = false;
+    private bool DEBUG = false;
+
+    public readonly string ClassifyImage = "GrabFrameAndClassify";
+    public readonly string ClassifyImageWithDelay = "GrabFrameAndClassifyWithDelay";
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -56,7 +59,7 @@ public class KinectClassify : MonoBehaviour
         }
         else
         {
-            Debug.Log("cannot get Kinect sensor");
+            ClimbARUtils.LogError("cannot get Kinect sensor");
         }
         GameObject bodyView = GameObject.Find("KinectBodyView");
         BodySourceView view = bodyView.GetComponent<BodySourceView>();
@@ -157,7 +160,7 @@ public class KinectClassify : MonoBehaviour
                         frame.Dispose();
                         frame = null;
                     }
-                    Debug.Log("Error with classifying. Exiting coroutine");
+                    ClimbARUtils.LogError("Error with classifying. Exiting coroutine");
                     classifyRunning = false;
                     yield break;
                 }
@@ -206,9 +209,15 @@ public class KinectClassify : MonoBehaviour
         }
         else
         {
-            Debug.Log("Frame was null");
+            ClimbARUtils.LogError("Frame was null");
         }
         classifyRunning = false;
+    }
+
+    IEnumerable GrabFrameAndClassifyWithDelay(int delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StartCoroutine("GrabFrameAndClassify");
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
@@ -248,7 +257,7 @@ public class KinectClassify : MonoBehaviour
 
         if (holdCount[0] < 1)
         {
-            Debug.Log("Error with classifier");
+            ClimbARUtils.LogError("Error with classifier");
             OpenCV.cleanupBBArray();
             float[] error = new float[1];
             error[0] = -1f;
