@@ -68,14 +68,11 @@ public class ManualSync : MonoBehaviour
 
         if (Input.GetKeyDown("escape"))
         {
-            if (Application.isEditor)
-            {
-                Debug.Log("Cannot quit the application (Application is editor).");
-            }
-            else
-            {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
+            GameObject confirmCanvas = GameObject.Find("ConfirmCanvas");
+            CanvasGroup exitGroup = confirmCanvas.GetComponent<CanvasGroup>();
+            exitGroup.blocksRaycasts = true;
+            exitGroup.alpha = 1;
+            exitGroup.interactable = true;
         }
     }
 

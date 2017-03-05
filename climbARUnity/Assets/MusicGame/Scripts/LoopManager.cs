@@ -10,6 +10,7 @@ public class LoopManager : MonoBehaviour
     public AudioClip[] clips;
     private Dictionary<int, int> soundMap;
     private bool[] activeSounds;
+    private bool[] saveState;
     private float SLEEP_TIME = 1.0f;
 
     // Use this for initialization
@@ -24,6 +25,7 @@ public class LoopManager : MonoBehaviour
         clips = new AudioClip[audioPaths.Length];
         sources = new AudioSource[audioPaths.Length];
         activeSounds = new bool[audioPaths.Length];
+        saveState = new bool[audioPaths.Length];
         for (int i = 0; i < audioPaths.Length; i++)
         {
             sources[i] = gameObject.AddComponent<AudioSource>();
@@ -31,6 +33,28 @@ public class LoopManager : MonoBehaviour
             activeSounds[i] = false;
         }
         StartCoroutine("StartTrackPlayback");
+    }
+
+    public void PauseSounds()
+    {
+        activeSounds.CopyTo(saveState, 0);
+        
+        // After saving state, mute all 
+        foreach (KeyValuePair<int, int> entry in soundMap)
+        {
+            Mute(entry.Key);
+        }
+    }
+
+    public void UnPauseSounds()
+    {
+        for (int i = 0; i < saveState.Length; i++)
+        {
+            if (saveState[i])
+            {
+                Unmute(i);
+            }
+        }
     }
 
     public void RegisterHold(int holdIndex, int soundId)
@@ -42,6 +66,7 @@ public class LoopManager : MonoBehaviour
     {
         if (soundMap.ContainsKey(holdIndex))
         {
+            activeSounds[holdIndex] = false;
             sources[holdIndex].volume = 0;
         }
     }
@@ -50,6 +75,7 @@ public class LoopManager : MonoBehaviour
     {
         if (soundMap.ContainsKey(holdIndex))
         {
+            activeSounds[holdIndex] = true;
             sources[holdIndex].volume = 1;
         }
     }
