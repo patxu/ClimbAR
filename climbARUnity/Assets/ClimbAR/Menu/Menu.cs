@@ -14,6 +14,7 @@ public class Menu : MonoBehaviour
     };
 
     private GameObject[] holds;
+    public GameObject customHoldSprite;
     public static Sprite customHoldSprite0;
     public static Sprite customHoldSprite1;
     public static float spriteXScale;
@@ -75,15 +76,20 @@ public class Menu : MonoBehaviour
             }
             else
             {
-                ClimbARHandhold.setHoldActivated(menuHold, true);
 
                 if (customHoldSprite0 != null && menuItem.Equals(SceneUtils.SceneNames.rocManGamePlay))
                 {
-                    ClimbARHandhold.DrawHoldSprite(menuHold.GetComponent<SpriteRenderer>(),
+                    GameObject customSpriteObject = GameObject.Instantiate(customHoldSprite);
+                    customSpriteObject.transform.SetParent(menuHold.transform);
+                    customSpriteObject.transform.localPosition = new Vector3(0,0,0);
+
+                    ClimbARHandhold.DrawHoldSprite(customSpriteObject.GetComponent<SpriteRenderer>(),
                         spriteXScale, spriteYScale);
+
                 }
                 else
                 {
+                    ClimbARHandhold.ActivateHoldLineRenderer(menuHold, true);
                     ClimbARHandhold.setHoldColor(menuHold, UnityEngine.Color.cyan);
                 }
 
@@ -106,9 +112,8 @@ public class Menu : MonoBehaviour
             HoldText hTextScript = hold.GetComponent<HoldText>();
             // Hide the rendered sprite
             hold.GetComponent<SpriteRenderer>().enabled = false;
-            // Ugly - that we need to rescale the hold upon scene change
-            hold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-            ClimbARHandhold.setHoldActivated(hold, false);
+            ClimbARHandhold.DestroyChildren(hold);
+            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
             Destroy(mHoldScript);
             Destroy(hTextScript);
         }

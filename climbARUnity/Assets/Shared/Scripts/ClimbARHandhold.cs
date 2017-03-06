@@ -123,6 +123,14 @@ static class ClimbARHandhold
         }
     }
 
+    public static void DestroyChildren(GameObject hold)
+    {
+        foreach (Transform child in hold.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
     public static void setHoldColor(GameObject hold, UnityEngine.Color color)
     {
         hold.GetComponent<LineRenderer>()
@@ -131,30 +139,9 @@ static class ClimbARHandhold
           .endColor = color;
     }
 
-    public static void setHoldActivated(GameObject hold, bool isActive)
+    public static void ActivateHoldLineRenderer(GameObject hold, bool isActive)
     {
         hold.GetComponent<LineRenderer>().enabled = isActive;
     }
 
-    public static GameObject[] GetValidClimbingHolds(Camera c)
-    {
-        GameObject[] holds = GameObject.FindGameObjectsWithTag("Hold");
-        List<GameObject> visibleHolds = new List<GameObject>();
-        foreach (GameObject hold in holds)
-        {
-            Vector3 targetDir = hold.transform.position - c.transform.position;
-            float angle = Vector3.Angle(targetDir, c.transform.forward);
-
-            if (angle < 5.0f) {
-                visibleHolds.Add(hold);
-            }
-            else
-            {
-                GameObject.Destroy(hold);
-            }
-        }
-
-        return visibleHolds.ToArray();
-
-    }
 }

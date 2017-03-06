@@ -157,6 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4686d76eb62d2594881d47523b98d39e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customHoldSprite: {fileID: 1187821414988374, guid: f2c6a3dbd0f279843981f20398c44895,
+    type: 2}
 --- !u!114 &13437376
 MonoBehaviour:
   m_ObjectHideFlags: 0

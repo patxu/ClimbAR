@@ -52,7 +52,7 @@ public class MusicGame : MonoBehaviour
             }
             else
             {
-                ClimbARHandhold.setHoldActivated(soundHold, true);
+                ClimbARHandhold.ActivateHoldLineRenderer(soundHold, true);
                 ClimbingHold holdScript = soundHold.GetComponent<ClimbingHold>();
                 Destroy(holdScript);
 
@@ -91,7 +91,7 @@ public class MusicGame : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
-            ClimbARHandhold.setHoldActivated(hold, false);
+            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
             SoundHold script = hold.GetComponent<SoundHold>();
             Destroy(script);
         }
