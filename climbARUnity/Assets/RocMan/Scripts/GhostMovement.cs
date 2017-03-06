@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GhostMovement : MonoBehaviour
 {
-
     // State variables
     private float moveSpeed;
     public RocMan rocmanScript;
+    public int xPos;
+    public int yPos; 
 
     // Use this for initialization
     void Start()
@@ -22,6 +23,9 @@ public class GhostMovement : MonoBehaviour
     {
         if (this.rocmanScript.playing)
         {
+            Vector3 pos = Camera.main.WorldToScreenPoint(GetComponent<Transform>().position);
+            this.xPos = (int) pos.x;
+            this.yPos = (int) pos.y;
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, this.moveSpeed);
@@ -43,10 +47,11 @@ public class GhostMovement : MonoBehaviour
             {
                 this.rocmanScript.ToggleEndGame();
             }
-        }
-        else
-        {
-            // Listen for 'm' or 'r'
+            // Avoid moving out of bounds
+            if (xPos < 0 || xPos > Screen.width || yPos < 0 || yPos > Screen.height)
+            {
+                this.ReverseDirection();
+            }
         }
     }
 
