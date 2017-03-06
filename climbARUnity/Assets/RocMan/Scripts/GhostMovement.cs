@@ -57,12 +57,10 @@ public class GhostMovement : MonoBehaviour
         // don't flip if == 0 so it doesn't change when moving up/down
         if (GetComponent<Rigidbody2D>().velocity.x < 0)
         {
-            Debug.Log("look left");
             GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (GetComponent<Rigidbody2D>().velocity.x > 0)
         {
-            Debug.Log("look right");
             GetComponent<SpriteRenderer>().flipX = false;
         }
     }
