@@ -71,6 +71,7 @@ static class ClimbARHandhold
             Menu.spriteYScale = col.radius / camWidth / 2;
 
             LineRenderer lineRenderer = newHandhold.GetComponent<LineRenderer>();
+            lineRenderer.enabled = false;
             DrawBoundingEllipse(lineRenderer, col.radius, col.radius);
        }
         return handholds.ToArray();

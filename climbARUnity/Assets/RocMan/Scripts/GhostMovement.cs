@@ -10,12 +10,21 @@ public class GhostMovement : MonoBehaviour
     private int lives;
     private bool offScreen;
     public GameObject livesRemaining;
+    private GameObject childSpriteObject;
 
     // Use this for initialization
     void Start()
     {
         this.moveSpeed = 0.5f;
         this.lives = 3;
+
+        foreach (Transform child in gameObject.transform)
+        {
+            if (child.gameObject.tag == "HoldSprite")
+            {
+                childSpriteObject = child.gameObject;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -39,8 +48,8 @@ public class GhostMovement : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
         }
 
-        // keep ghost on screen
-        if (!GetComponent<SpriteRenderer>().isVisible)
+             // keep ghost on screen
+        if (!childSpriteObject.GetComponent<SpriteRenderer>().isVisible)
         {
             if (offScreen == false) // was on screen before, now off, so reverse 
             {
@@ -56,12 +65,12 @@ public class GhostMovement : MonoBehaviour
         // make ghost look left or right depending on x velocity
         // don't flip if == 0 so it doesn't change when moving up/down
         if (GetComponent<Rigidbody2D>().velocity.x < 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
+{
+            childSpriteObject.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (GetComponent<Rigidbody2D>().velocity.x > 0)
         {
-            GetComponent<SpriteRenderer>().flipX = false;
+            childSpriteObject.GetComponent<SpriteRenderer>().flipX = false;
         }
     }
 

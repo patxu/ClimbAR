@@ -46,14 +46,6 @@ public class RocMan : MonoBehaviour
             ghostSpriteObject.transform.localScale = scale;
             ghostSpriteObject.transform.SetParent(this.ghosts[i].transform);
 
-            Rigidbody2D rigid = this.ghosts[i].AddComponent<Rigidbody2D>();
-            rigid.isKinematic = true;
-
-            CircleCollider2D col = this.ghosts[i].AddComponent<CircleCollider2D>();
-            col.radius = 4.0f;
-            col.enabled = true;
-            col.isTrigger = true;
-
             this.ghosts[i].GetComponent<GhostMovement>().livesRemaining = livesRemaining;
 
             offset += 3;
