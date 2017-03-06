@@ -165,11 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d12ab5889da54946b70faf925a90fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handholds: []
-  ClimbingHold: {fileID: 1000012162831070, guid: 45cfefdd50ca97e43b5609d3f47b52f9,
-    type: 2}
-  mainCam: {fileID: 811513269}
-  kinectClassifier: {fileID: 0}
 --- !u!114 &811513265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,10 +433,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoneMaterial: {fileID: 2100000, guid: f2ea145c63353784985576f08398a815, type: 2}
   BodySourceManager: {fileID: 0}
-  mainCam: {fileID: 0}
+  mainCam: {fileID: 811513269}
   Bone: {fileID: 0}
-  updateTextMesh: No Hands Detected!
-  shouldShowTextMesh: 0
+  isAHandDetected: 0
 --- !u!4 &920730295
 Transform:
   m_ObjectHideFlags: 0

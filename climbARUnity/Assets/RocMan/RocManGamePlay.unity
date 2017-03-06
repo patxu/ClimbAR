@@ -271,11 +271,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoneMaterial: {fileID: 2100000, guid: f2ea145c63353784985576f08398a815, type: 2}
-  BodySourceManager: {fileID: 0}
-  mainCam: {fileID: 0}
+  BodySourceManager: {fileID: 1557256090}
+  mainCam: {fileID: 2038593976}
   Bone: {fileID: 0}
-  updateTextMesh: No Hands Detected!
-  shouldShowTextMesh: 0
+  isAHandDetected: 0
 --- !u!4 &1112410178
 Transform:
   m_ObjectHideFlags: 0
@@ -489,7 +488,6 @@ GameObject:
   - component: {fileID: 2038593974}
   - component: {fileID: 2038593973}
   - component: {fileID: 2038593972}
-  - component: {fileID: 2038593978}
   - component: {fileID: 2038593979}
   m_Layer: 0
   m_Name: Main Camera
@@ -579,22 +577,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2038593978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2038593971}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d12ab5889da54946b70faf925a90fcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handholds: []
-  ClimbingHold: {fileID: 1000012162831070, guid: 45cfefdd50ca97e43b5609d3f47b52f9,
-    type: 2}
-  mainCam: {fileID: 2038593976}
-  kinectClassifier: {fileID: 1916355715}
 --- !u!114 &2038593979
 MonoBehaviour:
   m_ObjectHideFlags: 0

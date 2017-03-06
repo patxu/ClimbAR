@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ExitManager : MonoBehaviour {
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class ExitManager : MonoBehaviour
+{
+    // Use this for initialization
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
     public void ExitConfirmed()
     {
         if (Application.isEditor)
@@ -20,7 +23,7 @@ public class ExitManager : MonoBehaviour {
             ExitCancled();
         }
         else
-        { 
+        {
             System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
     }
@@ -31,7 +34,7 @@ public class ExitManager : MonoBehaviour {
         if (bodyView != null)
         {
             BodySourceView view = bodyView.GetComponent<BodySourceView>();
-            view.shouldShowTextMesh = true;
+            view.isAHandDetected = true;
         }
 
         GameObject confirmCanvas = GameObject.Find("ConfirmCanvas");

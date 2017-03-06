@@ -52,7 +52,7 @@ public class BodySourceManager : MonoBehaviour
         {
             GameObject bodyView = GameObject.Find("KinectBodyView");
             BodySourceView view = bodyView.GetComponent<BodySourceView>();
-            view.shouldShowTextMesh = false;
+            view.isAHandDetected = false;
 
             GameObject confirmCanvas = GameObject.Find("ConfirmCanvas");
             CanvasGroup exitGroup = confirmCanvas.GetComponent<CanvasGroup>();
