@@ -46,10 +46,10 @@ static class ClimbARHandhold
             newHandhold.transform.localPosition = pos;
             newHandhold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
-            Vector3 targetDir = newHandhold.transform.position - camera.transform.position;
-            float angle = Vector3.Angle(targetDir, camera.transform.forward);
+            Vector3 screenPoint = camera.WorldToViewportPoint(newHandhold.transform.position);
+            bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
 
-            if (angle < 5.0f)
+            if (onScreen)
             {
                 handholds.Add(newHandhold);
             }
