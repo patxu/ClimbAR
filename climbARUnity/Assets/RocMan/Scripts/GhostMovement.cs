@@ -36,11 +36,16 @@ public class GhostMovement : MonoBehaviour
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
         }
+
+        if (!GetComponent<SpriteRenderer>().isVisible)
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y * (-1));
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
         this.lives--;
         Debug.Log("You now have " + this.lives + " lives.");
         if (this.lives <= 0)

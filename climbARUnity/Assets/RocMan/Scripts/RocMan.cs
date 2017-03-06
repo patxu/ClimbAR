@@ -25,7 +25,7 @@ public class RocMan : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     void CreateGhosts()
@@ -46,7 +46,7 @@ public class RocMan : MonoBehaviour
             rigid.isKinematic = true;
 
             CircleCollider2D col = this.ghosts[i].AddComponent<CircleCollider2D>();
-            col.radius = 0.1f;
+            col.radius = 4.0f;
             col.enabled = true;
             col.isTrigger = true;
 
