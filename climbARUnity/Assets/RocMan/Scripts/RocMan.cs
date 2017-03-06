@@ -17,7 +17,7 @@ public class RocMan : MonoBehaviour
     public TextMesh gameOverText;
     public TextMesh gameStartText;
     public const int numGhosts = 1;
-    public int lives = 10;
+    public int lives = 100;
     public bool playing = false;
 
     // Private variables
@@ -105,6 +105,7 @@ public class RocMan : MonoBehaviour
         // Toggle on screen game text 
         this.gameOverText.text = "";
         this.gameStartText.text = "";
+        this.livesText.text = "Number of Lives: " + this.lives;
         // Allow game state to resume
         this.playing = true;
     }
