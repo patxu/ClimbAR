@@ -7,35 +7,41 @@ public class GhostMovement : MonoBehaviour
 
     // State variables
     private float moveSpeed;
-    private int lives;
-    private bool offScreen;
+    public RocMan rocmanScript;
 
     // Use this for initialization
     void Start()
     {
         this.moveSpeed = 0.5f;
-        this.lives = 10;
+        this.rocmanScript = Camera.main.GetComponent<RocMan>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // keyboard controls
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (this.rocmanScript.playing)
         {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, this.moveSpeed);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, 0);
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, 0);
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, this.moveSpeed);
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, -this.moveSpeed);
+            }
+            // For Debug
+            if (Input.GetKey("space"))
+            {
+                this.rocmanScript.ToggleEndGame();
+            }
         }
     }
 
@@ -51,10 +57,9 @@ public class GhostMovement : MonoBehaviour
         switch (layerName)
         {
             case "Holds":
-                // currently a nop
                 break;
             case "Skeleton":
-                this.lives--;
+                this.rocmanScript.LoseLife();
                 break;
             default:
                 break;
