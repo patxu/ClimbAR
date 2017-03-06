@@ -42,10 +42,7 @@ public class MenuHold : ClimbingHold
         }
         else
         {
-            gameObject.GetComponent<LineRenderer>()
-               .startColor = UnityEngine.Color.cyan;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.cyan;
+            ClimbARHandhold.setHoldColor(gameObject, UnityEngine.Color.cyan);
         }
     }
 
@@ -67,10 +64,7 @@ public class MenuHold : ClimbingHold
         }
         else
         {
-            gameObject.GetComponent<LineRenderer>()
-                .startColor = UnityEngine.Color.cyan;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.cyan;
+            ClimbARHandhold.setHoldColor(gameObject, UnityEngine.Color.cyan);
         }
     }
 

@@ -6,6 +6,10 @@ using UnityEngine;
 
 static class ClimbARHandhold
 {
+
+    public static UnityEngine.Color ENTERED_COLOR = UnityEngine.Color.green;
+    public static UnityEngine.Color RESET_COLOR = UnityEngine.Color.red;
+
     // holdBoundingBoxes should be transformed to the final "projector" space
     public static GameObject[] InstantiateHandholds(
         GameObject Handhold, // handhold prefab
@@ -16,7 +20,10 @@ static class ClimbARHandhold
         float camWidth = camHeight * camera.aspect;
 
         int numHolds = holdBoundingBoxes.Length / 4;
-        GameObject[] handholds = new GameObject[numHolds];
+        
+        List<GameObject> handholds = new List<GameObject>();
+
+        GameObject newHandhold;
 
         for (int i = 0; i < numHolds; i++)
         {
@@ -27,8 +34,8 @@ static class ClimbARHandhold
             float width = (holdBoundingBoxes[holdIndex + 2] / 2) * camWidth; //divide by 2 because it is a radius
             float height = (holdBoundingBoxes[holdIndex + 3] / 2) * camHeight;
 
-            handholds[i] = GameObject.Instantiate(Handhold);
-            handholds[i].name = "Handhold " + i;
+            newHandhold = GameObject.Instantiate(Handhold);
+            newHandhold.name = "Handhold " + i;
 
             Vector2 pos = new Vector2(x + width, (y + height) * -1f);
 
@@ -36,24 +43,38 @@ static class ClimbARHandhold
             {
                 pos.x = pos.x * -1;
             }
-            handholds[i].transform.localPosition = pos;
-            handholds[i].transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            newHandhold.transform.localPosition = pos;
+            newHandhold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
-            Rigidbody2D rigid = handholds[i].AddComponent<Rigidbody2D>();
+            Vector3 screenPoint = camera.WorldToViewportPoint(newHandhold.transform.position);
+            bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+
+            if (onScreen)
+            {
+                handholds.Add(newHandhold);
+            }
+            else
+            {
+                GameObject.Destroy(newHandhold);
+                continue;
+            }
+
+            Rigidbody2D rigid = newHandhold.AddComponent<Rigidbody2D>();
             rigid.isKinematic = true;
 
-            CircleCollider2D col = handholds[i].AddComponent<CircleCollider2D>();
+            CircleCollider2D col = newHandhold.AddComponent<CircleCollider2D>();
             col.radius = (float)Math.Max(width, height);
             col.enabled = true;
             col.isTrigger = true;
-
+            
             Menu.spriteXScale = col.radius / camWidth / 2;
             Menu.spriteYScale = col.radius / camWidth / 2;
 
-            LineRenderer lineRenderer = handholds[i].GetComponent<LineRenderer>();
+            LineRenderer lineRenderer = newHandhold.GetComponent<LineRenderer>();
+            lineRenderer.enabled = false;
             DrawBoundingEllipse(lineRenderer, col.radius, col.radius);
        }
-        return handholds;
+        return handholds.ToArray();
     }
 
     // draw and instantiate custom sprite for climbing hold
@@ -64,6 +85,7 @@ static class ClimbARHandhold
     {
         spriteRenderer.sprite = Menu.customHoldSprite0;
         spriteRenderer.transform.localScale = new Vector3(xscale, yscale);
+        spriteRenderer.enabled = true;
     }
 
     // draw the bounding ellipse of the climbing hold
@@ -72,8 +94,8 @@ static class ClimbARHandhold
         float xradius,
         float yradius)
     {
-        lineRenderer.startColor = Color.red;
-        lineRenderer.endColor = Color.red;
+        lineRenderer.startColor = Color.cyan;
+        lineRenderer.endColor = Color.cyan;
 
         float x;
         float y;
@@ -102,19 +124,25 @@ static class ClimbARHandhold
         }
     }
 
-    public static GameObject[] GetValidClimbingHolds()
+    public static void DestroyChildren(GameObject hold)
     {
-        GameObject[] holds = GameObject.FindGameObjectsWithTag("Hold");
-        List<GameObject> visibleHolds = new List<GameObject>();
-        foreach (GameObject hold in holds)
+        foreach (Transform child in hold.transform)
         {
-            if (hold.GetComponent<Renderer>().isVisible)
-            {
-                visibleHolds.Add(hold);
-            }
+            GameObject.Destroy(child.gameObject);
         }
-
-        return visibleHolds.ToArray();
-
     }
+
+    public static void setHoldColor(GameObject hold, UnityEngine.Color color)
+    {
+        hold.GetComponent<LineRenderer>()
+          .startColor = color;
+        hold.GetComponent<LineRenderer>()
+          .endColor = color;
+    }
+
+    public static void ActivateHoldLineRenderer(GameObject hold, bool isActive)
+    {
+        hold.GetComponent<LineRenderer>().enabled = isActive;
+    }
+
 }

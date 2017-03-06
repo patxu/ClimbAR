@@ -2,12 +2,14 @@
 using System.Collections;
 using System;
 
+
 public class ClimbingHold : MonoBehaviour
 {
-   private int enterCount;
+    private int enterCount;
     private System.DateTime lastCountedCollision;
     private int smoothing = 750;
     public bool smoothingEnabled;
+
 
     void Start()
     {
@@ -77,21 +79,15 @@ public class ClimbingHold : MonoBehaviour
     {
         if (ShouldRegisterHoldReleased(col))
         {
-            gameObject.GetComponent<LineRenderer>()
-               .startColor = UnityEngine.Color.red;
-            gameObject.GetComponent<LineRenderer>()
-               .endColor = UnityEngine.Color.red;
-       }
+            ClimbARHandhold.setHoldColor(gameObject, ClimbARHandhold.RESET_COLOR);
+        }
     }
     public void OnTriggerEnter2D(Collider2D col)
     {
         if (ShouldRegisterHoldGrabbed(col))
         {
-            gameObject.GetComponent<LineRenderer>()
-              .startColor = UnityEngine.Color.green;
-            gameObject.GetComponent<LineRenderer>()
-              .endColor = UnityEngine.Color.green;
-       }
+            ClimbARHandhold.setHoldColor(gameObject, ClimbARHandhold.ENTERED_COLOR);
+        }
     }
 
     void OnMouseDown()

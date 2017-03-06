@@ -13,6 +13,7 @@ public class Menu : MonoBehaviour
     };
 
     private GameObject[] holds;
+    public GameObject customHoldSprite;
     public static Sprite customHoldSprite0;
     public static Sprite customHoldSprite1;
     public static float spriteXScale;
@@ -38,7 +39,7 @@ public class Menu : MonoBehaviour
 
     void pairMenuItemsWithHolds(Dictionary<string, GameObject> menuItems)
     {
-        holds = ClimbARHandhold.GetValidClimbingHolds();
+        holds = GameObject.FindGameObjectsWithTag("Hold");
         List<string> keys = new List<string>(menuItems.Keys);
         if (holds.Length < keys.Count)
         {
@@ -55,7 +56,7 @@ public class Menu : MonoBehaviour
     void attachMenuHoldToHold(Dictionary<string, GameObject> menuItems)
     {
         foreach (string menuItem in menuItems.Keys)
-        {
+        {   
             GameObject menuHold = menuItems[menuItem];
             if (menuHold == null)
             {
@@ -63,15 +64,21 @@ public class Menu : MonoBehaviour
             }
             else
             {
+
                 if (customHoldSprite0 != null && menuItem.Equals(SceneUtils.SceneNames.rocManGamePlay))
                 {
-                    ClimbARHandhold.DrawHoldSprite(menuHold.GetComponent<SpriteRenderer>(),
+                    GameObject customSpriteObject = GameObject.Instantiate(customHoldSprite);
+                    customSpriteObject.transform.SetParent(menuHold.transform);
+                    customSpriteObject.transform.localPosition = new Vector3(0,0,0);
+
+                    ClimbARHandhold.DrawHoldSprite(customSpriteObject.GetComponent<SpriteRenderer>(),
                         spriteXScale, spriteYScale);
+
                 }
                 else
                 {
-                    menuHold.GetComponent<LineRenderer>().startColor = UnityEngine.Color.cyan;
-                    menuHold.GetComponent<LineRenderer>().endColor = UnityEngine.Color.cyan;
+                    ClimbARHandhold.ActivateHoldLineRenderer(menuHold, true);
+                    ClimbARHandhold.setHoldColor(menuHold, UnityEngine.Color.cyan);
                 }
 
                 GameObject holdText = new GameObject();
@@ -93,8 +100,8 @@ public class Menu : MonoBehaviour
             HoldText hTextScript = hold.GetComponent<HoldText>();
             // Hide the rendered sprite
             hold.GetComponent<SpriteRenderer>().enabled = false;
-            // Ugly - that we need to rescale the hold upon scene change
-            hold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            ClimbARHandhold.DestroyChildren(hold);
+            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
             Destroy(mHoldScript);
             Destroy(hTextScript);
         }
