@@ -36,6 +36,7 @@ public class RocMan : MonoBehaviour
             Vector3 scale = new Vector3(0.1f, 0.1f, 0.1f);
 
             this.ghosts[i] = GameObject.Instantiate(ghost);
+            this.ghosts[i].name = "Ghost " + i;
             this.ghosts[i].transform.localPosition = pos;
             this.ghosts[i].transform.localScale = scale;
 
