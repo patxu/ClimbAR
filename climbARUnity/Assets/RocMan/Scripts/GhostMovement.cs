@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GhostMovement : MonoBehaviour
@@ -10,6 +9,7 @@ public class GhostMovement : MonoBehaviour
     private float moveSpeed;
     private int lives;
     private bool offScreen;
+    public GameObject livesRemaining;
 
     // Use this for initialization
     void Start()
@@ -70,18 +70,40 @@ public class GhostMovement : MonoBehaviour
         // reverse velocity
         GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
 
-        if (col.gameObject.tag == "Hold")
+        if (col != null && col.gameObject.tag == "Hold")
         {
         }
         else
         {
-            this.lives--;
-            Debug.Log("You now have " + this.lives + " lives.");
+            decrementLivesRemaining();
         }
 
         if (this.lives <= 0)
         {
             SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
         }
+    }
+
+    void decrementLivesRemaining()
+    {
+        this.lives--;
+        string[] strArray = livesRemaining.GetComponent<Text>().text.Split(" "[0]);
+        foreach (var str in strArray)
+        {
+            int lives;
+            bool success = int.TryParse(str, out lives);
+            if (success)
+            {
+                lives--;
+                break;
+            }
+        }
+
+        livesRemaining.GetComponent<Text>().text = "Lives: " + lives;
+    }
+
+    private void OnMouseDown()
+    {
+        OnTriggerEnter2D(null);
     }
 }
