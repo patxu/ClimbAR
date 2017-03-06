@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.IO;
 
 public class ManualSync : MonoBehaviour
 {
@@ -15,6 +16,21 @@ public class ManualSync : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //if saved state file exists
+        //load holds and transition to next scene
+
+        if (File.Exists("Assets/ClimbAR/ProjectorCalibrateManual/SavedState/SavedState.xml"))
+        {
+            print("The file exists.");
+            
+        } else
+        {
+            print("File not found");
+            string path = Directory.GetCurrentDirectory();
+            print(path);
+        }
+
+        //else
         InitCornerCircles();
         DrawBorder(BORDER_WIDTH);
     }
@@ -22,6 +38,9 @@ public class ManualSync : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        
+        
         // continue to next scene, saving the coordinates of the corner circles as state
         if (Input.GetKeyDown("space"))
         {
@@ -46,6 +65,10 @@ public class ManualSync : MonoBehaviour
                 this.cornerCircles[3].transform.localPosition.x,
                 lowerY,
                 mainCam);
+
+            //serialize here
+
+
             SceneManager.LoadScene(SceneUtils.SceneNames.holdSetup);
             //SceneManager.LoadScene(SceneUtils.Names.demo);
         }
