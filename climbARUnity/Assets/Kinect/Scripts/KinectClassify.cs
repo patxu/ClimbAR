@@ -65,7 +65,7 @@ public class KinectClassify : MonoBehaviour
         }
         GameObject bodyView = GameObject.Find("KinectBodyView");
         BodySourceView view = bodyView.GetComponent<BodySourceView>();
-        view.shouldShowTextMesh = false;
+        view.isAHandDetected = false;
     }
 
     void Update()

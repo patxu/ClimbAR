@@ -50,15 +50,17 @@ public class BodySourceManager : MonoBehaviour
         }
         if (Input.GetKeyDown("escape"))
         {
-            if (Application.isEditor)
-            {
-                Debug.Log("Cannot quit the application (Application is editor).");
-            }
-            else
-            {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }
+            GameObject bodyView = GameObject.Find("KinectBodyView");
+            BodySourceView view = bodyView.GetComponent<BodySourceView>();
+            view.isAHandDetected = false;
+
+            GameObject confirmCanvas = GameObject.Find("ConfirmCanvas");
+            CanvasGroup exitGroup = confirmCanvas.GetComponent<CanvasGroup>();
+            exitGroup.blocksRaycasts = true;
+            exitGroup.alpha = 1;
+            exitGroup.interactable = true;
         }
+        
 
         if (Input.GetKeyDown("backspace"))
         {

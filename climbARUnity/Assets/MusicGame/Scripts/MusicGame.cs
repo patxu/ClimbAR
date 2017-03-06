@@ -6,17 +6,20 @@ using UnityEngine;
 public class MusicGame : MonoBehaviour
 {
 
-    bool DEBUG = false;
+    bool DEBUG = false; 
     public GameObject prefabHold;
-
-    string[] soundItems = new string[] { "acapella1", "acapella2", "acapella3", "acapella4" }; //path relative to Resources folder
+    public LoopManager loopManager;
+    string[] soundItems = new string[] { "Brass", "Bass", "Drums", "Piano" }; //path relative to Resources folder
     GameObject[] holds;
 
     // Use this for initialization
     void Start()
     {
+
         holds = GameObject.FindGameObjectsWithTag("Hold");
-        LoopManager loopManager = gameObject.AddComponent<LoopManager>();
+
+        loopManager = gameObject.GetComponent<LoopManager>();
+
         loopManager.Setup(soundItems);
 
         // If starting directly into music scene, holds will be empty
@@ -66,6 +69,10 @@ public class MusicGame : MonoBehaviour
                     .startColor = UnityEngine.Color.cyan;
                 soundHoldScript.GetComponent<LineRenderer>()
                     .endColor = UnityEngine.Color.cyan;
+
+                GameObject holdText = new GameObject();
+                HoldText holdTextScript = holdText.AddComponent<HoldText>();
+                holdTextScript.addText(soundItems[i], holdText, soundHold);
             }
         }
     }
@@ -84,15 +91,26 @@ public class MusicGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // Example of how to add a behavior to ConfirmationCanvas:
+        // In music game we want to mute the tracks when escape is hit. We add a listner for escape here to 
+        // add that behavior. We then add the function UnPauseSounds to the cancel button in this particular 
+        // scene to start back up the sounds if the user doesn't choose to quit
+        if (Input.GetKeyDown("escape"))
+        {
+            loopManager.PauseSounds();
+        }
     }
-
     private void OnDisable()
     {
         foreach (GameObject hold in holds)
         {
+
             ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+
+            HoldText hTextScript = hold.GetComponent<HoldText>();
+
             SoundHold script = hold.GetComponent<SoundHold>();
+            Destroy(hTextScript);
             Destroy(script);
         }
     }

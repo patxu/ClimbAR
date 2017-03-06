@@ -1,16 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class RocMan : MonoBehaviour
 {
 
     // Game Objects
-    public Camera mainCam;
     public GameObject[] ghosts;
     public GameObject ghost;
     public GameObject ghostSprite;
+    public GameObject livesRemaining;
     //public GameObject[] handholds;
     //public GameObject Handhold;
     // TODO: include handholds when the game state requires access to them...
@@ -26,7 +23,7 @@ public class RocMan : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     void CreateGhosts()
@@ -40,6 +37,7 @@ public class RocMan : MonoBehaviour
             Vector3 scale = new Vector3(0.1f, 0.1f, 0.1f);
 
             this.ghosts[i] = GameObject.Instantiate(ghost);
+            this.ghosts[i].name = "Ghost " + i;
             this.ghosts[i].transform.localPosition = pos;
             this.ghosts[i].transform.localScale = scale;
 
@@ -47,6 +45,16 @@ public class RocMan : MonoBehaviour
             ghostSpriteObject.transform.localPosition = pos;
             ghostSpriteObject.transform.localScale = scale;
             ghostSpriteObject.transform.SetParent(this.ghosts[i].transform);
+
+            Rigidbody2D rigid = this.ghosts[i].AddComponent<Rigidbody2D>();
+            rigid.isKinematic = true;
+
+            CircleCollider2D col = this.ghosts[i].AddComponent<CircleCollider2D>();
+            col.radius = 4.0f;
+            col.enabled = true;
+            col.isTrigger = true;
+
+            this.ghosts[i].GetComponent<GhostMovement>().livesRemaining = livesRemaining;
 
             offset += 3;
         }

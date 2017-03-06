@@ -15,9 +15,7 @@ public class BodySourceView : MonoBehaviour
 
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
-    public string updateTextMesh;
-    string textMeshText;
-    public bool shouldShowTextMesh;
+    public bool isAHandDetected;
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -54,29 +52,28 @@ public class BodySourceView : MonoBehaviour
     void Start()
     {
         _Sensor = Kinect.KinectSensor.GetDefault();
-        shouldShowTextMesh = true;
+        isAHandDetected = true;
     }
 
     void Update()
     {
-        textMeshText = updateTextMesh;
         if (BodySourceManager == null)
         {
-            setTextMesh(textMeshText);
+            updateTextMesh();
             return;
         }
 
         _BodyManager = BodySourceManager.GetComponent<BodySourceManager>();
         if (_BodyManager == null)
         {
-            setTextMesh(textMeshText);
+            updateTextMesh();
             return;
         }
 
         Kinect.Body[] data = _BodyManager.GetData();
         if (data == null)
         {
-            setTextMesh(textMeshText);
+            updateTextMesh();
             return;
         }
 
@@ -124,24 +121,23 @@ public class BodySourceView : MonoBehaviour
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
             }
         }
-        if (shouldShowTextMesh)
+    }
+
+    public void updateTextMesh()
+    {
+        if (isAHandDetected)
         {
-            setTextMesh(textMeshText);
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
         }
         else
         {
-            setTextMesh("");
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
-    }
-
-    public void setTextMesh(string text)
-    {
-        gameObject.GetComponent<TextMesh>().text = text;
     }
 
     private GameObject CreateBodyObject(ulong id)
     {
-        string textMeshText = "No Hands Detected!";
+        isAHandDetected = true;
         GameObject body = new GameObject("Body:" + id);
         body.layer = LayerMask.NameToLayer("Skeleton");
 
@@ -207,7 +203,7 @@ public class BodySourceView : MonoBehaviour
                     jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
                     jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
                 {
-                    textMeshText = "";
+                    isAHandDetected = false;
                 }
                 lr.SetPosition(0, jointObj.localPosition);
                 lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));

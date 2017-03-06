@@ -70,4 +70,10 @@ public class SoundHold : ClimbingHold
             return;
         }
     }
+
+    private void OnDisable()
+    {
+        TextMesh textMesh = gameObject.GetComponentInChildren<TextMesh>();
+        Destroy(textMesh);
+    }
 }
