@@ -36,9 +36,9 @@ public class KinectClassify : MonoBehaviour
     public GameObject[] handholds = new GameObject[0];
     public GameObject Handhold;
     public Camera mainCam;
-    //public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
+    public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
     //public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_17_newgym_lbp.xml";
-    public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade.xml";
+    //public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade.xml";
     bool classifyRunning = false;
 
     void Start()
