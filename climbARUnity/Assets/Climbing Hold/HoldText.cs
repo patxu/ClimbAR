@@ -16,12 +16,17 @@ public class HoldText : MonoBehaviour
     // must call setup script
     public void setup(string sceneName, GameObject holdText, GameObject menuHold)
     {
+        this.addText(SceneUtils.SceneNameToDisplayName[sceneName], holdText, menuHold); 
+    }
+
+    public void addText(string text, GameObject holdText, GameObject menuHold)
+    {
         holdText.transform.SetParent(menuHold.transform); // set empty gameobject with textmesh as child of sprite
 
         TextMesh textMesh = holdText.AddComponent<TextMesh>();
         textMesh.characterSize = 0.12f;
         textMesh.fontSize = 40;
-        textMesh.text = SceneUtils.SceneNameToDisplayName[sceneName];
+        textMesh.text = text;
         textMesh.transform.position = menuHold.transform.position;
         textMesh.anchor = TextAnchor.MiddleLeft;
 
