@@ -472,6 +472,7 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   Bone: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
   updateTextMesh: 
   shouldShowTextMesh: 0
 --- !u!4 &1382317861
@@ -480,6 +481,11 @@ MonoBehaviour:
   shouldShowTextMesh: 0
 --- !u!4 &691219391
 >>>>>>> Add exit confirmation for RocMan and work on option to change game state in RocMan
+=======
+  updateTextMesh: No Hands Detected!
+  shouldShowTextMesh: 0
+--- !u!4 &691219391
+>>>>>>> 798b6359a5c8f274ee1aad23714bee6e513b590f
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1548,9 +1554,12 @@ MonoBehaviour:
   ghosts: []
   ghost: {fileID: 1785000464321050, guid: c656df448300f634a823c7e8aa425db6, type: 2}
 <<<<<<< HEAD
+<<<<<<< HEAD
   ghostSprite: {fileID: 1879222579295096, guid: 53f21194105064b4d866ec3ac8656291,
     type: 2}
 =======
+=======
+>>>>>>> 798b6359a5c8f274ee1aad23714bee6e513b590f
   handholds: []
   Handhold: {fileID: 0}
   livesText: {fileID: 1157555987}
@@ -1589,4 +1598,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
+<<<<<<< HEAD
 >>>>>>> Add exit confirmation for RocMan and work on option to change game state in RocMan
+=======
+>>>>>>> 798b6359a5c8f274ee1aad23714bee6e513b590f
