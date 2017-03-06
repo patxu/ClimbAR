@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class RocMan : MonoBehaviour
 {
 
     // Game Objects
-    public Camera mainCam;
     public GameObject[] ghosts;
     public GameObject ghost;
+    public GameObject livesRemaining;
     //public GameObject[] handholds;
     //public GameObject Handhold;
     // TODO: include handholds when the game state requires access to them...
@@ -49,6 +46,8 @@ public class RocMan : MonoBehaviour
             col.radius = 4.0f;
             col.enabled = true;
             col.isTrigger = true;
+
+            this.ghosts[i].GetComponent<GhostMovement>().livesRemaining = livesRemaining;
 
             offset += 3;
         }
