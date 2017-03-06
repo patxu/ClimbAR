@@ -970,7 +970,6 @@ MonoBehaviour:
   BodySourceManager: {fileID: 1246944923}
   mainCam: {fileID: 13437374}
   Bone: {fileID: 0}
-  updateTextMesh: No Hands Detected!
   shouldShowTextMesh: 0
 --- !u!4 &1825385646
 Transform:
