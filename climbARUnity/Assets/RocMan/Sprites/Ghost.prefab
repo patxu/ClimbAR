@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4986703567739178}
   - component: {fileID: 114189534835224550}
   - component: {fileID: 58868021422062478}
-  - component: {fileID: 50772083758944662}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -42,26 +41,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50772083758944662
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1785000464321050}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &58868021422062478
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -87,3 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac444f068a4ba8459e84f1c6c9d314d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rocmanScript: {fileID: 0}
+  xPos: 0
+  yPos: 0
