@@ -10,6 +10,7 @@ public class RocMan : MonoBehaviour
     public Camera mainCam;
     public GameObject[] ghosts;
     public GameObject ghost;
+    public GameObject ghostSprite;
     //public GameObject[] handholds;
     //public GameObject Handhold;
     // TODO: include handholds when the game state requires access to them...
@@ -42,13 +43,10 @@ public class RocMan : MonoBehaviour
             this.ghosts[i].transform.localPosition = pos;
             this.ghosts[i].transform.localScale = scale;
 
-            Rigidbody2D rigid = this.ghosts[i].AddComponent<Rigidbody2D>();
-            rigid.isKinematic = true;
-
-            CircleCollider2D col = this.ghosts[i].AddComponent<CircleCollider2D>();
-            col.radius = 0.1f;
-            col.enabled = true;
-            col.isTrigger = true;
+            GameObject ghostSpriteObject = GameObject.Instantiate(ghostSprite);
+            ghostSpriteObject.transform.localPosition = pos;
+            ghostSpriteObject.transform.localScale = scale;
+            ghostSpriteObject.transform.SetParent(this.ghosts[i].transform);
 
             offset += 3;
         }

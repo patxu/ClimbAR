@@ -66,6 +66,7 @@ public class HoldSetup : MonoBehaviour
         {
             ClimbingHold script = hold.GetComponent<ClimbingHold>();
             Destroy(script);
+            ClimbARHandhold.setHoldActivated(hold, false);
         }
     }
 }

@@ -11,6 +11,7 @@ public class ExampleGame : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         holds = GameObject.FindGameObjectsWithTag("Hold");
+        ClimbARHandhold.setHoldActivated(backHold, true); 
 
         //if (holds.Length == 0)
         //{
@@ -40,5 +41,7 @@ public class ExampleGame : MonoBehaviour {
     {
         MenuHold script = backHold.GetComponent<MenuHold>();
         Destroy(script);
+
+        ClimbARHandhold.setHoldActivated(backHold, false);
     }
 }

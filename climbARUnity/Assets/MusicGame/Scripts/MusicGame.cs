@@ -15,7 +15,7 @@ public class MusicGame : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        holds = ClimbARHandhold.GetValidClimbingHolds();
+        holds = GameObject.FindGameObjectsWithTag("Hold");
         LoopManager loopManager = gameObject.AddComponent<LoopManager>();
         loopManager.Setup(soundItems);
 
@@ -52,6 +52,7 @@ public class MusicGame : MonoBehaviour
             }
             else
             {
+                ClimbARHandhold.setHoldActivated(soundHold, true);
                 ClimbingHold holdScript = soundHold.GetComponent<ClimbingHold>();
                 Destroy(holdScript);
 
@@ -90,6 +91,7 @@ public class MusicGame : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
+            ClimbARHandhold.setHoldActivated(hold, false);
             SoundHold script = hold.GetComponent<SoundHold>();
             Destroy(script);
         }
