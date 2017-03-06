@@ -20,7 +20,6 @@ static class SceneUtils
     // name of the scene which we would display on the menu
     public static Dictionary<string, string> SceneNameToDisplayName = new Dictionary<string, string>()
     {
-        { SceneNames.exampleGame, "    Example\n    Game" },
         { SceneNames.musicGame, "    Music\n    Game" },
         { SceneNames.menu, "    Menu" },
         { SceneNames.rocManGamePlay, "    RocMan\n    Game" },
