@@ -2,14 +2,17 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.IO;
+using System.Xml.Serialization;
 
 public class ManualSync : MonoBehaviour
 {
     //private constants
     private float BORDER_WIDTH = 0.05f
         ;
+    private string path = "Assets/ClimbAR/ProjectorCalibrateManual/SavedState/SavedState.xml";
     // Game objects
     public GameObject[] cornerCircles;
+    public float[] cornerCircleCoordinates;
     public GameObject CornerCircle;
     public Camera mainCam;
 
@@ -19,10 +22,21 @@ public class ManualSync : MonoBehaviour
         //if saved state file exists
         //load holds and transition to next scene
 
-        if (File.Exists("Assets/ClimbAR/ProjectorCalibrateManual/SavedState/SavedState.xml"))
-        {
+        if (File.Exists(path)) {
             print("The file exists.");
-            
+
+            XmlSerializer xmlSearializer = new XmlSerializer(typeof(float[]));
+
+            using (FileStream fs = File.Open(path, FileMode.Open))
+            {
+
+                cornerCircleCoordinates =  (float[]) xmlSearializer.Deserialize(fs);
+               foreach(float f in cornerCircleCoordinates)
+                {
+                    print(f);
+                } 
+            }
+
         } else
         {
             print("File not found");
@@ -44,6 +58,10 @@ public class ManualSync : MonoBehaviour
         // continue to next scene, saving the coordinates of the corner circles as state
         if (Input.GetKeyDown("space"))
         {
+
+            //debug
+            cornerCircleCoordinates = new float[] { 1.4363f, 2.34563f, 3.3456f };
+            //end debug
 
             float upperY = (this.cornerCircles[0].transform.localPosition.y + this.cornerCircles[1].transform.localPosition.y) / 2;
             float lowerY = (this.cornerCircles[2].transform.localPosition.y + this.cornerCircles[3].transform.localPosition.y) / 2;
@@ -67,7 +85,11 @@ public class ManualSync : MonoBehaviour
                 mainCam);
 
             //serialize here
+            XmlSerializer xmlSearializer = new XmlSerializer(typeof(float[]));
+            FileStream file = File.Create(path);
 
+            xmlSearializer.Serialize(file, cornerCircleCoordinates);
+            file.Close();
 
             SceneManager.LoadScene(SceneUtils.SceneNames.holdSetup);
             //SceneManager.LoadScene(SceneUtils.Names.demo);
