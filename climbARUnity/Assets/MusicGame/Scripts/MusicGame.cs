@@ -9,7 +9,7 @@ public class MusicGame : MonoBehaviour
     bool DEBUG = false;
     public GameObject prefabHold;
     public LoopManager loopManager;
-    string[] soundItems = new string[] { "acapella1", "acapella2", "acapella3", "acapella4" }; //path relative to Resources folder
+    string[] soundItems = new string[] { "Brass", "Bass", "Drums", "Piano" }; //path relative to Resources folder
     GameObject[] holds;
 
     // Use this for initialization
