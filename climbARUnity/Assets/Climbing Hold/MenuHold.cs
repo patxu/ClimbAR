@@ -81,6 +81,7 @@ public class MenuHold : ClimbingHold
 
     private void OnDisable()
     {
+        // Destroy menu text mesh and reset line renderers to uniform color
         TextMesh textMesh = gameObject.GetComponentInChildren<TextMesh>();
         Destroy(textMesh);
     }

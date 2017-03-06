@@ -1,118 +1,78 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GhostMovement : MonoBehaviour
 {
-
     // State variables
     private float moveSpeed;
-    private int lives;
-    private bool offScreen;
-    public GameObject livesRemaining;
-    private GameObject childSpriteObject;
+    public RocMan rocmanScript;
+    public int xPos;
+    public int yPos;
 
     // Use this for initialization
     void Start()
     {
         this.moveSpeed = 0.5f;
-        this.lives = 3;
-
-        foreach (Transform child in gameObject.transform)
-        {
-            if (child.gameObject.tag == "HoldSprite")
-            {
-                childSpriteObject = child.gameObject;
-            }
-        }
+        this.rocmanScript = Camera.main.GetComponent<RocMan>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // keyboard controls
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (this.rocmanScript.playing)
         {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, this.moveSpeed);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, 0);
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, 0);
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
-        }
-
-             // keep ghost on screen
-        if (!childSpriteObject.GetComponent<SpriteRenderer>().isVisible)
-        {
-            if (offScreen == false) // was on screen before, now off, so reverse 
+            Vector3 pos = Camera.main.WorldToScreenPoint(GetComponent<Transform>().position);
+            this.xPos = (int)pos.x;
+            this.yPos = (int)pos.y;
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, this.moveSpeed);
             }
-            offScreen = true;
-        }
-        else
-        {
-            offScreen = false;
-        }
-
-        // make ghost look left or right depending on x velocity
-        // don't flip if == 0 so it doesn't change when moving up/down
-        if (GetComponent<Rigidbody2D>().velocity.x < 0)
-{
-            childSpriteObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (GetComponent<Rigidbody2D>().velocity.x > 0)
-        {
-            childSpriteObject.GetComponent<SpriteRenderer>().flipX = false;
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, -this.moveSpeed);
+            }
+            // For Debug
+            if (Input.GetKey("space"))
+            {
+                this.rocmanScript.ToggleEndGame();
+            }
+            // Avoid moving out of bounds
+            if (xPos < 0 || xPos > Screen.width || yPos < 0 || yPos > Screen.height)
+            {
+                this.ReverseDirection();
+            }
         }
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        // reverse velocity
-        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
-
-        if (col != null && col.gameObject.tag == "Hold")
+        this.ReverseDirection();
+        string layerName = LayerMask.LayerToName(col.gameObject.layer);
+        switch (layerName)
         {
-        }
-        else
-        {
-            decrementLivesRemaining();
-        }
-
-        if (this.lives <= 0)
-        {
-            SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
-        }
-    }
-
-    void decrementLivesRemaining()
-    {
-        this.lives--;
-        string[] strArray = livesRemaining.GetComponent<Text>().text.Split(" "[0]);
-        foreach (var str in strArray)
-        {
-            int lives;
-            bool success = int.TryParse(str, out lives);
-            if (success)
-            {
-                lives--;
+            case "Holds":
                 break;
-            }
+            case "Skeleton":
+                this.rocmanScript.LoseLife();
+                break;
+            default:
+                break;
         }
-
-        livesRemaining.GetComponent<Text>().text = "Lives: " + lives;
     }
 
-    private void OnMouseDown()
+    public void ReverseDirection()
     {
-        OnTriggerEnter2D(null);
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y * (-1));
     }
 }
