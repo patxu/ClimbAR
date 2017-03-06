@@ -6,7 +6,7 @@ using UnityEngine;
 public class MusicGame : MonoBehaviour
 {
 
-    bool DEBUG = false;
+    bool DEBUG = false; 
     public GameObject prefabHold;
     public LoopManager loopManager;
     string[] soundItems = new string[] { "Brass", "Bass", "Drums", "Piano" }; //path relative to Resources folder
@@ -65,6 +65,10 @@ public class MusicGame : MonoBehaviour
                     .startColor = UnityEngine.Color.cyan;
                 soundHoldScript.GetComponent<LineRenderer>()
                     .endColor = UnityEngine.Color.cyan;
+
+                GameObject holdText = new GameObject();
+                HoldText holdTextScript = holdText.AddComponent<HoldText>();
+                holdTextScript.addText(soundItems[i], holdText, soundHold);
             }
         }
     }
@@ -96,7 +100,9 @@ public class MusicGame : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
+            HoldText hTextScript = hold.GetComponent<HoldText>();
             SoundHold script = hold.GetComponent<SoundHold>();
+            Destroy(hTextScript);
             Destroy(script);
         }
     }
