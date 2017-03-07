@@ -11,8 +11,6 @@ public class BodySourceView : MonoBehaviour
     private Kinect.KinectSensor _Sensor;
     public Camera mainCam;
 
-    public GameObject Bone;
-
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
     public bool isAHandDetected;
@@ -52,28 +50,26 @@ public class BodySourceView : MonoBehaviour
     void Start()
     {
         _Sensor = Kinect.KinectSensor.GetDefault();
-        isAHandDetected = true;
     }
 
     void Update()
     {
+        isAHandDetected = false;
+        updateTextMesh();
         if (BodySourceManager == null)
         {
-            updateTextMesh();
             return;
         }
 
         _BodyManager = BodySourceManager.GetComponent<BodySourceManager>();
         if (_BodyManager == null)
         {
-            updateTextMesh();
             return;
         }
 
         Kinect.Body[] data = _BodyManager.GetData();
         if (data == null)
         {
-            updateTextMesh();
             return;
         }
 
@@ -119,25 +115,19 @@ public class BodySourceView : MonoBehaviour
                 }
 
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
+                updateTextMesh();
             }
         }
     }
 
     public void updateTextMesh()
     {
-        if (isAHandDetected)
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
-        }
-        else
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
+        gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
     }
 
     private GameObject CreateBodyObject(ulong id)
     {
-        isAHandDetected = true;
+        //isAHandDetected = false;
         GameObject body = new GameObject("Body:" + id);
         body.layer = LayerMask.NameToLayer("Skeleton");
 
@@ -202,6 +192,10 @@ public class BodySourceView : MonoBehaviour
                 if (jt == Kinect.JointType.HandLeft || jt == Kinect.JointType.HandRight ||
                     jt == Kinect.JointType.HandTipLeft || jt == Kinect.JointType.HandTipRight ||
                     jt == Kinect.JointType.ThumbLeft || jt == Kinect.JointType.ThumbRight)
+                {
+                    isAHandDetected = true;
+                }
+                else
                 {
                     isAHandDetected = false;
                 }
