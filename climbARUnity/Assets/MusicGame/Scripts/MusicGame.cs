@@ -55,7 +55,7 @@ public class MusicGame : MonoBehaviour
             }
             else
             {
-                ClimbARHandhold.ActivateHoldLineRenderer(soundHold, true);
+                ClimbARHandhold.HoldLineRendererActive(soundHold, true);
                 ClimbingHold holdScript = soundHold.GetComponent<ClimbingHold>();
                 Destroy(holdScript);
 
@@ -104,14 +104,16 @@ public class MusicGame : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
+            if (hold != null)
+            {
+                ClimbARHandhold.HoldLineRendererActive(hold, false);
 
-            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+                HoldText hTextScript = hold.GetComponent<HoldText>();
 
-            HoldText hTextScript = hold.GetComponent<HoldText>();
-
-            SoundHold script = hold.GetComponent<SoundHold>();
-            Destroy(hTextScript);
-            Destroy(script);
+                SoundHold script = hold.GetComponent<SoundHold>();
+                Destroy(hTextScript);
+                Destroy(script);
+            }
         }
     }
 

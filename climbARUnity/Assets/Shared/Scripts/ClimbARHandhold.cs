@@ -140,7 +140,7 @@ static class ClimbARHandhold
           .endColor = color;
     }
 
-    public static void ActivateHoldLineRenderer(GameObject hold, bool isActive)
+    public static void HoldLineRendererActive(GameObject hold, bool isActive)
     {
         hold.GetComponent<LineRenderer>().enabled = isActive;
     }
