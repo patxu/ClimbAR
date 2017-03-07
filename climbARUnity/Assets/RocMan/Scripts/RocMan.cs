@@ -34,7 +34,7 @@ public class RocMan : MonoBehaviour
         this.gameOverText.text = "";
         this.gameOverText.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 3, Screen.height - Screen.height / 4, 0));
 
-        this.gameStartText.text = "      Press m for menu scene\n           or s to start game";
+        this.gameStartText.text = "      Press m for menu scene\n           or space to start game";
         this.gameStartText.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 3, Screen.height, 0));
     }
 
@@ -49,7 +49,7 @@ public class RocMan : MonoBehaviour
             this.CleanupGhosts();
             this.StartGame();
         }
-        if (Input.GetKeyDown("s"))
+        if (Input.GetKeyDown("space"))
         {
             this.StartGame();
         }
