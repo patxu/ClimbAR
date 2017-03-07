@@ -28,19 +28,19 @@ public class GhostMovement : MonoBehaviour
             this.yPos = (int)pos.y;
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, this.moveSpeed);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, this.moveSpeed);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, 0);
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, 0);
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, -this.moveSpeed);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
             }
             // For Debug
             if (Input.GetKey("space"))
