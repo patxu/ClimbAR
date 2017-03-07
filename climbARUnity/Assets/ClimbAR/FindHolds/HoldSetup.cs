@@ -15,7 +15,7 @@ public class HoldSetup : MonoBehaviour
         {
             if (classifier == null)
             {
-                ClimbARUtils.LogError("No classifier specified for hold setup so cannot automatically classify and transition");
+                Debug.LogError("No classifier specified for hold setup so cannot automatically classify and transition");
             }
             else
             {
@@ -39,7 +39,7 @@ public class HoldSetup : MonoBehaviour
             // don't move until we've flipped hold orientation - future scenes shouldn't have the live image
             if (StateManager.instance.debugView == true)
             {
-                ClimbARUtils.LogError("Color view must be toggled off! Press <t>");
+                Debug.LogError("Color view must be toggled off! Press <t>");
             }
             else
             {

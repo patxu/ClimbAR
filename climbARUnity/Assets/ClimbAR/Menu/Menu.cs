@@ -26,7 +26,7 @@ public class Menu : MonoBehaviour
         customHoldSprite1 = Resources.Load<Sprite>("customHold1");
         if (customHoldSprite0 == null || customHoldSprite1 == null)
         {
-            ClimbARUtils.LogError("Could not find both custom hold sprites necessary in Resources folder");
+            Debug.LogError("Could not find both custom hold sprites necessary in Resources folder");
         }
         pairMenuItemsWithHolds(menuItems);
         attachMenuHoldToHold(menuItems);
