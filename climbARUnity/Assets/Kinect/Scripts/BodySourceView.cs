@@ -194,10 +194,6 @@ public class BodySourceView : MonoBehaviour
                 {
                     isAHandDetected = true;
                 }
-                else
-                {
-                    isAHandDetected = false;
-                }
                 lr.SetPosition(0, jointObj.localPosition);
                 lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));
                 lr.startColor = GetColorForState(sourceJoint.TrackingState);
@@ -206,6 +202,19 @@ public class BodySourceView : MonoBehaviour
             else
             {
                 lr.enabled = false;
+            }
+        }
+
+
+        // If we get through all joints and still haven't found a hand, zero 
+        // enterCount for all holds. This prevents a hold from getting stuck "on"
+        // if the kinect loses track of the hand while it is grabbing a hold
+        if (!isAHandDetected)
+        {
+            GameObject[] holds = GameObject.FindGameObjectsWithTag("Hold");
+            foreach (GameObject hold in holds)
+            {
+                hold.GetComponent<ClimbingHold>().enterCount = 0;
             }
         }
     }

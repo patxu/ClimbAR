@@ -5,7 +5,7 @@ using System.Threading;
 
 public class ClimbingHold : MonoBehaviour
 {
-    private int enterCount = 0;
+    public int enterCount = 0;
     private float grabbedSmoothing = 200 / 1000; // divided by 1000 to put as fraction of second
     private float releasedSmoothing = 200 / 1000;
 
