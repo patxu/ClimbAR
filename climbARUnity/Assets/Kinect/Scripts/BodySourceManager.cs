@@ -72,6 +72,11 @@ public class BodySourceManager : MonoBehaviour
 
         if (Input.GetKeyDown("s"))
         {
+            Camera.main.cullingMask = LayerMask.NameToLayer("Everything"); // don't show skeleton
+        }
+
+        if (Input.GetKeyDown("h"))
+        {
             Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton
         }
     }
