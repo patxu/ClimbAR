@@ -73,7 +73,7 @@ public class Menu : MonoBehaviour
                 }
                 else
                 {
-                    ClimbARHandhold.ActivateHoldLineRenderer(menuHold, true);
+                    ClimbARHandhold.HoldLineRendererActive(menuHold, true);
                     ClimbARHandhold.setHoldColor(menuHold, UnityEngine.Color.cyan);
                 }
 
@@ -91,19 +91,24 @@ public class Menu : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
-            // Which components do we want to destroy?
-            MenuHold mHoldScript = hold.GetComponent<MenuHold>();
-            HoldText hTextScript = hold.GetComponent<HoldText>();
-            // Hide the rendered sprite
-            hold.GetComponent<SpriteRenderer>().enabled = false;
-            ClimbARHandhold.DestroyChildren(hold);
-            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
-            hold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-            // Reset line renderer to uniform color
-            hold.GetComponent<LineRenderer>().startColor = UnityEngine.Color.cyan;
-            hold.GetComponent<LineRenderer>().endColor = UnityEngine.Color.cyan;
-            Destroy(mHoldScript);
-            Destroy(hTextScript);
+            if (hold != null)
+            {
+                MenuHold mHoldScript = hold.GetComponent<MenuHold>();
+                HoldText hTextScript = hold.GetComponent<HoldText>();
+
+                // Hide the rendered sprite
+                hold.GetComponent<SpriteRenderer>().enabled = false;
+                ClimbARHandhold.DestroyChildren(hold);
+                ClimbARHandhold.HoldLineRendererActive(hold, false);
+                hold.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+
+                // Reset line renderer to uniform color
+                hold.GetComponent<LineRenderer>().startColor = UnityEngine.Color.cyan;
+                hold.GetComponent<LineRenderer>().endColor = UnityEngine.Color.cyan;
+
+                Destroy(mHoldScript);
+                Destroy(hTextScript);
+            }
         }
     }
 }
