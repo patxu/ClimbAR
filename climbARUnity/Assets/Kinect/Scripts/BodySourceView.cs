@@ -127,7 +127,6 @@ public class BodySourceView : MonoBehaviour
 
     private GameObject CreateBodyObject(ulong id)
     {
-        //isAHandDetected = false;
         GameObject body = new GameObject("Body:" + id);
         body.layer = LayerMask.NameToLayer("Skeleton");
 
