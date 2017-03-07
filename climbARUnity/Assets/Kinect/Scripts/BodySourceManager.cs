@@ -69,6 +69,11 @@ public class BodySourceManager : MonoBehaviour
                 SceneManager.LoadSceneAsync("ClimbAR_Menu", LoadSceneMode.Single);
             }
         }
+
+        if (Input.GetKeyDown("s"))
+        {
+            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton
+        }
     }
     
     void OnApplicationQuit()
