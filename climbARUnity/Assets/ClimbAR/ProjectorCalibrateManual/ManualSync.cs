@@ -19,6 +19,9 @@ public class ManualSync : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+
+        InitCornerCircles();
+
         //if saved state file exists
         //reposition circles
 
@@ -37,7 +40,6 @@ public class ManualSync : MonoBehaviour
 
         }
 
-        InitCornerCircles();
         DrawBorder(BORDER_WIDTH);
     }
 
