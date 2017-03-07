@@ -12,7 +12,7 @@ public class ManualSync : MonoBehaviour
     private string path = "Assets/ClimbAR/ProjectorCalibrateManual/SavedState/SavedState.xml";
     // Game objects
     public GameObject[] cornerCircles;
-    public float[] cornerCircleCoordinates;
+    public float[] cornerCircleCoordinates; //used for serialization - gets values from cornerCircles
     public GameObject CornerCircle;
     public Camera mainCam;
 
@@ -22,7 +22,8 @@ public class ManualSync : MonoBehaviour
         //if saved state file exists
         //load holds and transition to next scene
 
-        if (File.Exists(path)) {
+        if (File.Exists(path))
+        {
             print("The file exists.");
 
             XmlSerializer xmlSearializer = new XmlSerializer(typeof(float[]));
@@ -30,14 +31,15 @@ public class ManualSync : MonoBehaviour
             using (FileStream fs = File.Open(path, FileMode.Open))
             {
 
-                cornerCircleCoordinates =  (float[]) xmlSearializer.Deserialize(fs);
-               foreach(float f in cornerCircleCoordinates)
+                cornerCircleCoordinates = (float[])xmlSearializer.Deserialize(fs);
+                foreach (float f in cornerCircleCoordinates)
                 {
                     print(f);
-                } 
+                }
             }
 
-        } else
+        }
+        else
         {
             print("File not found");
             string path = Directory.GetCurrentDirectory();
@@ -52,36 +54,31 @@ public class ManualSync : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        
-        
+
+
+
         // continue to next scene, saving the coordinates of the corner circles as state
         if (Input.GetKeyDown("space"))
         {
 
-            //debug
-            cornerCircleCoordinates = new float[] { 1.4363f, 2.34563f, 3.3456f };
-            //end debug
-
-            float upperY = (this.cornerCircles[0].transform.localPosition.y + this.cornerCircles[1].transform.localPosition.y) / 2;
-            float lowerY = (this.cornerCircles[2].transform.localPosition.y + this.cornerCircles[3].transform.localPosition.y) / 2;
+            cornerCircleCoordinates = GetCoordinateFloatArray();
 
             // 0,0 is top left, +y points down
             StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[0].transform.localPosition.x,
-                upperY,
+                cornerCircleCoordinates[0],
+                cornerCircleCoordinates[1],
                 mainCam);
             StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[1].transform.localPosition.x,
-                upperY,
+                cornerCircleCoordinates[2],
+                cornerCircleCoordinates[3],
                 mainCam);
             StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[2].transform.localPosition.x,
-                lowerY,
+                cornerCircleCoordinates[4],
+                cornerCircleCoordinates[5],
                 mainCam);
             StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(
-                this.cornerCircles[3].transform.localPosition.x,
-                lowerY,
+                cornerCircleCoordinates[6],
+                cornerCircleCoordinates[7],
                 mainCam);
 
             //serialize here
@@ -165,4 +162,26 @@ public class ManualSync : MonoBehaviour
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
     }
+
+    //Generates array used for serialization
+    private float[] GetCoordinateFloatArray()
+    {
+        float[] arr = new float[8];
+
+        float upperY = (this.cornerCircles[0].transform.localPosition.y + this.cornerCircles[1].transform.localPosition.y) / 2;
+        float lowerY = (this.cornerCircles[2].transform.localPosition.y + this.cornerCircles[3].transform.localPosition.y) / 2;
+
+
+        arr[0] = this.cornerCircles[0].transform.localPosition.x;
+        arr[1] = upperY;
+        arr[2] = this.cornerCircles[1].transform.localPosition.x;
+        arr[3] = upperY;
+        arr[4] = this.cornerCircles[2].transform.localPosition.x;
+        arr[5] = lowerY;
+        arr[6] = this.cornerCircles[3].transform.localPosition.x;
+        arr[7] = lowerY;
+
+        return arr;
+    }
+
 }
