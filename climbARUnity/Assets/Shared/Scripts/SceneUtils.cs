@@ -15,11 +15,13 @@ static class SceneUtils
         public static String musicGame = "MusicGame";
         public static String rocManGamePlay = "RocManGamePlay";
         public static String rocManYouDied = "RocManYouDied";
+        public static String musicLoadingScene = "MusicLoadingScene";
     }
 
     // name of the scene which we would display on the menu
     public static Dictionary<string, string> SceneNameToDisplayName = new Dictionary<string, string>()
     {
+        { SceneNames.musicLoadingScene, "    Music\n    Game" },
         { SceneNames.musicGame, "    Music\n    Game" },
         { SceneNames.menu, "    Menu" },
         { SceneNames.rocManGamePlay, "    RocMan\n    Game" },

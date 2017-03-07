@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class MenuHold : ClimbingHold
 {
 
-    private int enterCount;
     private IEnumerator coroutine;
     public string sceneName;
     private States grabbedState;
@@ -62,7 +61,7 @@ public class MenuHold : ClimbingHold
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
-        coroutine = TransitionToSceneWithDelay(sceneName, 0.5f);
+        coroutine = TransitionToSceneWithDelay(sceneName, 0.2f);
     }
 
 
@@ -74,6 +73,7 @@ public class MenuHold : ClimbingHold
 
     IEnumerator TransitionToSceneWithDelay(string sceneName, float delay)
     {
+        Debug.Log("Going to scene" + sceneName);
         yield return new WaitForSeconds(delay);
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     }
