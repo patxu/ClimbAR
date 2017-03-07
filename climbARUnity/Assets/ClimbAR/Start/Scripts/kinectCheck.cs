@@ -55,12 +55,12 @@ public class kinectCheck : MonoBehaviour
     {
         if (sensor.IsAvailable)
         {
-            txt.text = "Connected! Transitioning...";
+            txt.text = "Transitioning...";
             StartCoroutine(TransitionToSceneWithDelay(SceneUtils.SceneNames.manualSync, 0.3f));
         }
         else
         {
-            txt.text = "Kinect Disconnected. Please Reconnect!";
+            txt.text = "";
         }
     }
 

@@ -125,11 +125,19 @@ public class BodySourceView : MonoBehaviour
     {
         if (!isClassifying)
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
+            GameObject canvasObject = GameObject.Find("Handhold Canvas");
+            if (canvasObject != null)
+            {
+                canvasObject.GetComponent<Canvas>().enabled = !isAHandDetected;
+            }
         }
         else
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            GameObject canvasObject = GameObject.Find("Handhold Canvas");
+            if (canvasObject != null)
+            {
+                canvasObject.GetComponent<Canvas>().enabled = !isAHandDetected;
+            }
         }
     }
 

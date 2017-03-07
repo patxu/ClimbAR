@@ -232,7 +232,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Waiting for script to start
+  m_Text: Waiting...
 --- !u!222 &570901169
 CanvasRenderer:
   m_ObjectHideFlags: 0
