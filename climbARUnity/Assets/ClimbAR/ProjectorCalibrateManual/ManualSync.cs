@@ -9,7 +9,7 @@ public class ManualSync : MonoBehaviour
     //private constants
     private float BORDER_WIDTH = 0.05f
         ;
-    private string path = "Assets/ClimbAR/ProjectorCalibrateManual/SavedState/SavedState.xml";
+    private string path = "Assets/ClimbAR/ProjectorCalibrateManual/SavedState.xml";
     // Game objects
     public GameObject[] cornerCircles;
     public float[] cornerCircleCoordinates; //used for serialization - gets values from cornerCircles
@@ -24,20 +24,15 @@ public class ManualSync : MonoBehaviour
 
         //if saved state file exists
         //reposition circles
-
         if (File.Exists(path))
         {
-            print("The file exists.");
-
             XmlSerializer xmlSearializer = new XmlSerializer(typeof(float[]));
 
             using (FileStream fs = File.Open(path, FileMode.Open))
             {
-
                 cornerCircleCoordinates = (float[])xmlSearializer.Deserialize(fs);
                 PositionCircles(cornerCircleCoordinates);
             }
-
         }
 
         DrawBorder(BORDER_WIDTH);
@@ -46,11 +41,9 @@ public class ManualSync : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         // continue to next scene, saving the coordinates of the corner circles as state
         if (Input.GetKeyDown("space"))
         {
-
             cornerCircleCoordinates = GetCoordinateFloatArray();
             RecordBounds(cornerCircleCoordinates);
             Serialize(path, cornerCircleCoordinates);
@@ -61,8 +54,12 @@ public class ManualSync : MonoBehaviour
         // reset to outer corners
         if (Input.GetKeyDown("r"))
         {
-            float[] positions = new float[] { 0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f };
-            PositionCircles(positions);
+            Vector2 topLeft = ClimbARUtils.fractionToWorldSpace(0f, 0f, this.mainCam);
+            Vector2 topRight = ClimbARUtils.fractionToWorldSpace(1f, 0f, this.mainCam);
+            Vector2 bottomRight = ClimbARUtils.fractionToWorldSpace(1f, 1f, this.mainCam);
+            Vector2 bottomLeft = ClimbARUtils.fractionToWorldSpace(0f, 1f, this.mainCam);
+
+            PositionCircles(topLeft, topRight, bottomRight, bottomLeft);
         }
 
         if (Input.GetKeyDown("escape"))
@@ -125,25 +122,22 @@ public class ManualSync : MonoBehaviour
     {
         float[] arr = new float[8];
 
-        float upperY = (this.cornerCircles[0].transform.localPosition.y + this.cornerCircles[1].transform.localPosition.y) / 2;
-        float lowerY = (this.cornerCircles[2].transform.localPosition.y + this.cornerCircles[3].transform.localPosition.y) / 2;
-
-
         arr[0] = this.cornerCircles[0].transform.localPosition.x;
-        arr[1] = upperY;
+        arr[1] = this.cornerCircles[0].transform.localPosition.y;
         arr[2] = this.cornerCircles[1].transform.localPosition.x;
-        arr[3] = upperY;
+        arr[3] = this.cornerCircles[1].transform.localPosition.y;
         arr[4] = this.cornerCircles[2].transform.localPosition.x;
-        arr[5] = lowerY;
+        arr[5] = this.cornerCircles[2].transform.localPosition.y;
         arr[6] = this.cornerCircles[3].transform.localPosition.x;
-        arr[7] = lowerY;
+        arr[7] = this.cornerCircles[3].transform.localPosition.y;
 
         return arr;
     }
 
-
     private void RecordBounds(float[] cornerCircleCoordinates)
     {
+        float upperY = (cornerCircleCoordinates[1] + cornerCircleCoordinates[3]) / 2;
+        float lowerY = (cornerCircleCoordinates[5] + cornerCircleCoordinates[7]) / 2;
 
         // 0,0 is top left, +y points down
         StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
@@ -177,14 +171,17 @@ public class ManualSync : MonoBehaviour
     {
         if (this.cornerCircles != null)
         {
-            this.cornerCircles[0].transform.localPosition =
-                ClimbARUtils.fractionToWorldSpace(positions[0], positions[1], this.mainCam);
-            this.cornerCircles[1].transform.localPosition =
-                ClimbARUtils.fractionToWorldSpace(positions[2], positions[3], this.mainCam);
-            this.cornerCircles[2].transform.localPosition =
-                ClimbARUtils.fractionToWorldSpace(positions[4], positions[5], this.mainCam);
-            this.cornerCircles[3].transform.localPosition =
-                ClimbARUtils.fractionToWorldSpace(positions[6], positions[7], this.mainCam);
+            this.cornerCircles[0].transform.localPosition = new Vector2(positions[0], positions[1]);
+            this.cornerCircles[1].transform.localPosition = new Vector2(positions[2], positions[3]);
+            this.cornerCircles[2].transform.localPosition = new Vector2(positions[4], positions[5]);
+            this.cornerCircles[3].transform.localPosition = new Vector2(positions[6], positions[7]);
         }
+    }
+
+    private void PositionCircles(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft)
+    {
+        float[] positions = new float[] {topLeft.x, topLeft.y, topRight.x, topRight.y,
+                                         bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y };
+        PositionCircles(positions);
     }
 }
