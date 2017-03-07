@@ -124,7 +124,16 @@ public class ClimbingHold : MonoBehaviour
         {
             return;
         }
-        enterCount--;
+
+        // We don't ever want to go negative. 
+        // Going negative could happend if the kinect finds hands and 
+        // creates collider insider hold. This will never trigger 
+        // OnCollisionEnter (where enterCount++) and then on exit will 
+        // decrement count below zero
+        if (enterCount > 0)
+        {
+            enterCount--;
+        }
         updateStateOnCollisionExit();
     }
 
