@@ -792,8 +792,8 @@ MonoBehaviour:
   BoneMaterial: {fileID: 2100000, guid: f2ea145c63353784985576f08398a815, type: 2}
   BodySourceManager: {fileID: 1436912975}
   mainCam: {fileID: 2038593976}
-  Bone: {fileID: 0}
   isAHandDetected: 0
+  isClassifying: 0
 --- !u!4 &1266991470
 Transform:
   m_ObjectHideFlags: 0
@@ -1456,7 +1456,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2038593971}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!124 &2038593974
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1551,6 +1551,7 @@ MonoBehaviour:
   gameStartText: {fileID: 704730413}
   lives: 10
   playing: 0
+  source: {fileID: 0}
 --- !u!23 &2038593980
 MeshRenderer:
   m_ObjectHideFlags: 0
