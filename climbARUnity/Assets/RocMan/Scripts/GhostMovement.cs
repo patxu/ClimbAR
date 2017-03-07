@@ -43,7 +43,7 @@ public class GhostMovement : MonoBehaviour
                 GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
             }
             // For Debug
-            if (Input.GetKey("space"))
+            if (Input.GetKey("d"))
             {
                 this.rocmanScript.ToggleEndGame();
             }

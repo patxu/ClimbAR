@@ -17,8 +17,23 @@ public class RocMan : MonoBehaviour
     public TextMesh gameOverText;
     public TextMesh gameStartText;
     public const int numGhosts = 1;
-    public int lives = 100;
+    public int lives;
     public bool playing = false;
+
+    // For in-game sound effects
+    public AudioSource source;
+    public static class RocManSounds 
+    {
+        public static string gameStart = "gameStart";
+        public static string ghostCollision = "ghostCollision";
+        public static string youDied = "youDied";
+    }
+    public static Dictionary<string, AudioClip> RocManSoundMap = new Dictionary<string, AudioClip>()
+    {
+        { RocManSounds.gameStart, null},
+        { RocManSounds.ghostCollision, null},
+        { RocManSounds.youDied, null},
+    };
 
     // Private variables
     private IEnumerator coroutine;
@@ -29,13 +44,17 @@ public class RocMan : MonoBehaviour
 
         this.livesText.text = "Number of Lives: " + this.lives;
         this.livesText.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
-        //this.livesText.GetComponent<MeshRenderer>().sortingLayerID = 0;
 
         this.gameOverText.text = "";
         this.gameOverText.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 3, Screen.height - Screen.height / 4, 0));
 
-        this.gameStartText.text = "      Press m for menu scene\n           or s to start game";
+        this.gameStartText.text = "      Press m for menu scene\n        or space to start game";
         this.gameStartText.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 3, Screen.height, 0));
+
+        this.source = gameObject.AddComponent<AudioSource>();
+        RocManSoundMap[RocManSounds.gameStart] = Resources.Load<AudioClip>("RocManSounds/gameStart");
+        RocManSoundMap[RocManSounds.ghostCollision] = Resources.Load<AudioClip>("RocManSounds/ghostCollision");
+        RocManSoundMap[RocManSounds.youDied] = Resources.Load<AudioClip>("RocManSounds/youDied");
     }
 
     void Update()
@@ -44,18 +63,18 @@ public class RocMan : MonoBehaviour
         {
             this.PauseMovement();
         }
-        if (Input.GetKeyDown("r"))
-        {
-            this.CleanupGhosts();
-            this.StartGame();
-        }
-        if (Input.GetKeyDown("s"))
-        {
-            this.StartGame();
-        }
         if (Input.GetKeyDown("m"))
         {
             this.TransitiontoMenuScene();
+        }
+        if (!playing)
+        {
+            if (Input.GetKeyDown("space"))
+            {
+
+                this.CleanupGhosts();
+                this.StartGame();
+            }
         }
     }
 
@@ -108,6 +127,10 @@ public class RocMan : MonoBehaviour
         this.livesText.text = "Number of Lives: " + this.lives;
         // Allow game state to resume
         this.playing = true;
+        // Play game start sound
+        AudioClip clip;
+        RocManSoundMap.TryGetValue(RocManSounds.gameStart, out clip);
+        source.PlayOneShot(clip);
     }
 
 
@@ -128,6 +151,9 @@ public class RocMan : MonoBehaviour
         this.lives--;
         if (this.lives > 0)
         {
+            AudioClip clip;
+            RocManSoundMap.TryGetValue(RocManSounds.ghostCollision, out clip);
+            source.PlayOneShot(clip);
             this.livesText.text = "Number of Lives: " + this.lives;
         }
         else
@@ -138,9 +164,14 @@ public class RocMan : MonoBehaviour
 
     public void ToggleEndGame()
     {
+        // Play game over sounds
+        AudioClip clip;
+        RocManSoundMap.TryGetValue(RocManSounds.youDied, out clip);
+        source.PlayOneShot(clip);
+        // Other end game stuff
         this.PauseMovement();
         this.livesText.text = "Number of Lives: 0";
-        this.gameOverText.text = "                Game Over\n      Press m for menu scene\n           or r to restart game";
+        this.gameOverText.text = "                Game Over\n      Press m for menu scene\n      or space to restart game";
         this.playing = false;
     }
 
