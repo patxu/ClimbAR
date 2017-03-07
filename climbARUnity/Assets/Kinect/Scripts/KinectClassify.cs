@@ -14,7 +14,6 @@ public class KinectClassify : MonoBehaviour
     private bool DEBUG = false;
 
     public readonly string ClassifyImage = "GrabFrameAndClassify";
-    public readonly string ClassifyImageWithDelay = "GrabFrameAndClassifyWithDelay";
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -75,7 +74,7 @@ public class KinectClassify : MonoBehaviour
 
             if (!classifyRunning)
             {
-                StartCoroutine("GrabFrameAndClassify");
+                StartCoroutine("GrabFrameAndClassify", 0);
             }
             else
             {
@@ -110,11 +109,14 @@ public class KinectClassify : MonoBehaviour
     }
 
     // coroutine for overlaying bounding boxes on color image
-    IEnumerator GrabFrameAndClassify()
+    IEnumerator GrabFrameAndClassify(float delay)
     {
         classifyRunning = true;
         Debug.Log("starting classification coroutine");
 
+        Debug.Log(Time.time);
+        yield return new WaitForSeconds(delay);
+        Debug.Log(Time.time);
 
         if (_Reader == null)
         {
@@ -214,14 +216,6 @@ public class KinectClassify : MonoBehaviour
             Debug.LogError("Frame was null");
         }
         classifyRunning = false;
-    }
-
-    IEnumerator GrabFrameAndClassifyWithDelay(int delay)
-    {
-        Debug.Log(Time.time);
-        yield return new WaitForSeconds(delay);
-        Debug.Log(Time.time);
-        //StartCoroutine("GrabFrameAndClassify");
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
