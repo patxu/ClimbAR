@@ -10,7 +10,6 @@ public class SoundHold : ClimbingHold
     public LoopManager loopManager;
     public int holdIndex;
 
-    private System.DateTime lastCountedCollision;
     private int smoothing = 1000;
     private int enterCount = 0;
 
@@ -59,7 +58,6 @@ public class SoundHold : ClimbingHold
 
     public void Setup(string audioPath, int holdIndex, LoopManager loopManager)
     {
-        lastCountedCollision = System.DateTime.UtcNow;
         this.loopManager = loopManager;
         this.holdIndex = holdIndex;
     }

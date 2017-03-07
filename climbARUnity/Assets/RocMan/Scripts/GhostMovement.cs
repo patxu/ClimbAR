@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GhostMovement : MonoBehaviour
 {
@@ -10,10 +11,13 @@ public class GhostMovement : MonoBehaviour
     public RocMan rocmanScript;
     public int xPos;
     public int yPos;
+    private System.DateTime lastCountedCollision;
+    private int smoothingTime = 500; // time in milliseconds before we count the next collision
 
     // Use this for initialization
     void Start()
     {
+        lastCountedCollision = System.DateTime.UtcNow;
         this.moveSpeed = 0.5f;
         this.rocmanScript = Camera.main.GetComponent<RocMan>();
     }
@@ -57,14 +61,21 @@ public class GhostMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        this.ReverseDirection();
         string layerName = LayerMask.LayerToName(col.gameObject.layer);
         switch (layerName)
         {
             case "Holds":
+                this.ReverseDirection();
                 break;
             case "Skeleton":
-                this.rocmanScript.LoseLife();
+                System.DateTime currentTime = System.DateTime.UtcNow;
+                TimeSpan diff = currentTime - lastCountedCollision;
+                if (diff.TotalMilliseconds > smoothingTime)
+                {
+                    this.ReverseDirection();
+                    this.rocmanScript.LoseLife();
+                    lastCountedCollision = System.DateTime.UtcNow;
+                }
                 break;
             default:
                 break;
