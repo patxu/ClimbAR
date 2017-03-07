@@ -15,12 +15,12 @@ public class HoldSetup : MonoBehaviour
         {
             if (classifier == null)
             {
-                ClimbARUtils.LogError("No classifier specified for hold setup so cannot automatically classify and transition");
+                Debug.LogError("No classifier specified for hold setup so cannot automatically classify and transition");
             }
             else
             {
                 StateManager.instance.debugView = false;
-                classifier.StartCoroutine(classifier.ClassifyImage);
+                classifier.StartCoroutine(classifier.ClassifyImageWithDelay, 1);
             }
 
             if (autoTransition)
@@ -39,7 +39,7 @@ public class HoldSetup : MonoBehaviour
             // don't move until we've flipped hold orientation - future scenes shouldn't have the live image
             if (StateManager.instance.debugView == true)
             {
-                ClimbARUtils.LogError("Color view must be toggled off! Press <t>");
+                Debug.LogError("Color view must be toggled off! Press <t>");
             }
             else
             {
@@ -52,8 +52,12 @@ public class HoldSetup : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
-            ClimbingHold script = hold.GetComponent<ClimbingHold>();
-            Destroy(script);
+            if (hold != null)
+            {
+                ClimbingHold script = hold.GetComponent<ClimbingHold>();
+                Destroy(script);
+                ClimbARHandhold.HoldLineRendererActive(hold, false);
+            }
         }
     }
 }

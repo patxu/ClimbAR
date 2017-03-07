@@ -37,6 +37,8 @@ public class KinectClassify : MonoBehaviour
     public GameObject Handhold;
     public Camera mainCam;
     public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_demo.xml";
+    //public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade_17_newgym_lbp.xml";
+    //public string classifierPath = "C:\\cs98-senior-project\\OpenCV_files\\cascade.xml";
     bool classifyRunning = false;
 
     void Start()
@@ -59,7 +61,7 @@ public class KinectClassify : MonoBehaviour
         }
         else
         {
-            ClimbARUtils.LogError("cannot get Kinect sensor");
+            Debug.LogError("cannot get Kinect sensor");
         }
         GameObject bodyView = GameObject.Find("KinectBodyView");
         BodySourceView view = bodyView.GetComponent<BodySourceView>();
@@ -160,7 +162,7 @@ public class KinectClassify : MonoBehaviour
                         frame.Dispose();
                         frame = null;
                     }
-                    ClimbARUtils.LogError("Error with classifying. Exiting coroutine");
+                    Debug.LogError("Error with classifying. Exiting coroutine");
                     classifyRunning = false;
                     yield break;
                 }
@@ -209,15 +211,17 @@ public class KinectClassify : MonoBehaviour
         }
         else
         {
-            ClimbARUtils.LogError("Frame was null");
+            Debug.LogError("Frame was null");
         }
         classifyRunning = false;
     }
 
-    IEnumerable GrabFrameAndClassifyWithDelay(int delay)
+    IEnumerator GrabFrameAndClassifyWithDelay(int delay)
     {
+        Debug.Log(Time.time);
         yield return new WaitForSeconds(delay);
-        StartCoroutine("GrabFrameAndClassify");
+        Debug.Log(Time.time);
+        //StartCoroutine("GrabFrameAndClassify");
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
@@ -257,7 +261,7 @@ public class KinectClassify : MonoBehaviour
 
         if (holdCount[0] < 1)
         {
-            ClimbARUtils.LogError("Error with classifier");
+            Debug.LogError("Error with classifier");
             OpenCV.cleanupBBArray();
             float[] error = new float[1];
             error[0] = -1f;

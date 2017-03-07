@@ -5,74 +5,74 @@ using UnityEngine.SceneManagement;
 
 public class GhostMovement : MonoBehaviour
 {
-
     // State variables
     private float moveSpeed;
-    private int lives;
-    private bool offScreen;
+    public RocMan rocmanScript;
+    public int xPos;
+    public int yPos;
 
     // Use this for initialization
     void Start()
     {
         this.moveSpeed = 0.5f;
-        this.lives = 3;
+        this.rocmanScript = Camera.main.GetComponent<RocMan>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // keyboard controls
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (this.rocmanScript.playing)
         {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, this.moveSpeed);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, 0);
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, 0);
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
-        }
-
-        // keep ghost on screen
-        if (!GetComponent<SpriteRenderer>().isVisible)
-        {
-            if (offScreen == false) // was on screen before, now off, so reverse 
+            Vector3 pos = Camera.main.WorldToScreenPoint(GetComponent<Transform>().position);
+            this.xPos = (int)pos.x;
+            this.yPos = (int)pos.y;
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, this.moveSpeed);
             }
-            offScreen = true;
-        }
-        else
-        {
-            offScreen = false;
-        }
-
-        // make ghost look left or right depending on x velocity
-        // don't flip if == 0 so it doesn't change when moving up/down
-        if (GetComponent<Rigidbody2D>().velocity.x < 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (GetComponent<Rigidbody2D>().velocity.x > 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(this.moveSpeed, 0);
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(-this.moveSpeed, 0);
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, -this.moveSpeed);
+            }
+            // For Debug
+            if (Input.GetKey("space"))
+            {
+                this.rocmanScript.ToggleEndGame();
+            }
+            // Avoid moving out of bounds
+            if (xPos < 0 || xPos > Screen.width || yPos < 0 || yPos > Screen.height)
+            {
+                this.ReverseDirection();
+            }
         }
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * -1, GetComponent<Rigidbody2D>().velocity.y * -1);
-        this.lives--;
-        Debug.Log("You now have " + this.lives + " lives.");
-        if (this.lives <= 0)
+        this.ReverseDirection();
+        string layerName = LayerMask.LayerToName(col.gameObject.layer);
+        switch (layerName)
         {
-            SceneManager.LoadScene(SceneUtils.SceneNames.rocManYouDied);
+            case "Holds":
+                break;
+            case "Skeleton":
+                this.rocmanScript.LoseLife();
+                break;
+            default:
+                break;
         }
+    }
+
+    public void ReverseDirection()
+    {
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y * (-1));
     }
 }

@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/ClimbAR_Start.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/MusicGame.unity
   - enabled: 1
     path: Assets/RocMan/RocManGamePlay.unity
@@ -21,3 +21,5 @@ EditorBuildSettings:
     path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateAuto.unity
   - enabled: 1
     path: Assets/ClimbAR/ClimbAR_ProjectorCalibrateManual.unity
+  - enabled: 1
+    path: Assets/MusicGame/MusicGame.unity
