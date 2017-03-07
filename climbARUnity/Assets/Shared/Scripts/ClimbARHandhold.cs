@@ -142,7 +142,10 @@ static class ClimbARHandhold
 
     public static void HoldLineRendererActive(GameObject hold, bool isActive)
     {
-        hold.GetComponent<LineRenderer>().enabled = isActive;
+        if (hold != null)
+        {
+            hold.GetComponent<LineRenderer>().enabled = isActive;
+        }
     }
 
 }

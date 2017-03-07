@@ -10,10 +10,51 @@ public class MenuHold : ClimbingHold
     private int enterCount;
     private IEnumerator coroutine;
     public string sceneName;
+    private States grabbedState;
 
     void Start()
     {
-        enterCount = 0;
+        grabbedState = States.Released;
+    }
+
+    void Update()
+    {
+        if (grabbedState == States.Released && currentState == States.Grabbed)
+        {
+            grabbedState = States.Grabbed;
+
+            StartCoroutine(coroutine);
+
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
+            {
+                Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+                gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
+                    ? Menu.customHoldSprite1
+                    : Menu.customHoldSprite0;
+            }
+            else
+            {
+                ClimbARHandhold.setHoldColor(gameObject, UnityEngine.Color.cyan);
+            }
+        }
+        else if (grabbedState == States.Grabbed && currentState == States.Released)
+        {
+            grabbedState = States.Released;
+
+            StopCoroutine(coroutine);
+
+            if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
+            {
+                Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+                gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
+                    ? Menu.customHoldSprite1
+                    : Menu.customHoldSprite0;
+            }
+            else
+            {
+                ClimbARHandhold.setHoldColor(gameObject, UnityEngine.Color.cyan);
+            }
+        }
     }
     public GameObject canvasGameObject;
 
@@ -24,52 +65,10 @@ public class MenuHold : ClimbingHold
         coroutine = TransitionToSceneWithDelay(sceneName, 0.5f);
     }
 
-    private new void OnTriggerExit2D(Collider2D col)
-    {
-        if (!ShouldRegisterHoldReleased(col))
-        {
-            return;
-        }
-
-        StopCoroutine(coroutine);
-
-        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
-        {
-            Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
-                ? Menu.customHoldSprite1
-                : Menu.customHoldSprite0;
-        }
-        else
-        {
-            ClimbARHandhold.setHoldColor(gameObject, UnityEngine.Color.cyan);
-        }
-    }
-
-    private new void OnTriggerEnter2D(Collider2D col)
-    {
-        if (!ShouldRegisterHoldGrabbed(col))
-        {
-            return;
-        }
-
-        StartCoroutine(coroutine);
-
-        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
-        {
-            Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-            gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
-                ? Menu.customHoldSprite1
-                : Menu.customHoldSprite0;
-        }
-        else
-        {
-            ClimbARHandhold.setHoldColor(gameObject, UnityEngine.Color.cyan);
-        }
-    }
 
     void OnMouseDown()
     {
+        Debug.Log("clicked");
         OnTriggerEnter2D(null);
     }
 
