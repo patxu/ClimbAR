@@ -10,24 +10,6 @@ public class kinectCheck : MonoBehaviour
     private Text txt;
     private KinectSensor _Sensor;
 
-    private void onIsAvailableChanged(object sensor, System.EventArgs args)
-    {
-        checkKinectConnection((KinectSensor)sensor);
-    }
-
-    void checkKinectConnection(KinectSensor sensor)
-    {
-        if (sensor.IsAvailable)
-        {
-            txt.text = "Connected! Transitioning...";
-            StartCoroutine(TransitionToSceneWithDelay(SceneUtils.SceneNames.manualSync, 0.3f));
-        }
-        else
-        {
-            txt.text = "Kinect Disconnected. Please Reconnect!";
-        }
-    }
-
     // Use this for initialization
     void Start()
     {
@@ -63,4 +45,23 @@ public class kinectCheck : MonoBehaviour
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         Destroy(this, 1);
     }
+
+    private void onIsAvailableChanged(object sensor, System.EventArgs args)
+    {
+        checkKinectConnection((KinectSensor)sensor);
+    }
+
+    void checkKinectConnection(KinectSensor sensor)
+    {
+        if (sensor.IsAvailable)
+        {
+            txt.text = "Connected! Transitioning...";
+            StartCoroutine(TransitionToSceneWithDelay(SceneUtils.SceneNames.manualSync, 0.3f));
+        }
+        else
+        {
+            txt.text = "Kinect Disconnected. Please Reconnect!";
+        }
+    }
+
 }
