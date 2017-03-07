@@ -98,11 +98,11 @@ public class KinectClassify : MonoBehaviour
         classifyRunning = true;
         Debug.Log("starting classification coroutine");
 
-        yield return new WaitForSeconds(delay);
-
         GameObject bodyView = GameObject.Find("KinectBodyView");
         BodySourceView view = bodyView.GetComponent<BodySourceView>();
         view.isClassifying = true;
+
+        yield return new WaitForSeconds(delay);
 
         if (_Reader == null)
         {

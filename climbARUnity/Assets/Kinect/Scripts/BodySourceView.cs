@@ -127,6 +127,10 @@ public class BodySourceView : MonoBehaviour
         {
             gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
         }
+        else
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     private GameObject CreateBodyObject(ulong id)
