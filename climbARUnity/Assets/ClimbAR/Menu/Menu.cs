@@ -86,7 +86,6 @@ public class Menu : MonoBehaviour
                 holdTextScript.setup(menuItem, holdText, menuHold);
 
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
-                Debug.Log(menuItem);
                 menuHoldScript.setup(menuItem);
             }
         }
