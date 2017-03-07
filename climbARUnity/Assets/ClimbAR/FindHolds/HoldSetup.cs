@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class HoldSetup : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class HoldSetup : MonoBehaviour
     public KinectClassify classifier;
     public bool autoClassify = true;
     public bool autoTransition = true;
+    private float delay = 5f;
 
     private void Start()
     {
@@ -20,14 +22,20 @@ public class HoldSetup : MonoBehaviour
             else
             {
                 StateManager.instance.debugView = false;
-                classifier.StartCoroutine(classifier.ClassifyImage, 1f);
+                classifier.StartCoroutine(classifier.ClassifyImage, delay);
             }
 
             if (autoTransition)
             {
-                SceneManager.LoadScene(SceneUtils.SceneNames.menu);
+                StartCoroutine(loadNextScene());
             }
         }
+    }
+
+    IEnumerator loadNextScene()
+    {
+        yield return new WaitForSeconds(delay + 0.2f);
+        SceneManager.LoadScene(SceneUtils.SceneNames.menu);
     }
 
     void Update()

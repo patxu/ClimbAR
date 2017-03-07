@@ -90,22 +90,6 @@ public class KinectClassify : MonoBehaviour
                     new Vector3(position.x * -1, position.y, position.z);
             }
         }
-
-
-        if (_Reader != null)
-        {
-            var frame = _Reader.AcquireLatestFrame();
-
-            if (frame != null)
-            {
-                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
-                _Texture.LoadRawTextureData(_Data);
-                //_Texture.Apply();
-
-                frame.Dispose();
-                frame = null;
-            }
-        }
     }
 
     // coroutine for overlaying bounding boxes on color image
@@ -114,9 +98,7 @@ public class KinectClassify : MonoBehaviour
         classifyRunning = true;
         Debug.Log("starting classification coroutine");
 
-        Debug.Log(Time.time);
         yield return new WaitForSeconds(delay);
-        Debug.Log(Time.time);
 
         if (_Reader == null)
         {
