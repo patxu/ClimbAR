@@ -66,8 +66,15 @@ public class SoundHold : ClimbingHold
 
     private void OnMouseDown()
     {
-       enterCount = 0;
-       OnTriggerEnter2D(null); 
+        if (base.currentState == States.Grabbed)
+        {
+            enterCount = 0;
+            base.currentState = States.Released;
+        }
+        else if (base.currentState == States.Released)
+        {
+            base.currentState = States.Grabbed;
+        }
     }
 
     private void OnDisable()

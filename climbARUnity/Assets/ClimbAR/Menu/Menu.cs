@@ -9,7 +9,7 @@ public class Menu : MonoBehaviour
     public Dictionary<string, GameObject> menuItems = new Dictionary<string, GameObject>()
     {
         { SceneUtils.SceneNames.rocManGamePlay, null },
-        { SceneUtils.SceneNames.musicGame, null },
+        { SceneUtils.SceneNames.musicLoadingScene, null },
     };
 
     private GameObject[] holds;
@@ -86,6 +86,7 @@ public class Menu : MonoBehaviour
                 holdTextScript.setup(menuItem, holdText, menuHold);
 
                 MenuHold menuHoldScript = menuHold.AddComponent<MenuHold>();
+                Debug.Log(menuItem);
                 menuHoldScript.setup(menuItem);
             }
         }
