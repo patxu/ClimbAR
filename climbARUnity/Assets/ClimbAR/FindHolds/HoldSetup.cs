@@ -52,9 +52,12 @@ public class HoldSetup : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
-            ClimbingHold script = hold.GetComponent<ClimbingHold>();
-            Destroy(script);
-            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+            if (hold != null)
+            {
+                ClimbingHold script = hold.GetComponent<ClimbingHold>();
+                Destroy(script);
+                ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+            }
         }
     }
 }
