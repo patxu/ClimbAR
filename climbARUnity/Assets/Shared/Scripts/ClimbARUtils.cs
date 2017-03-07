@@ -9,7 +9,7 @@ static class ClimbARUtils
 
     public static Vector2 kinectScale = new Vector2(1920, 1080);
 
-    // Converts from image coordinate system ((0,0) is upper left and unbounded range) to unity viewport space ((0,0) is lower left with max height and width of 1) 
+    // Converts from image coordinate system ((0,0) is upper left and unbounded range) to unity viewport space ((0,0) is lower left with max height and width of 1)
     public static Vector2 openCVToUnity(int kinectUpperLeftX, int kinectUpperLeftY, int width, int height, int pointToConvertX, int pointToConvertY)
     {
         float fractionOfX = (pointToConvertX - kinectUpperLeftX) / (width);
@@ -36,7 +36,7 @@ static class ClimbARUtils
         return transformed;
     }
 
-    // take a point x and y in range [0,1] (top left is 0,0) and translate to the camera space (orthographic) 
+    // take a point x and y in range [0,1] (top left is 0,0) and translate to the camera space (orthographic)
     public static Vector2 fractionToWorldSpace(float x, float y, Camera cam)
     {
         float camHeight = 2f * cam.orthographicSize;
@@ -54,11 +54,6 @@ static class ClimbARUtils
 
         return new Vector2(x / camWidth + 0.5f,
                            (y / camHeight - 0.5f) * -1f);
-    }
-
-    public static void LogError(string error)
-    {
-        Debug.LogError("ClimbAR Error: " + error);
     }
 
 }
