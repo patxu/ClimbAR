@@ -24,7 +24,7 @@ public static class RouteGeneration
         return Mathf.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
-    static GameObject getNearestHold(GameObject[] handHolds, GameObject currentHold)
+    public static GameObject getNearestHold(GameObject[] handHolds, GameObject currentHold)
     {
         // input tests i
         if (handHolds == null)
@@ -54,7 +54,7 @@ public static class RouteGeneration
     }
 
 
-    static GameObject getNearestHoldAbove(GameObject[] handHolds, GameObject currentHold)
+    public static GameObject getNearestHoldAbove(GameObject[] handHolds, GameObject currentHold)
     {
         float minDistance = float.MaxValue;
         GameObject minHold = null;
@@ -72,7 +72,7 @@ public static class RouteGeneration
         return minHold;
     }
 
-    static GameObject getNearestHoldBelow(GameObject[] handHolds, GameObject currentHold)
+    public static GameObject getNearestHoldBelow(GameObject[] handHolds, GameObject currentHold)
     {
         float minDistance = float.MaxValue;
         GameObject minHold = null;
@@ -90,7 +90,7 @@ public static class RouteGeneration
         return minHold;
     }
 
-    static GameObject getNearestHoldRight(GameObject[] handHolds, GameObject currentHold)
+    public static GameObject getNearestHoldRight(GameObject[] handHolds, GameObject currentHold)
     {
         float minDistance = float.MaxValue;
         GameObject minHold = null;
@@ -108,7 +108,7 @@ public static class RouteGeneration
         return minHold;
     }
 
-    static GameObject getNearestHoldLeft(GameObject[] handHolds, GameObject currentHold)
+    public static GameObject getNearestHoldLeft(GameObject[] handHolds, GameObject currentHold)
     {
         float minDistance = float.MaxValue;
         GameObject minHold = null;
@@ -142,7 +142,7 @@ public static class RouteGeneration
         return routeHolds;
     }
 
-    private static GameObject getStartingHold(GameObject[] handHolds)
+    public static GameObject getStartingHold(GameObject[] handHolds)
     {
         GameObject[] sortedArray = new GameObject[handHolds.Length];
         Array.Copy(handHolds, sortedArray, handHolds.Length);

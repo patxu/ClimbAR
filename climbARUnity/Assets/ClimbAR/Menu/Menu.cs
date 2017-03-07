@@ -42,10 +42,14 @@ public class Menu : MonoBehaviour
         holds = GameObject.FindGameObjectsWithTag("Hold");
         List<string> keys = new List<string>(menuItems.Keys);
 
+        GameObject currentHold = RouteGeneration.getStartingHold(holds);
+
         // right now, just pair them arbitrarily
         for (int i = 0; i < Math.Min(holds.Length, keys.Count); i++)
         {
-            menuItems[keys[i]] = holds[i];
+            menuItems[keys[i]] = currentHold;
+
+            currentHold = RouteGeneration.getNearestHoldAbove(holds, currentHold);
         }
     }
 
