@@ -20,7 +20,7 @@ public class HoldSetup : MonoBehaviour
             else
             {
                 StateManager.instance.debugView = false;
-                classifier.StartCoroutine(classifier.ClassifyImage);
+                classifier.StartCoroutine(classifier.ClassifyImageWithDelay, 1);
             }
 
             if (autoTransition)
@@ -52,9 +52,12 @@ public class HoldSetup : MonoBehaviour
     {
         foreach (GameObject hold in holds)
         {
-            ClimbingHold script = hold.GetComponent<ClimbingHold>();
-            Destroy(script);
-            ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+            if (hold != null)
+            {
+                ClimbingHold script = hold.GetComponent<ClimbingHold>();
+                Destroy(script);
+                ClimbARHandhold.ActivateHoldLineRenderer(hold, false);
+            }
         }
     }
 }
