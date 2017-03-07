@@ -19,6 +19,9 @@ static class ClimbARHandhold
         float camHeight = 2f * camera.orthographicSize;
         float camWidth = camHeight * camera.aspect;
 
+        Menu.camHeight = camHeight;
+        Menu.camWidth = camWidth;
+
         int numHolds = holdBoundingBoxes.Length / 4;
         
         List<GameObject> handholds = new List<GameObject>();
@@ -80,10 +83,11 @@ static class ClimbARHandhold
     // draw and instantiate custom sprite for climbing hold
     public static void DrawHoldSprite(
         SpriteRenderer spriteRenderer,
+        Sprite customSprite,
         float xscale,
         float yscale)
     {
-        spriteRenderer.sprite = Menu.customHoldSprite0;
+        spriteRenderer.sprite = customSprite;
         spriteRenderer.transform.localScale = new Vector3(xscale, yscale);
         spriteRenderer.enabled = true;
     }
