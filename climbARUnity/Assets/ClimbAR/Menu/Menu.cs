@@ -41,10 +41,6 @@ public class Menu : MonoBehaviour
     {
         holds = GameObject.FindGameObjectsWithTag("Hold");
         List<string> keys = new List<string>(menuItems.Keys);
-        if (holds.Length < keys.Count)
-        {
-            Debug.Log("Not enough handholds for the number of menu items");
-        }
 
         // right now, just pair them arbitrarily
         for (int i = 0; i < Math.Min(holds.Length, keys.Count); i++)
