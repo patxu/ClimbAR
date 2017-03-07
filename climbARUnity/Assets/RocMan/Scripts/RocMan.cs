@@ -40,8 +40,10 @@ public class RocMan : MonoBehaviour
 
     void Start()
     {
+        // Set menu transition
         this.coroutine = TransitionToSceneWithDelay(SceneUtils.SceneNames.menu, 0.5f);
 
+        // Set in-game text
         this.livesText.text = "Number of Lives: " + this.lives;
         this.livesText.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
 
@@ -51,10 +53,18 @@ public class RocMan : MonoBehaviour
         this.gameStartText.text = "      Press m for menu scene\n        or space to start game";
         this.gameStartText.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 3, Screen.height, 0));
 
+        // Set in-game sound effect
         this.source = gameObject.AddComponent<AudioSource>();
         RocManSoundMap[RocManSounds.gameStart] = Resources.Load<AudioClip>("RocManSounds/gameStart");
         RocManSoundMap[RocManSounds.ghostCollision] = Resources.Load<AudioClip>("RocManSounds/ghostCollision");
         RocManSoundMap[RocManSounds.youDied] = Resources.Load<AudioClip>("RocManSounds/youDied");
+
+        // Reactivate line renderers for handholds
+        this.handholds = GameObject.FindGameObjectsWithTag("Hold");
+        for (int i = 0; i < handholds.Length; i++)
+        {
+            ClimbARHandhold.HoldLineRendererActive(handholds[i], true);
+        }
     }
 
     void Update()
@@ -201,7 +211,14 @@ public class RocMan : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("Do cleanup on disable");
         this.CleanupGhosts();
+        foreach (GameObject hold in this.handholds)
+        {
+            if (hold != null)
+            {
+                ClimbARHandhold.HoldLineRendererActive(hold, false);
+                ClimbARHandhold.DestroyChildren(hold);
+            }
+        }
     }
 }
