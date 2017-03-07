@@ -284,10 +284,6 @@ GameObject:
   - component: {fileID: 1552627936}
   - component: {fileID: 1552627935}
   - component: {fileID: 1552627934}
-  - component: {fileID: 1552627933}
-  - component: {fileID: 1552627932}
-  - component: {fileID: 1552627931}
-  - component: {fileID: 1552627930}
   - component: {fileID: 1552627929}
   m_Layer: 0
   m_Name: Main Camera
@@ -304,54 +300,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1552627928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d25a3bfb87d7ffc4080b8936935e5ae6, type: 3}
+  m_Script: {fileID: 11500000, guid: af9de641da1f18e46bb987fbe8bebbb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clips: []
---- !u!114 &1552627930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1552627928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3e1989191f148040ace0b74b1bb89f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabHold: {fileID: 1000012162831070, guid: 45cfefdd50ca97e43b5609d3f47b52f9, type: 2}
-  loopManager: {fileID: 0}
---- !u!114 &1552627931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1552627928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d12ab5889da54946b70faf925a90fcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1552627932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1552627928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4005414eae18c284b9d85c84325ffb12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateManager: {fileID: 114000011991695248, guid: 1af30584958d2bf43855e13685f6334e,
-    type: 2}
---- !u!81 &1552627933
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1552627928}
-  m_Enabled: 1
 --- !u!124 &1552627934
 Behaviour:
   m_ObjectHideFlags: 0

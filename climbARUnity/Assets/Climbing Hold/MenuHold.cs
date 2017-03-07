@@ -61,7 +61,7 @@ public class MenuHold : ClimbingHold
     public void setup(string sceneName)
     {
         this.sceneName = sceneName;
-        coroutine = TransitionToSceneWithDelay(sceneName, 0.2f);
+        coroutine = TransitionToSceneWithDelay(sceneName, 0.1f);
     }
 
 
