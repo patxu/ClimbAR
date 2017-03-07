@@ -14,7 +14,6 @@ public class KinectClassify : MonoBehaviour
     private bool DEBUG = false;
 
     public readonly string ClassifyImage = "GrabFrameAndClassify";
-    public readonly string ClassifyImageWithDelay = "GrabFrameAndClassifyWithDelay";
 
     // import OpenCV dll wrapper functions
     static class OpenCV
@@ -75,7 +74,7 @@ public class KinectClassify : MonoBehaviour
 
             if (!classifyRunning)
             {
-                StartCoroutine("GrabFrameAndClassify");
+                StartCoroutine("GrabFrameAndClassify", 0);
             }
             else
             {
@@ -91,34 +90,24 @@ public class KinectClassify : MonoBehaviour
                     new Vector3(position.x * -1, position.y, position.z);
             }
         }
-
-
-        if (_Reader != null)
-        {
-            var frame = _Reader.AcquireLatestFrame();
-
-            if (frame != null)
-            {
-                frame.CopyConvertedFrameDataToArray(_Data, ColorImageFormat.Rgba);
-                _Texture.LoadRawTextureData(_Data);
-                //_Texture.Apply();
-
-                frame.Dispose();
-                frame = null;
-            }
-        }
     }
 
     // coroutine for overlaying bounding boxes on color image
-    IEnumerator GrabFrameAndClassify()
+    IEnumerator GrabFrameAndClassify(float delay)
     {
         classifyRunning = true;
         Debug.Log("starting classification coroutine");
 
+        yield return new WaitForSeconds(delay);
+
+        GameObject bodyView = GameObject.Find("KinectBodyView");
+        BodySourceView view = bodyView.GetComponent<BodySourceView>();
+        view.isClassifying = true;
 
         if (_Reader == null)
         {
             Debug.Log("Using hardcoded bounding boxes or image");
+            view.isClassifying = false;
             yield return null;
         }
         ColorFrame frame = _Reader.AcquireLatestFrame();
@@ -213,15 +202,10 @@ public class KinectClassify : MonoBehaviour
         {
             Debug.LogError("Frame was null");
         }
-        classifyRunning = false;
-    }
 
-    IEnumerator GrabFrameAndClassifyWithDelay(int delay)
-    {
-        Debug.Log(Time.time);
-        yield return new WaitForSeconds(delay);
-        Debug.Log(Time.time);
-        //StartCoroutine("GrabFrameAndClassify");
+        // release locks for this file and the body source view text
+        classifyRunning = false;
+        view.isClassifying = false;
     }
 
     void cleanHandHolds(ref GameObject[] handholds)

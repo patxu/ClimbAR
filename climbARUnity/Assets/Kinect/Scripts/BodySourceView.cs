@@ -14,6 +14,7 @@ public class BodySourceView : MonoBehaviour
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
     public bool isAHandDetected;
+    public bool isClassifying = false;
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -122,7 +123,10 @@ public class BodySourceView : MonoBehaviour
 
     public void updateTextMesh()
     {
-        gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
+        if (!isClassifying)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
+        }
     }
 
     private GameObject CreateBodyObject(ulong id)
