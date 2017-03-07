@@ -27,7 +27,9 @@ public class BodySourceManager : MonoBehaviour
             {
                 _Sensor.Open();
             }
-        }   
+        }
+
+        Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton by default  
     }
     
     void Update () 
