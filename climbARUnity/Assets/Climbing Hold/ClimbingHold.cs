@@ -6,14 +6,12 @@ using System.Threading;
 public class ClimbingHold : MonoBehaviour
 {
     private int enterCount = 0;
-    private float grabbedSmoothing = 500 / 1000; // divided by 1000 to put as fraction of second
-    private float releasedSmoothing = 500 / 1000;
+    private float grabbedSmoothing = 200 / 1000; // divided by 1000 to put as fraction of second
+    private float releasedSmoothing = 200 / 1000;
 
     public bool smoothingEnabled = true;
-    public enum States {Released, GrabbedPending, Grabbed, ReleasePending}
+    public enum States { Released, GrabbedPending, Grabbed, ReleasePending }
     public States currentState = States.Released;
-
-    private Guid id = Guid.NewGuid();
 
     void Start()
     {
@@ -33,7 +31,7 @@ public class ClimbingHold : MonoBehaviour
 
     private IEnumerator grabbedPending()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(grabbedSmoothing);
 
         // if after the sleep we are still in pending state, change to grabbed
         if (currentState == States.GrabbedPending)
@@ -45,10 +43,10 @@ public class ClimbingHold : MonoBehaviour
     private IEnumerator releasedPending()
     {
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(releasedSmoothing);
 
         // if after the sleep we are still in pending state, change to released
-        if (currentState == States.ReleasePending) 
+        if (currentState == States.ReleasePending)
         {
             currentState = States.Released;
         }
