@@ -1246,8 +1246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classifier: {fileID: 1916355715}
-  autoClassify: 1
-  autoTransition: 1
+  autoClassify: 0
+  autoTransition: 0
 --- !u!224 &2038593980
 RectTransform:
   m_ObjectHideFlags: 0

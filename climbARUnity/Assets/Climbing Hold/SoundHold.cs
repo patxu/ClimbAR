@@ -14,12 +14,38 @@ public class SoundHold : ClimbingHold
     private int smoothing = 1000;
     private int enterCount = 0;
 
-    bool audioPlaying;
+    private bool audioPlaying;
+
+    private States displayedState;
 
     // Use this for initialization
     void Start()
     {
         audioPlaying = false;
+        displayedState = States.Released;
+    }
+
+    void Update()
+    {
+        if (displayedState == States.Released && base.currentState == States.Grabbed)
+        {
+            audioPlaying = true;
+            loopManager.Unmute(holdIndex);
+            gameObject.GetComponent<LineRenderer>()
+               .startColor = UnityEngine.Color.green;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.green;
+            displayedState = States.Grabbed;
+        }
+        else if (displayedState == States.Grabbed && base.currentState == States.Released)
+        {
+            audioPlaying = false;
+            gameObject.GetComponent<LineRenderer>()
+                 .startColor = UnityEngine.Color.cyan;
+            gameObject.GetComponent<LineRenderer>()
+                .endColor = UnityEngine.Color.cyan;
+            loopManager.Mute(holdIndex);
+        }
     }
 
     public void Setup(string audioPath, int holdIndex, LoopManager loopManager)
@@ -35,6 +61,7 @@ public class SoundHold : ClimbingHold
        OnTriggerEnter2D(null); 
     }
 
+    /*
     private new void OnTriggerEnter2D(Collider2D collision)
     {
         if (!ShouldRegisterHoldGrabbed(collision))
@@ -42,6 +69,7 @@ public class SoundHold : ClimbingHold
             return;
         }
 
+        
         if (audioPlaying)
         {
             audioPlaying = false;
@@ -61,15 +89,15 @@ public class SoundHold : ClimbingHold
                 .endColor = UnityEngine.Color.green;
         }
 
-    }
-
+    }*/
+    /*
     private new void OnTriggerExit2D(Collider2D collision)
     {
         if (!ShouldRegisterHoldReleased(collision))
         {
             return;
         }
-    }
+    }*/
 
     private void OnDisable()
     {
