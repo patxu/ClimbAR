@@ -33,7 +33,7 @@ public class ClimbingHold : MonoBehaviour
 
     private IEnumerator grabbedPending()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         // if after the sleep we are still in pending state, change to grabbed
         if (currentState == States.GrabbedPending)
@@ -45,7 +45,7 @@ public class ClimbingHold : MonoBehaviour
     private IEnumerator releasedPending()
     {
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         // if after the sleep we are still in pending state, change to released
         if (currentState == States.ReleasePending) 

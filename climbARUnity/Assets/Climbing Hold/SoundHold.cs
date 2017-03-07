@@ -29,22 +29,30 @@ public class SoundHold : ClimbingHold
     {
         if (displayedState == States.Released && base.currentState == States.Grabbed)
         {
-            audioPlaying = true;
-            loopManager.Unmute(holdIndex);
-            gameObject.GetComponent<LineRenderer>()
-               .startColor = UnityEngine.Color.green;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.green;
             displayedState = States.Grabbed;
+            if (audioPlaying)
+            {
+                audioPlaying = true;
+                loopManager.Unmute(holdIndex);
+                gameObject.GetComponent<LineRenderer>()
+                   .startColor = UnityEngine.Color.green;
+                gameObject.GetComponent<LineRenderer>()
+                    .endColor = UnityEngine.Color.green;
+            }
+            else
+            {
+                audioPlaying = false;
+                gameObject.GetComponent<LineRenderer>()
+                     .startColor = UnityEngine.Color.cyan;
+                gameObject.GetComponent<LineRenderer>()
+                    .endColor = UnityEngine.Color.cyan;
+                loopManager.Mute(holdIndex);
+            }
+            
         }
         else if (displayedState == States.Grabbed && base.currentState == States.Released)
         {
-            audioPlaying = false;
-            gameObject.GetComponent<LineRenderer>()
-                 .startColor = UnityEngine.Color.cyan;
-            gameObject.GetComponent<LineRenderer>()
-                .endColor = UnityEngine.Color.cyan;
-            loopManager.Mute(holdIndex);
+            displayedState = States.Released;
         }
     }
 
