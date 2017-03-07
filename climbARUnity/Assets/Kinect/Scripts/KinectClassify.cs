@@ -247,7 +247,7 @@ public class KinectClassify : MonoBehaviour
         {
             if (holdCount[0] == 0)
             {
-                Debug.Log("No Holds Found");
+                Debug.LogError("No Holds Found");
             }
             else
             {
