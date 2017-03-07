@@ -6,7 +6,7 @@ using UnityEngine;
 public class MusicGame : MonoBehaviour
 {
 
-    bool DEBUG = false; 
+    bool DEBUG = false;
     public GameObject prefabHold;
     public LoopManager loopManager;
     string[] soundItems = new string[] { "Brass", "Bass", "Drums", "Piano" }; //path relative to Resources folder
@@ -113,6 +113,8 @@ public class MusicGame : MonoBehaviour
                 SoundHold script = hold.GetComponent<SoundHold>();
                 Destroy(hTextScript);
                 Destroy(script);
+
+                ClimbARHandhold.DestroyChildren(hold);
             }
         }
     }
