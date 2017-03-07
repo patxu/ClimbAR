@@ -14,7 +14,6 @@ static class SceneUtils
         public static String exampleGame = "ExampleGame";
         public static String musicGame = "MusicGame";
         public static String rocManGamePlay = "RocManGamePlay";
-        public static String rocManYouDied = "RocManYouDied";
         public static String musicLoadingScene = "MusicLoadingScene";
     }
 
