@@ -20,7 +20,7 @@ public class HoldSetup : MonoBehaviour
             else
             {
                 StateManager.instance.debugView = false;
-                classifier.StartCoroutine(classifier.ClassifyImage);
+                classifier.StartCoroutine(classifier.ClassifyImageWithDelay, 1);
             }
 
             if (autoTransition)

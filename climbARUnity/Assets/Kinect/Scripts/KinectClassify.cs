@@ -216,10 +216,12 @@ public class KinectClassify : MonoBehaviour
         classifyRunning = false;
     }
 
-    IEnumerable GrabFrameAndClassifyWithDelay(int delay)
+    IEnumerator GrabFrameAndClassifyWithDelay(int delay)
     {
+        Debug.Log(Time.time);
         yield return new WaitForSeconds(delay);
-        StartCoroutine("GrabFrameAndClassify");
+        Debug.Log(Time.time);
+        //StartCoroutine("GrabFrameAndClassify");
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
