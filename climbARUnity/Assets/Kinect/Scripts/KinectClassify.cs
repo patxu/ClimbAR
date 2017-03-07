@@ -245,7 +245,14 @@ public class KinectClassify : MonoBehaviour
 
         if (holdCount[0] < 1)
         {
-            Debug.LogError("Error with classifier");
+            if (holdCount[0] == 0)
+            {
+                Debug.LogError("No Holds Found");
+            }
+            else
+            {
+                Debug.LogError("Error with classifier");
+            }
             OpenCV.cleanupBBArray();
             float[] error = new float[1];
             error[0] = -1f;
