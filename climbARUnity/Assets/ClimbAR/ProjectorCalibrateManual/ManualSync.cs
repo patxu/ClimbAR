@@ -20,7 +20,7 @@ public class ManualSync : MonoBehaviour
     void Start()
     {
         //if saved state file exists
-        //load holds and transition to next scene
+        //reposition circles
 
         if (File.Exists(path))
         {
@@ -32,21 +32,11 @@ public class ManualSync : MonoBehaviour
             {
 
                 cornerCircleCoordinates = (float[])xmlSearializer.Deserialize(fs);
-                foreach (float f in cornerCircleCoordinates)
-                {
-                    print(f);
-                }
+                PositionCircles(cornerCircleCoordinates);
             }
 
         }
-        else
-        {
-            print("File not found");
-            string path = Directory.GetCurrentDirectory();
-            print(path);
-        }
 
-        //else
         InitCornerCircles();
         DrawBorder(BORDER_WIDTH);
     }
@@ -55,57 +45,22 @@ public class ManualSync : MonoBehaviour
     void Update()
     {
 
-
-
         // continue to next scene, saving the coordinates of the corner circles as state
         if (Input.GetKeyDown("space"))
         {
 
             cornerCircleCoordinates = GetCoordinateFloatArray();
-
-            // 0,0 is top left, +y points down
-            StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
-                cornerCircleCoordinates[0],
-                cornerCircleCoordinates[1],
-                mainCam);
-            StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(
-                cornerCircleCoordinates[2],
-                cornerCircleCoordinates[3],
-                mainCam);
-            StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(
-                cornerCircleCoordinates[4],
-                cornerCircleCoordinates[5],
-                mainCam);
-            StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(
-                cornerCircleCoordinates[6],
-                cornerCircleCoordinates[7],
-                mainCam);
-
-            //serialize here
-            XmlSerializer xmlSearializer = new XmlSerializer(typeof(float[]));
-            FileStream file = File.Create(path);
-
-            xmlSearializer.Serialize(file, cornerCircleCoordinates);
-            file.Close();
+            RecordBounds(cornerCircleCoordinates);
+            Serialize(path, cornerCircleCoordinates);
 
             SceneManager.LoadScene(SceneUtils.SceneNames.holdSetup);
-            //SceneManager.LoadScene(SceneUtils.Names.demo);
         }
 
         // reset to outer corners
         if (Input.GetKeyDown("r"))
         {
-            if (this.cornerCircles != null)
-            {
-                this.cornerCircles[0].transform.localPosition =
-                    ClimbARUtils.fractionToWorldSpace(0f, 0f, this.mainCam);
-                this.cornerCircles[1].transform.localPosition =
-                    ClimbARUtils.fractionToWorldSpace(1f, 0f, this.mainCam);
-                this.cornerCircles[2].transform.localPosition =
-                    ClimbARUtils.fractionToWorldSpace(1f, 1f, this.mainCam);
-                this.cornerCircles[3].transform.localPosition =
-                    ClimbARUtils.fractionToWorldSpace(0f, 1f, this.mainCam);
-            }
+            float[] positions = new float[] { 0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f };
+            PositionCircles(positions);
         }
 
         if (Input.GetKeyDown("escape"))
@@ -184,4 +139,50 @@ public class ManualSync : MonoBehaviour
         return arr;
     }
 
+
+    private void RecordBounds(float[] cornerCircleCoordinates)
+    {
+
+        // 0,0 is top left, +y points down
+        StateManager.instance.kinectUpperLeft = ClimbARUtils.worldSpaceToFraction(
+            cornerCircleCoordinates[0],
+            cornerCircleCoordinates[1],
+            mainCam);
+        StateManager.instance.kinectUpperRight = ClimbARUtils.worldSpaceToFraction(
+            cornerCircleCoordinates[2],
+            cornerCircleCoordinates[3],
+            mainCam);
+        StateManager.instance.kinectLowerRight = ClimbARUtils.worldSpaceToFraction(
+            cornerCircleCoordinates[4],
+            cornerCircleCoordinates[5],
+            mainCam);
+        StateManager.instance.kinectLowerLeft = ClimbARUtils.worldSpaceToFraction(
+            cornerCircleCoordinates[6],
+            cornerCircleCoordinates[7],
+            mainCam);
+    }
+
+    private void Serialize(string path, float[] cornerCircleCoordinates)
+    {
+        XmlSerializer xmlSearializer = new XmlSerializer(typeof(float[]));
+        FileStream file = File.Create(path);
+
+        xmlSearializer.Serialize(file, cornerCircleCoordinates);
+        file.Close();
+    }
+
+    private void PositionCircles(float[] positions)
+    {
+        if (this.cornerCircles != null)
+        {
+            this.cornerCircles[0].transform.localPosition =
+                ClimbARUtils.fractionToWorldSpace(positions[0], positions[1], this.mainCam);
+            this.cornerCircles[1].transform.localPosition =
+                ClimbARUtils.fractionToWorldSpace(positions[2], positions[3], this.mainCam);
+            this.cornerCircles[2].transform.localPosition =
+                ClimbARUtils.fractionToWorldSpace(positions[4], positions[5], this.mainCam);
+            this.cornerCircles[3].transform.localPosition =
+                ClimbARUtils.fractionToWorldSpace(positions[6], positions[7], this.mainCam);
+        }
+    }
 }
