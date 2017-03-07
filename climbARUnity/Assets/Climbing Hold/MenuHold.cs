@@ -26,10 +26,8 @@ public class MenuHold : ClimbingHold
 
             if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
-                Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-                gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
-                    ? Menu.customHoldSprite1
-                    : Menu.customHoldSprite0;
+                // Do some sound effect?
+                Debug.Log("Do some sound effect?");
             }
             else
             {
@@ -44,10 +42,8 @@ public class MenuHold : ClimbingHold
 
             if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
-                Sprite currSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-                gameObject.GetComponent<SpriteRenderer>().sprite = (currSprite == Menu.customHoldSprite0)
-                    ? Menu.customHoldSprite1
-                    : Menu.customHoldSprite0;
+                // Do some sound effect?
+                Debug.Log("Do some sound effect?");
             }
             else
             {

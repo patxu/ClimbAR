@@ -5,29 +5,37 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
 
-    // declare menu items here
+    // Declare menu items here
     public Dictionary<string, GameObject> menuItems = new Dictionary<string, GameObject>()
     {
         { SceneUtils.SceneNames.rocManGamePlay, null },
         { SceneUtils.SceneNames.musicLoadingScene, null },
     };
+    // Associate sprites with specific menu scene items 
+    public static Dictionary<string, Sprite> menuSprites = new Dictionary<string, Sprite>()
+    {
+        { SceneUtils.SceneNames.rocManGamePlay, null },
+        { SceneUtils.SceneNames.musicLoadingScene, null },
+    };   
 
+    // Set during handhold instantiation, used for rendering menu hold sprites
+    public static float camHeight;
+    public static float camWidth;
+
+    // Other variables
     private GameObject[] holds;
     public GameObject customHoldSprite;
-    public static Sprite customHoldSprite0;
-    public static Sprite customHoldSprite1;
     public static float spriteXScale;
     public static float spriteYScale;
 
     // Use this for initialization
     void Start()
     {
-        customHoldSprite0 = Resources.Load<Sprite>("customHold0");
-        customHoldSprite1 = Resources.Load<Sprite>("customHold1");
-        if (customHoldSprite0 == null || customHoldSprite1 == null)
-        {
-            Debug.LogError("Could not find both custom hold sprites necessary in Resources folder");
-        }
+        // Find custom hold sprites
+        menuSprites[SceneUtils.SceneNames.rocManGamePlay] = Resources.Load<Sprite>("CustomHolds/rocmanGameHold");
+        menuSprites[SceneUtils.SceneNames.musicLoadingScene] = Resources.Load<Sprite>("CustomHolds/musicGameHold");
+
+        // Setup menu scene
         pairMenuItemsWithHolds(menuItems);
         attachMenuHoldToHold(menuItems);
         //Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Skeleton")); // don't show skeleton
@@ -64,17 +72,19 @@ public class Menu : MonoBehaviour
             }
             else
             {
-
-                if (customHoldSprite0 != null && menuItem.Equals(SceneUtils.SceneNames.rocManGamePlay))
+                // Draw custom hold sprite for menu hold if present in Resources folder
+                if (menuSprites[menuItem] != null)
                 {
                     GameObject customSpriteObject = GameObject.Instantiate(customHoldSprite);
                     customSpriteObject.transform.SetParent(menuHold.transform);
                     customSpriteObject.transform.localPosition = new Vector3(0,0,0);
 
-                    ClimbARHandhold.DrawHoldSprite(customSpriteObject.GetComponent<SpriteRenderer>(),
-                        spriteXScale, spriteYScale);
+                    float radius = menuHold.GetComponent<CircleCollider2D>().radius;
+                    ClimbARHandhold.DrawHoldSprite(customSpriteObject.GetComponent<SpriteRenderer>(), menuSprites[menuItem],
+                        radius / camWidth / 2, radius / camWidth / 2);
 
                 }
+                // Draw line renderer otherwise
                 else
                 {
                     ClimbARHandhold.HoldLineRendererActive(menuHold, true);
