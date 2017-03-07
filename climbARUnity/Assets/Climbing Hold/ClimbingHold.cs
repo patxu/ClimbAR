@@ -80,7 +80,6 @@ public class ClimbingHold : MonoBehaviour
 
     private void updateStateOnCollisionEnter()
     {
-        Debug.Log("hold " + id + " updated enter with state " + currentState.ToString() + " and enterCount " + enterCount.ToString());
         switch (currentState)
         {
             case States.Released:
