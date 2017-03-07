@@ -9,7 +9,7 @@ public class HoldSetup : MonoBehaviour
     public KinectClassify classifier;
     public bool autoClassify = true;
     public bool autoTransition = true;
-    private float delay = 5f;
+    private float delay = .5f;
 
     private void Start()
     {
