@@ -123,7 +123,12 @@ public class BodySourceView : MonoBehaviour
 
     public void updateTextMesh()
     {
-        gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
+        if (!isClassifying)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = !isAHandDetected;
+        }
+
+        Debug.Log(isClassifying);
     }
 
     private GameObject CreateBodyObject(ulong id)

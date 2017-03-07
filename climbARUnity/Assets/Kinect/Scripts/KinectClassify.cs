@@ -100,9 +100,14 @@ public class KinectClassify : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
+        GameObject bodyView = GameObject.Find("KinectBodyView");
+        BodySourceView view = bodyView.GetComponent<BodySourceView>();
+        view.isClassifying = true;
+
         if (_Reader == null)
         {
             Debug.Log("Using hardcoded bounding boxes or image");
+            view.isClassifying = false;
             yield return null;
         }
         ColorFrame frame = _Reader.AcquireLatestFrame();
@@ -197,7 +202,10 @@ public class KinectClassify : MonoBehaviour
         {
             Debug.LogError("Frame was null");
         }
+
+        // release locks for this file and the body source view text
         classifyRunning = false;
+        view.isClassifying = false;
     }
 
     void cleanHandHolds(ref GameObject[] handholds)
