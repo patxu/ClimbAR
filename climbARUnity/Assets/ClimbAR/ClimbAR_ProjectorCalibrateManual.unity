@@ -670,6 +670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cornerCircles: []
+  cornerCircleCoordinates: []
   CornerCircle: {fileID: 1000010435963904, guid: 6c1eb91f57008984f9dec8cd68974fee,
     type: 2}
   mainCam: {fileID: 816323392}
@@ -1190,7 +1191,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Drag the dots to the four corners of the projecter image
+  m_Text: 'Drag the dots to the four corners of the projector image
 
     Press [space] when ready'
 --- !u!222 &2044939936
