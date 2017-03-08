@@ -60,26 +60,30 @@ public class GhostMovement : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col)
-    {
-        System.DateTime currentTime = System.DateTime.UtcNow;
-        TimeSpan diff = currentTime - lastCountedCollision;
-        if (diff.TotalMilliseconds > smoothingTime)
-        {
-            this.ReverseDirection();
+    {  
             string layerName = LayerMask.LayerToName(col.gameObject.layer);
             switch (layerName)
             {
                 case "Holds":
+                    this.ReverseDirection();
                     break;
                 case "Skeleton":
                     this.rocmanScript.LoseLife();
+                    System.DateTime currentTime = System.DateTime.UtcNow;
+                    TimeSpan diff = currentTime - lastCountedCollision;
+                    if (diff.TotalMilliseconds > smoothingTime)
+                    {
+                        this.ReverseDirection();
+                        this.rocmanScript.LoseLife();
+                        lastCountedCollision = System.DateTime.UtcNow;
+                    }
                     break;
                 default:
                     break;
             }
             lastCountedCollision = System.DateTime.UtcNow;
-        }
     }
+
 
     public void ReverseDirection()
     {
