@@ -18,7 +18,7 @@ public class GhostMovement : MonoBehaviour
     void Start()
     {
         lastCountedCollision = System.DateTime.UtcNow;
-        this.moveSpeed = 0.5f;
+        this.moveSpeed = .6f;
         this.rocmanScript = Camera.main.GetComponent<RocMan>();
     }
 
@@ -66,9 +66,9 @@ public class GhostMovement : MonoBehaviour
             {
                 case "Holds":
                     this.ReverseDirection();
+                    Debug.Log("Reverse Direction");
                     break;
                 case "Skeleton":
-                    this.rocmanScript.LoseLife();
                     System.DateTime currentTime = System.DateTime.UtcNow;
                     TimeSpan diff = currentTime - lastCountedCollision;
                     if (diff.TotalMilliseconds > smoothingTime)
@@ -88,5 +88,7 @@ public class GhostMovement : MonoBehaviour
     public void ReverseDirection()
     {
         GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x * (-1), GetComponent<Rigidbody2D>().velocity.y * (-1));
+        gameObject.transform.position = new Vector2(gameObject.transform.position.x + (GetComponent<Rigidbody2D>().velocity.x/10),
+                                                    gameObject.transform.position.y + (GetComponent<Rigidbody2D>().velocity.y/10));
     }
 }
