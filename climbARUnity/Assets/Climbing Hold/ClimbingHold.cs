@@ -146,8 +146,9 @@ public class ClimbingHold : MonoBehaviour
         ShouldRegisterHoldGrabbed(col);
     }
 
+    /*
     void OnMouseDown()
     {
         Destroy(gameObject);
-    }
+    }*/
 }

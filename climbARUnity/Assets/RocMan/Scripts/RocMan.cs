@@ -63,6 +63,7 @@ public class RocMan : MonoBehaviour
         this.handholds = GameObject.FindGameObjectsWithTag("Hold");
         for (int i = 0; i < handholds.Length; i++)
         {
+            handholds[i].AddComponent<RocHold>();
             ClimbARHandhold.HoldLineRendererActive(handholds[i], true);
         }
     }
@@ -216,6 +217,8 @@ public class RocMan : MonoBehaviour
         {
             if (hold != null)
             {
+                RocHold s = hold.GetComponent<RocHold>();
+                Destroy(s);
                 ClimbARHandhold.HoldLineRendererActive(hold, false);
                 ClimbARHandhold.DestroyChildren(hold);
             }
