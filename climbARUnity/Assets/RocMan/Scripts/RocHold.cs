@@ -6,7 +6,8 @@ public class RocHold : ClimbingHold {
 
 	// Use this for initialization
 	void Start () {
-		
+        base.grabbedSmoothing = 50 / 1000;
+        base.releasedSmoothing = 50 / 1000;
 	}
 	
 	// Update is called once per frame
