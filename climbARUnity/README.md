@@ -1,7 +1,6 @@
 # climbAR Unity Project
 
 ## Overview
-
 Here lies the bulk of our work. We incorporate our OpenCV hand hold detector and Microsoft Kinect into a Unity game. We also make it easily extensible for future work.
 
 This is what our game looks like from the perspective of the Kinect. We take this, run some transformations, and then display it on the actual wall/person via a projector.
@@ -14,7 +13,7 @@ This is what our game looks like from the perspective of the Kinect. We take thi
 
 ## Quickstart
 - **Start the game** in `ClimbAR_Start`
-  - it checks if the Kinect is connected
+  - it checks if the Kinect is connected – if the screen remains black then the Kinect is not connected
 - Next, **specify the alignment** for the projector
   - if you're displaying your screen via projector, align by dragging each of the corner spheres to the four corners of the screen from the perspective of the Kinect.
 

@@ -7,14 +7,14 @@ Orestis Lykouropoulos, Charley Ren, Pat Xu, David Bain, Jon Kramer
 - [Architecture](https://github.com/patxu/cs98-senior-project#architecture)
 - [Setup](https://github.com/patxu/cs98-senior-project#setup)
 - [Deployment](https://github.com/patxu/cs98-senior-project#deployment)
-- [Docs](https://github.com/patxu/cs98-senior-project#docs)
+- [Docs and Poster](https://github.com/patxu/cs98-senior-project#docs)
 - [The Team](https://github.com/patxu/cs98-senior-project#the-team)
 - [Acknowledgements](https://github.com/patxu/cs98-senior-project#acknowledgements)
 
 ## Overview
 We are building an augmented reality climbing game platform, with a focus on releasing the platform as a developer-friendly development kit. Components include
-- wall, hold, and climber body recognition via [OpenCV](http://opencv.org/),
-- hold grabbing detection via [Microsoft Kinect](https://developer.microsoft.com/en-us/windows/kinect)
+- hold recognition via [OpenCV](http://opencv.org/), and
+- body (skeleton) detection via [Microsoft Kinect](https://developer.microsoft.com/en-us/windows/kinect)
 
 to allow developers to build 2D, interactive climbing games via Unity (e.g. these are some games that inspired our work [1](https://www.youtube.com/watch?v=W0ErnsIVzkc), [2](https://www.youtube.com/watch?v=kg2uRGf_04g), [3](http://augmentedclimbing.com/games/)).
 
@@ -22,18 +22,20 @@ to allow developers to build 2D, interactive climbing games via Unity (e.g. thes
 
 *This is an example of what our project can do. David is activating and deactivating holds, each of which have an associated music track.*
 
+<br>
+<img src="readme_imgs/videos/demo_vid1.gif">
+<img src="readme_imgs/videos/demo_vid2.gif">
+
+*A couple short videos of our Music Game in action at end-of-term demos.*
+
 ## Game Mockups
 Some basic mockups for how we envision the project. See a simple game UI displayed on the wall. Then, grab a hold to select an option.
 
-<img src="readme_imgs/game_menu.png" width=400x>
-<img src="readme_imgs/game_route_generation.png" width=400x>
+<img src="readme_imgs/game_menu.png" width=300x>
+<img src="readme_imgs/game_route_generation.png" width=300x>
 
 ## The Unity Project
-The Unity scene so far! It displays a circle around each climbing hold, given by the OpenCV classifier. Read about our Unity architecture to get an idea of how we use OpenCV in Unity.
-
-<img src="readme_imgs/overlay2.jpg" width=400x>
-
-*This is what our game looks like from the perspective of the Kinect. We take this, run some transformations, and then display it on the actual wall/person via a projector.*
+Learn more about our ClimbAR Unity Project [here](/climbARUnity/). This discusses how we incorporate OpenCV and the Kinect into a Unity game!
 
 ## Architecture
 - OpenCV
@@ -85,6 +87,7 @@ If you want to actually train your own classifier, here's what we did – YMMV.
 - the setup scenes will check if the Kinect is connected and will also run some alignment preprocessing on the Kinect image
 
 ## Docs
+- [End of Term Demo Poster](readme_imgs/poster.pdf)
 - [Project Proposal](https://docs.google.com/document/d/1-N9_9W50bxWwFv98lRIs-yA9pZ39pB0hi-4nF0_e69U/edit?usp=sharing)
 - [User Personas](https://docs.google.com/document/d/1pRK2dLdDFMOfifJBphd1jmsjdPxHTu6pCOvMk0Kpzp8/edit?usp=sharing)
 - [Mockups and Data Model](https://docs.google.com/document/d/1wIeR-_1b2lWhGa01Qd_FU361YMmZCi3dA5iZgJWjieM/edit?usp=sharing)
