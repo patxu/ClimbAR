@@ -6,8 +6,8 @@ using System.Threading;
 public class ClimbingHold : MonoBehaviour
 {
     public int enterCount = 0;
-    private float grabbedSmoothing = 200 / 1000; // divided by 1000 to put as fraction of second
-    private float releasedSmoothing = 200 / 1000;
+    public float grabbedSmoothing = 200 / 1000; // divided by 1000 to put as fraction of second
+    public float releasedSmoothing = 200 / 1000;
 
     public bool smoothingEnabled = true;
     public enum States { Released, GrabbedPending, Grabbed, ReleasePending }
@@ -146,8 +146,9 @@ public class ClimbingHold : MonoBehaviour
         ShouldRegisterHoldGrabbed(col);
     }
 
+    /*
     void OnMouseDown()
     {
         Destroy(gameObject);
-    }
+    }*/
 }

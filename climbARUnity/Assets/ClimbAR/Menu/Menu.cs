@@ -25,8 +25,6 @@ public class Menu : MonoBehaviour
     // Other variables
     private GameObject[] holds;
     public GameObject customHoldSprite;
-    public static float spriteXScale;
-    public static float spriteYScale;
 
     // Use this for initialization
     void Start()
@@ -81,7 +79,7 @@ public class Menu : MonoBehaviour
 
                     float radius = menuHold.GetComponent<CircleCollider2D>().radius;
                     ClimbARHandhold.DrawHoldSprite(customSpriteObject.GetComponent<SpriteRenderer>(), menuSprites[menuItem],
-                        radius / camWidth / 2, radius / camWidth / 2);
+                        radius / camWidth, radius / camWidth);
 
                 }
                 // Draw line renderer otherwise

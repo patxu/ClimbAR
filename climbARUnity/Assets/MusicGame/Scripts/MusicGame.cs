@@ -72,7 +72,7 @@ public class MusicGame : MonoBehaviour
 
                 GameObject holdText = new GameObject();
                 HoldText holdTextScript = holdText.AddComponent<HoldText>();
-                holdTextScript.addText(soundItems[i], holdText, soundHold);
+                holdTextScript.addText("   "+soundItems[i], holdText, soundHold);
             }
         }
     }
