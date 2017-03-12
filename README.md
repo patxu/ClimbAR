@@ -87,10 +87,13 @@ If you want to actually train your own classifier, here's what we did – YMMV.
 - the setup scenes will check if the Kinect is connected and will also run some alignment preprocessing on the Kinect image
 
 ## Docs
-- [End of Term Demo Poster](readme_imgs/poster.pdf)
 - [Project Proposal](https://docs.google.com/document/d/1-N9_9W50bxWwFv98lRIs-yA9pZ39pB0hi-4nF0_e69U/edit?usp=sharing)
 - [User Personas](https://docs.google.com/document/d/1pRK2dLdDFMOfifJBphd1jmsjdPxHTu6pCOvMk0Kpzp8/edit?usp=sharing)
 - [Mockups and Data Model](https://docs.google.com/document/d/1wIeR-_1b2lWhGa01Qd_FU361YMmZCi3dA5iZgJWjieM/edit?usp=sharing)
+- [User Testing Plan](https://docs.google.com/document/d/1SZNJkBW5mkPORlVMg3iUN0mf9WrXpGZTmwKvynMM2wU/edit?usp=sharing)
+- [Testing Analysis](https://docs.google.com/document/d/1r5oHRH4LkSW818os22fBRWORp74uME6gG6vRarHy7Go/edit?usp=sharing)
+- [End of Term Demo Poster](readme_imgs/poster.pdf)
+- [End of Term Debrief](https://docs.google.com/document/d/1HiUrD0mVZoncD63i8xACN6EJCa3EvmVWI4mNLXlZb8Y/edit?usp=sharing)
 
 ## The Team
 Who made this wonderful, open-source piece of art? Look no further.
