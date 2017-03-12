@@ -38,12 +38,13 @@ The MusicGame and RocMan game will be a good starting point for a developer look
 
 ## Climbing Hold Abstraction
 
-The ClimbAR sdk provides a base class `ClimbingHold` which encapsulates the basic collider logic on holds that is used in most games. Most importantly, `ClimbingHold` implements smoothing. Since the hand joints of the Kinect skeleton jump around, using a simple collider to represent a hold will cause the hold to toggle back and forth from grabbed to not grabbed very quickly. Internally, `ClimbingHold` uses a state machine with four states:
+The climbAR SDK provides a base class `ClimbingHold` which encapsulates the basic collider logic on holds that is used in most games. Most importantly, `ClimbingHold` implements smoothing. Since the hand joints of the Kinect skeleton jump around, using a simple collider to represent a hold will cause the hold to toggle back and forth from grabbed to not grabbed very quickly. Internally, `ClimbingHold` uses a state machine with four states:
 - Released
 - GrabbedPending
 - Grabbed
 - ReleasedPending
 
+  <br>
   <img src="readme_imgs/state.jpg" width=600px>
 
 The `ClimbingHold` class exposes four useful variables to developers extending it:
@@ -57,4 +58,3 @@ The `ClimbingHold` class exposes four useful variables to developers extending i
 Increasing `grabbedSmoothing` will help prevent false positives of hands passing over holds being counted as grabs, but will lead to more lag in registering an actual hold grab. Increasing `releasedSmoothing` will help prevent false positives of a release if the hand joints are jumping around a lot, but will lead to more lag in registering a hold released.
 
 Smoothing can be turned off completly by setting `smoothingEnabled` to false. The `currentState` can be used to update game behavior and change graphics. This is best done in the `Update()` function of the script extending `ClimbingHold`. See `SoundHold.cs` or `MenuHold.cs` for examples.
-
