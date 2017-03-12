@@ -19,6 +19,7 @@ If you haven't build OpenCV in your machine, follow our [README](https://github.
 
   - this step is very important as it specifies the graphical transform that is applied to the holds and skeleton to overlay properly on objects in the real world
   - if you aren't using this with a projector and a wall, press `r` to move each circle to the four corners of the screen. this will perform no transformation on the image taken in from the Kinect
+  - the program auto saves the positions of the circles (serializing to a file) each time you run it, so that calibration is typically only needed once per set up, or every time on of the hardware components is moved.
 1. **Hold classification** is done automatically, but if you want to pause here you can set the `Auto Classify` boolean to `false` in Unity via the `ClimbAR/FindHolds` scene
 1. The **Menu Scene** is where you'll probably be starting. Here, you can specify [additional scenes ](https://github.com/patxu/cs98-senior-project/blob/master/climbARUnity/Assets/ClimbAR/Menu/Menu.cs#L9) and put in your own game! Read more about building games with our project below.
 
