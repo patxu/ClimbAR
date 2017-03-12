@@ -31,6 +31,8 @@ The **Menu scene** has lots of critical components. Let's take a look:
 
   <img src="readme_imgs/menu.png" width=600px>
 
+The MusicGame and RocMan game will be a good starting point for a developer looking to use our platform to create a game of their own.
+
 ## Climbing Hold Abstraction
 
 The ClimbAR sdk provides a base class `ClimbingHold` which encapsulates the basic collider logic on holds that is used in most games. Most importantly, `ClimbingHold` implements smoothing. Since the hand joints of the Kinect skeleton jump around, using a simple collider to represent a hold will cause the hold to toggle back and forth from grabbed to not grabbed very quickly. Internally, `ClimbingHold` uses a state machine with four states:
@@ -53,4 +55,3 @@ Increasing `grabbedSmoothing` will help prevent false positives of hands passing
 
 Smoothing can be turned off completly by setting `smoothingEnabled` to false. The `currentState` can be used to update game behavior and change graphics. This is best done in the `Update()` function of the script extending `ClimbingHold`. See `SoundHold.cs` or `MenuHold.cs` for examples.
 
-The MusicGame and RocMan game will be a good starting point for a developer looking to use our platform to create a game of their own.
