@@ -13,7 +13,7 @@ Where `negatives` is a folder that contains background images, `positives` is a 
 
 ##### To begin, run `./photo_create_pos positives/`
 
-This will resize every image in positives to 3% its original size. It will then flip, blur, lighten, darken, and add and remove contrast to generate more images. This decreases overfitting and makes our classifier invariant to common functions applied to real-worled images.
+This will resize every image in positives to 3% its original size. It will then flip, blur, lighten, darken, and add and remove contrast to generate more images. This decreases overfitting and makes our classifier invariant to common functions applied to real-world images.
 
 It will then create a description file named `positive.txt`. Using this, it then runs `opencv_createsamples` which creates a file `training.vec` in the `positives` directory.
 
