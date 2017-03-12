@@ -60,8 +60,6 @@ Learn more about our ClimbAR Unity Project [here](/climbARUnity/). This discusse
 
 ### Hold Recognition Classifier
 If you want to actually train your own classifier, here's what we did – YMMV.
-- Image Pre-Processing in Java: Simple Java class - run from terminal or IDE
-  - `javaImageProcessing`
 - OpenCV Python
   - Install with Homebrew
     - `brew tap homebrew/science`
@@ -81,6 +79,9 @@ If you want to actually train your own classifier, here's what we did – YMMV.
       - use the `-img` and `-num` flag to train off one image. this is what we did when only had 7 images and had to generate training images from a single image
     - `opencv_createsamples -vec classifier/position_single -info info.dat -bg bg.dat`
     - `opencv_traincascade -data train_cascade/ -vec classifier/position_single -bg bg.dat -numPos 50 -numNeg 3`
+
+  - Classifying
+    - Classification is done in `KinectClassify`. The classifier used can be changed by updating the `classifierPath` in `KinectClassify`. We trained two classifiers, one for the classroom setting and one for the Dartmouth climbing gym, but any cascade classifier can be used if a new classifier is created for a specific environment. 
 
 ## Deployment
 - hook up to a projector and run the Unity project!
