@@ -1,5 +1,9 @@
-# climb.AR
+# ClimbAR
 Orestis Lykouropoulos, Charley Ren, Pat Xu, David Bain, Jon Kramer
+
+<img src="readme_imgs/videos/hop_demo.gif">
+
+## Table of Contents
 
 - [Overview](https://github.com/patxu/cs98-senior-project#overview)
 - [Mockups](https://github.com/patxu/cs98-senior-project#game-mockups)
@@ -18,13 +22,14 @@ We are building an augmented reality climbing game platform, with a focus on rel
 
 to allow developers to build 2D, interactive climbing games via Unity (e.g. these are some games that inspired our work [1](https://www.youtube.com/watch?v=W0ErnsIVzkc), [2](https://www.youtube.com/watch?v=kg2uRGf_04g), [3](http://augmentedclimbing.com/games/)).
 
+
+
 <img src="readme_imgs/videos/music_game_demo.gif">
 
 *This is an example of what our project can do. David is activating and deactivating holds, each of which have an associated music track.*
 
 <br>
-<img src="readme_imgs/videos/demo_vid1.gif">
-<img src="readme_imgs/videos/demo_vid2.gif">
+<img src="readme_imgs/videos/demo_vid1.gif">  <img src="readme_imgs/videos/demo_vid2.gif">
 
 *A couple short videos of our Music Game in action at end-of-term demos.*
 
@@ -81,7 +86,7 @@ If you want to actually train your own classifier, here's what we did – YMMV.
     - `opencv_traincascade -data train_cascade/ -vec classifier/position_single -bg bg.dat -numPos 50 -numNeg 3`
 
   - Classifying
-    - Classification is done in `KinectClassify`. The classifier used can be changed by updating the `classifierPath` in `KinectClassify`. We trained two classifiers, one for the classroom setting and one for the Dartmouth climbing gym, but any cascade classifier can be used if a new classifier is created for a specific environment. 
+    - Classification is done in `KinectClassify`. The classifier used can be changed by updating the `classifierPath` in `KinectClassify`. We trained two classifiers, one for the classroom setting and one for the Dartmouth climbing gym, but any cascade classifier can be used if a new classifier is created for a specific environment.
 
 ## Deployment
 - hook up to a projector and run the Unity project!
