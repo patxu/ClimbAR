@@ -96,10 +96,10 @@ If you want to actually train your own classifier, here's what we did – YMMV.
 - [Project Proposal](https://docs.google.com/document/d/1-N9_9W50bxWwFv98lRIs-yA9pZ39pB0hi-4nF0_e69U/edit?usp=sharing)
 - [User Personas](https://docs.google.com/document/d/1pRK2dLdDFMOfifJBphd1jmsjdPxHTu6pCOvMk0Kpzp8/edit?usp=sharing)
 - [Mockups and Data Model](https://docs.google.com/document/d/1wIeR-_1b2lWhGa01Qd_FU361YMmZCi3dA5iZgJWjieM/edit?usp=sharing)
-- [User Testing Plan](https://docs.google.com/document/d/1SZNJkBW5mkPORlVMg3iUN0mf9WrXpGZTmwKvynMM2wU/edit?usp=sharing)
+- [User Testing Plan](https://docs.google.com/document/d/1nPAwJRBm0xiniwQQKxlNNyLPxdRiyv2Salcx6e_4ETc/edit?usp=sharing)
 - [Testing Analysis](https://docs.google.com/document/d/1r5oHRH4LkSW818os22fBRWORp74uME6gG6vRarHy7Go/edit?usp=sharing)
 - [End of Term Demo Poster](readme_imgs/poster.pdf)
-- [End of Term Debrief](https://docs.google.com/document/d/1HiUrD0mVZoncD63i8xACN6EJCa3EvmVWI4mNLXlZb8Y/edit?usp=sharing)
+- [End of Term Debrief](https://docs.google.com/document/d/1vwHEkP5c2CE-UpCbkA8YtVss_DV9_8UDjxJGZXC1FEE/edit?usp=sharing)
 
 ## The Team
 Who made this wonderful, open-source piece of art? Look no further.
